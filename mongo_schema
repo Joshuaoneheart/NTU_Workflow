@@ -1,0 +1,44 @@
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
+
+const StudentSchema = new Schema({
+  name: { type: String, required: true },
+  // id: { type: ID, required: true},
+  department: { type: String, required: true },
+  grade: { type: Number, required: true },
+  email: { type: String, required: true },
+});
+
+const TeacherSchema = new Schema({
+  name: { type: String, required: true },
+  // id: { type: ID, required: true},
+  department: { type: String, required: true },
+  email: { type: String, required: true },
+});
+
+const DocumentSchema = new Schema({
+  id: { type: String, required: true },
+  title: { type: String, required: true },
+  body: { type: String, required: true },
+  passBy: { type:[String], required: true } 
+  //應該就可以存array of strings
+});
+
+const WorkflowSchema = new Schema({
+id: { type: String, required:true},
+DocumentId: { type: String, required: true },
+status: { type: String, required: true },
+comments: { type: String}, //等被reject或之後才會寫
+approvalLine: { name:String, approve:Boolean}, //想把它寫成dictionary
+applicants: { type: String, required: true },
+})
+
+
+const StudentModel = mongoose.model("Student", StudentSchema);
+const TeacherModel = mongoose.model("Teacher", TeacherSchema);
+const DocumentModel = mongoose.model("Document", DocumentSchema);
+const WorkflowModel = mongoose.model("Workflow", WorkflowSchema);
+
+
+export { StudentModel, TeacherModel, DocumentModel,WorkflowModel };
