@@ -29,7 +29,7 @@ function App() {
   }, [signedIn, user]);
 
   return (
-    <div className="App">
+    <>
       {signedIn === true ? (
         <MainPage user={user} />
       ) : (
@@ -42,7 +42,7 @@ function App() {
           displayStatus={displayStatus}
         />
       )}
-    </div>
+    </>
   );
 }
 
