@@ -31,7 +31,7 @@ status: { type: String, required: true },
 date :{ type: Date, required: true },
 comments: [{ type: String}], //等被reject或需要退回修改才會寫
 approvalLine: [{ teachers:{ type: mongoose.Types.ObjectId, ref: "Teacher" }, approve: {type: Boolean}}], //想把它寫成dictionary
-applicant: { type: mongoose.Types.ObjectId, ref: "Student" },
+student: { type: mongoose.Types.ObjectId, ref: "Student" },
 })
 
 

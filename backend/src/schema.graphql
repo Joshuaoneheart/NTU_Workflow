@@ -15,7 +15,7 @@ type Query {
 type Mutation {
   createStudent(data: CreateStudentInput!): Student!
   #申請時也創workflow
-  createApplication(data: CreateApplicationInput!): Document!
+  createApplication(title: String! ,body: String!): Document!
   createWorkflow(data: CreateWorkflowInput!): Workflow!
 
   updateWorkflow(status: String, comments: String): Workflow!
@@ -35,20 +35,14 @@ input CreateStudentInput {
   email: String!
 }
 
-input CreateApplicationInput {
-  #name: String! #登入已經有姓名
-  title: String!
-  body: String!
-}
-
 input CreateWorkflowInput{
   id: ID! 
-  documentId : ID! #how to reference?
-  status: String!
+  #documentId : ID! #how to reference?
+  #status: String! #APPLY
   date: Date!
-  comments: [String] 
+  #comments: [String] 
   approvalLine: approvalPayload! # dictionary ?
-  applicant: Student! #how to reference?
+  student: Student! #how to reference?
 }
 
 
