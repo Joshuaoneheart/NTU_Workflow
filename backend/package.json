@@ -1,0 +1,23 @@
+{
+  "name": "NTU_Workflow",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Joshuaoneheart/NTU_Workflow.git",
+  "author": "EileenWang-10001010 <68323929+EileenWang-10001010@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv-defaults": "^3.0.0",
+    "graphql-yoga": "^1.18.3",
+    "mongoose": "^6.1.4",
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "start": "nodemon src/index.js --ext js,graphql --exec babel-node"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.16.7",
+    "@babel/node": "^7.16.7",
+    "@babel/preset-env": "^7.16.7"
+  }
+}

@@ -1,0 +1,82 @@
+scalar Date
+
+type Query {
+  name(query: String): [Student!]
+  document(query: String): [Document!]
+  workflow(query: String): [Workflow!]
+}
+
+type Mutation {
+  createStudent(data: CreateStudentInput!): Student!
+  CreateApplication(data: CreateApplicationInput!): Document!
+}
+
+type Subscription {
+  #如果status更新 或是有comments:拒絕的理由或需要補件，都會通知teachers跟students
+  Workflow(comments: String, status: String): CommentSubscriptionPayload!
+}
+
+# only faculty members can create student users ?
+input CreateStudentInput {
+  name: String!
+  id: ID! #還是type要改成ID!
+  department: String!
+  grade: Int!
+  email: String!
+}
+
+input CreateApplicationInput {
+  #name: String! #登入已經有姓名
+  title: String!
+  body: String!
+}
+
+
+type Student {
+  name: String!
+  id: ID!
+  department: String!
+  grade: Int!
+  email: String!
+}
+
+type Teacher {
+  name: String!
+  id: ID!
+  department: String!
+  email: String!
+}
+
+type Document {
+  id: ID! 
+  title: String!
+  body: String!
+  passBy: [Teacher!]!
+}
+
+type Workflow {
+  id: ID! 
+  DocumentId : ID!
+  status: String!
+  Date: Date!
+  comments: String
+  approvalLine: approvalPayload!
+  applicant: Student!
+}
+
+type approvalPayload{
+  teachers:[Teacher!]!
+  approve: [String!]! 
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  data: Workflow!
+}
+
+#for Subscription
+enum MutationType {
+  APPLY
+  ACCEPT
+  DECLINE
+}
