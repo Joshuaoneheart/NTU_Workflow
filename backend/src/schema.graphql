@@ -37,12 +37,12 @@ input CreateStudentInput {
 
 input CreateWorkflowInput{
   id: ID! 
-  document : Document! # ID ref 
+  document : Document! #  ref 
   #status: String! #APPLY
   date: Date!
   #comments: [String] 
   approvalLine: [approvalPayload]! # dictionary ?
-  student: Student! # ID ref
+  student: Student! #  ref
 }
 
 
@@ -65,17 +65,17 @@ type Document {
   id: ID! 
   title: String!
   body: String!
-  passBy: [Teacher!]!
+  passBy: [Teacher!]! #ref
 }
 
 type Workflow {
   id: ID! 
-  documentId : ID!
+  document : Document! # ref 
   status: Status!
   date: Date!
   comments: [String] 
   approvalLine: [approvalPayload]! 
-  applicant: Student!
+  student: Student!
 }
 
 type approvalPayload{
