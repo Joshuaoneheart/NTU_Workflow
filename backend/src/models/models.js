@@ -26,11 +26,11 @@ const DocumentSchema = new Schema({
 
 const WorkflowSchema = new Schema({
 id: { type: String, required:true},
-documentId: { type: mongoose.Types.ObjectId, ref: "Document" }, 
+document: { type: mongoose.Types.ObjectId, ref: "Document" }, 
 status: { type: String, required: true },
 date :{ type: Date, required: true },
 comments: [{ type: String}], //等被reject或需要退回修改才會寫
-approvalLine: [{ teachers:{ type: mongoose.Types.ObjectId, ref: "Teacher" }, approve: {type: Boolean}}], //想把它寫成dictionary
+approvalLine: [{ teacher:{ type: mongoose.Types.ObjectId, ref: "Teacher" }, approve: {type: Boolean}}], //想把它寫成dictionary
 student: { type: mongoose.Types.ObjectId, ref: "Student" },
 })
 

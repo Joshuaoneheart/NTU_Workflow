@@ -1,7 +1,7 @@
 scalar Date
 
 enum Status {
-  APPLY
+  PENDING
   ACCEPT
   DECLINE
 }
@@ -15,7 +15,7 @@ type Query {
 type Mutation {
   createStudent(data: CreateStudentInput!): Student!
   #申請時也創workflow
-  createApplication(title: String! ,body: String!): Document!
+  createDocument(title: String! ,body: String!): Document!
   createWorkflow(data: CreateWorkflowInput!): Workflow!
 
   updateWorkflow(status: String, comments: String): Workflow!
@@ -37,12 +37,12 @@ input CreateStudentInput {
 
 input CreateWorkflowInput{
   id: ID! 
-  #documentId : ID! #how to reference?
+  document : Document! # ID ref 
   #status: String! #APPLY
   date: Date!
   #comments: [String] 
-  approvalLine: approvalPayload! # dictionary ?
-  student: Student! #how to reference?
+  approvalLine: [approvalPayload]! # dictionary ?
+  student: Student! # ID ref
 }
 
 
@@ -74,12 +74,12 @@ type Workflow {
   status: Status!
   date: Date!
   comments: [String] 
-  approvalLine: approvalPayload! # dictionary ?
+  approvalLine: [approvalPayload]! 
   applicant: Student!
 }
 
 type approvalPayload{
-  teachers:[Teacher!]!
-  approve: [String!]!
+  teacher: Teacher!
+  status: Status!
 }
 
