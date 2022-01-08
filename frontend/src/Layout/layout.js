@@ -2,6 +2,7 @@ import { Layout } from "antd";
 import { useState } from "react";
 import MainPage from "../Containers/MainPage/mainPage";
 import { UserBadge } from "../Components/UserBadge";
+import LeftSider from "../Containers/Sider/leftsider";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -31,7 +32,7 @@ const CustomLayout = (props) => {
             setShowSider(collapsed);
           }}
         >
-          Left Sider
+          <LeftSider />
         </Sider>
         <Content style={{ padding: "0 50px" }}>
           <div
