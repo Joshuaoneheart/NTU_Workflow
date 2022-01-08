@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 function App() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
   const [signedIn, setSignedIn] = useState(false);
+  const [isNew, setIsNew] = useState(false);
   const displayStatus = (payload) => {
     if (payload.msg) {
       const { type, msg } = payload;
@@ -35,7 +37,11 @@ function App() {
       ) : (
         <SignInPage
           user={user}
+					isNew={isNew}
           password={password}
+					confirmPass={confirmPass}
+					setConfirmPass={setConfirmPass}
+					setIsNew={setIsNew}
           setUser={setUser}
           setPassword={setPassword}
           setSignedIn={setSignedIn}
