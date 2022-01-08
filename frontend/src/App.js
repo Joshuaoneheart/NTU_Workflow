@@ -2,7 +2,7 @@
 import "./App.css";
 import { message } from "antd";
 import SignInPage from "./Containers/SignIn/signIn";
-import MainPage from "./Containers/MainPage/mainPage";
+import Layout from "./Layout/layout"
 import { useEffect, useState } from "react";
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
   return (
     <>
       {signedIn === true ? (
-        <MainPage user={user} />
+        <Layout user={user} />
       ) : (
         <SignInPage
           user={user}
