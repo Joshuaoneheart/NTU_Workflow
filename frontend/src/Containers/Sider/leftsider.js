@@ -1,5 +1,6 @@
 import { Avatar, Badge } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import ListContainer from "./listContainer";
 import styled from "styled-components";
 
 const UserIcon = styled(UserOutlined)`
@@ -30,7 +31,8 @@ const Header = styled.h1`
   padding: 10px;
 `;
 
-const LeftSider = () => {
+const LeftSider = (collapsed) => {
+  console.log(collapsed);
   return (
     <>
       <Container>
@@ -45,9 +47,16 @@ const LeftSider = () => {
             <Avatar shape="circle" size="large" icon={<UserIcon />} />
           </Badge>
         </IconColumn>
-        <ContentColumn>
-          <Header>Notifications</Header>
-        </ContentColumn>
+        {collapsed.collapsed === false ? (
+          <>
+            <ContentColumn>
+              <Header>Notifications</Header>
+							<ListContainer />
+            </ContentColumn>
+          </>
+        ) : (
+          <></>
+        )}
       </Container>
     </>
   );

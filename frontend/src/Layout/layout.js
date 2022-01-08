@@ -33,7 +33,7 @@ const CustomLayout = (props) => {
             setShowSider(collapsed);
           }}
         >
-          <LeftSider />
+          <LeftSider collapsed={showSider}/>
         </Sider>
         <Content style={{ padding: "0 50px" }}>
           <div
