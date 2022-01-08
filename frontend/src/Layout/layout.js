@@ -1,18 +1,9 @@
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import { useState } from "react";
 import MainPage from "../Containers/MainPage/mainPage";
-import UserOutlined from '@ant-design/icons';
-import styled from "styled-components"
+import { UserBadge } from "../Components/UserBadge";
 
 const { Header, Footer, Sider, Content } = Layout;
-const UserIcon = styled.div`
-    border-radius:50%;
-    float: right;
-    background-color: #eee;
-    width: 50px;
-    height: 50px;
-    margin-top: 5px;
-`
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
@@ -29,7 +20,7 @@ const CustomLayout = (props) => {
             background: "rgba(255, 255, 255, 0.3)",
           }}
         />
-        <UserIcon><UserOutlined/></UserIcon>
+        <UserBadge user={props.user} />
       </Header>
       <Layout>
         <Sider
