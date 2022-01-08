@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
+import { Avatar, Space,Typography } from "antd";
+
+const { Text } = Typography;
 const Badge = styled.div`
   float: right;
   width: 130px;
@@ -19,20 +21,12 @@ const UserIcon = styled(Avatar)`
   margin-right: 5px;
 `;
 
-const TextLayout = styled.div`
-  margin-right: 10px;
-  flex-direction: column;
-  display: flex;
-`;
-
-
-
 export const UserBadge = (props) => (
   <Badge>
-    <TextLayout>
-      <p style={{display: "flex", marginBottom: "5px", height: "20px"}}>{props.user}</p>
-      <p style={{display: "flex", marginBottom: "1px", height: "20px"}}>{props.user}</p>
-    </TextLayout>
+    <Space size="small" direction="vertical">
+        <Text>{props.user}</Text>
+        <Text>{props.user}</Text>
+    </Space>
     <UserIcon size="large" icon={<UserOutlined />} />
   </Badge>
 );
