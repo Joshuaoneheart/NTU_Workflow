@@ -41,7 +41,11 @@ const signIn = ({
 								type: "error",
 								msg: "UserName empty"
 						})
-						else setSignedIn(true);
+						else {
+              let salt = 0;
+              const hashed_p = hash(password, salt);
+              setSignedIn(true);
+            }
 					}}
           placeholder="Enter username here"
           size="large"
