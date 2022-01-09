@@ -1,32 +1,49 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Space,Typography } from "antd";
+import { Avatar, Button, Dropdown, Menu } from "antd";
 
-const { Text } = Typography;
-const Badge = styled.div`
+const Badge = styled(Button)`
   float: right;
-  width: 130px;
+  width: 120px;
   height: 55px;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
-  padding: 4px;
   margin-top: 4px;
-  display: flex;
-  justify-content: flex-end;
   user-select: none;
+  align-items: center;
+  display: flex;
+  border: 0;
+  &:hover {
+    color: #555;
+  }
 `;
 
 const UserIcon = styled(Avatar)`
   align-self: center;
-  margin-right: 5px;
 `;
 
+const menu = (
+  <Menu>
+    <Menu.Item>
+        Setting
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item>
+        Log out
+    </Menu.Item>
+  </Menu>
+);
+
 export const UserBadge = (props) => (
+  <Dropdown overlay={menu}>
   <Badge>
-    <Space size="small" direction="vertical">
-        <Text>{props.user}</Text>
-        <Text>{props.user}</Text>
-    </Space>
-    <UserIcon size="large" icon={<UserOutlined />} />
+    <div style={{display: "flex", width: "70px", marginRight: "7px", flexDirection: "column", alignItems: "flex-end", marginRight: "10px"}}>
+        <label style={{padding: 0, width: "30px", display: "inline-flex"}}>{props.user}</label>
+        <label style={{padding: 0, width: "30px", display: "inline-flex"}}>{props.user}</label>
+    </div>
+    <div style={{display: "flex"}}>
+      <UserIcon size="large" icon={<UserOutlined />} />
+    </div>
   </Badge>
+  </Dropdown>
 );
