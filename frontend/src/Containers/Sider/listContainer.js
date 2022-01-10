@@ -18,7 +18,7 @@ const listContainer = () => {
         {(item) => (
           <List.Item key={item.name}>
             <List.Item.Meta
-              avatar={<Avatar src={<UserOutlined />} />}
+              avatar={<Avatar src={UserOutlined} />}
               title={item.name}
               description={item.name}
             />

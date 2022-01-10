@@ -23,6 +23,7 @@ const IconColumn = styled.div`
 const ContentColumn = styled.div`
   margin-left: 80px;
   position: absolute;
+	${({collapsed}) => collapsed &&	`visibility: hidden;`}
 `;
 
 const Header = styled.h1`
@@ -32,7 +33,6 @@ const Header = styled.h1`
 `;
 
 const LeftSider = (collapsed) => {
-  console.log(collapsed);
   return (
     <>
       <Container>
@@ -51,7 +51,7 @@ const LeftSider = (collapsed) => {
           <>
             <ContentColumn>
               <Header>Notifications</Header>
-							<ListContainer />
+              <ListContainer />
             </ContentColumn>
           </>
         ) : (
