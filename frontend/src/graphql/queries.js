@@ -20,4 +20,49 @@ const SIGN_IN = gql`
   }
 `;
 
-export { SALT_QUERY, SIGN_IN };
+const DOCUMENT_QUERY = gql`
+  query ($id: ID!) {
+    document(id: $id) {
+      id
+      title
+      body
+      fields
+      passBy
+    }
+  }
+`;
+
+const ALL_DOCUMENTS = gql`
+  query {
+    document {
+      id
+      title
+    }
+  }
+`;
+
+const ALL_USERS = gql`
+  query {
+    user {
+      id
+      name
+    }
+  }
+`;
+
+const FIND_USERS_BY_GROUP = gql`
+  query ($group: String!) {
+    user(group: $group) {
+      id
+      name
+    }
+  }
+`;
+
+const ALL_GROUPS = gql`
+  query {
+    findGroups
+  }
+`
+
+export { SALT_QUERY, SIGN_IN, DOCUMENT_QUERY, ALL_DOCUMENTS, ALL_USERS, ALL_GROUPS, FIND_USERS_BY_GROUP };

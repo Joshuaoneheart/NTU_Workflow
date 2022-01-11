@@ -9,7 +9,7 @@ function App() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
   const [isNew, setIsNew] = useState(false);
   const displayStatus = (payload) => {
     if (payload.msg) {
@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       {signedIn === true ? (
-        <Layout user={user} setUser={setUser} setSignedIn={setSignedIn}/>
+        <Layout user={user} setUser={setUser} setSignedIn={setSignedIn} displayStatus={displayStatus}/>
       ) : (
         <SignInPage
           user={user}
