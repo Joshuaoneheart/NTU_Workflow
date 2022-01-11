@@ -62,17 +62,21 @@ const Header = styled.h1`
 const LeftSider = (collapsed) => {
   const [FocusedIcon, setFocused] = useState(<Notifications />);
   const [activeBadge, setActiveBadge] = useState(0);
+	const [title, setTitle] = useState("Notifications")
   const FocusNotifications = () => {
     setFocused(<Notifications />);
     setActiveBadge(0);
+		setTitle("Notifications");
   };
   const FocusMessages = () => {
     setFocused(<Messages />);
     setActiveBadge(1);
+		setTitle("Messages");
   };
   const FocusArchives = () => {
     setFocused(<Archives />);
     setActiveBadge(2);
+		setTitle("Archives");
   };
   return (
     <>
@@ -112,7 +116,7 @@ const LeftSider = (collapsed) => {
         {collapsed.collapsed === false ? (
           <>
             <ContentColumn>
-              <Header>Notifications</Header>
+              <Header>{title}</Header>
               {FocusedIcon}
             </ContentColumn>
           </>
