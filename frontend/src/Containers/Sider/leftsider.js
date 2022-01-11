@@ -49,6 +49,7 @@ const IconColumn = styled.div`
 
 const ContentColumn = styled.div`
   margin-left: 80px;
+  width: 200px;
   position: absolute;
   ${({ collapsed }) => collapsed && `visibility: hidden;`}
 `;
@@ -62,21 +63,21 @@ const Header = styled.h1`
 const LeftSider = (collapsed) => {
   const [FocusedIcon, setFocused] = useState(<Notifications />);
   const [activeBadge, setActiveBadge] = useState(0);
-	const [title, setTitle] = useState("Notifications")
+  const [title, setTitle] = useState("Notifications");
   const FocusNotifications = () => {
     setFocused(<Notifications />);
     setActiveBadge(0);
-		setTitle("Notifications");
+    setTitle("Notifications");
   };
   const FocusMessages = () => {
     setFocused(<Messages />);
     setActiveBadge(1);
-		setTitle("Messages");
+    setTitle("Messages");
   };
   const FocusArchives = () => {
     setFocused(<Archives />);
     setActiveBadge(2);
-		setTitle("Archives");
+    setTitle("Archives");
   };
   return (
     <>
