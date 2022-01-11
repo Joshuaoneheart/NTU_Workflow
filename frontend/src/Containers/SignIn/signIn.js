@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
 import SignUp from "./signUp";
+import { SALT_QUERY, SIGN_IN } from "../../graphql/queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
 
 const Container = styled(Card)`
   position: absolute;
@@ -20,7 +22,7 @@ const Container = styled(Card)`
   box-shadow: 0px 0px 1px black;
 `;
 
-const signIn = ({
+const SignIn = ({
   user,
   password,
   confirmPass,
@@ -32,21 +34,29 @@ const signIn = ({
   setSignedIn,
   displayStatus,
 }) => {
-  const handleSignUp = () => {
+  const { data: salt } = useQuery(SALT_QUERY);
+  const [signIn] = useLazyQuery(SIGN_IN);
+  const handleSignUp = async () => {
     setPassword("");
     setConfirmPass("");
     setIsNew(true);
   };
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!user || !password) {
       displayStatus({
         type: "error",
         msg: "Username or Password empty",
       });
     } else {
-      let salt = 0;
-      const hashed_p = hash(password, salt);
-      setSignedIn(true);
+      /*const hashed_p = hash(password, salt);
+      const { data: signIn_res, error: signIn_err } = await signIn({
+        variables: { email: user["email"], password: hashed_p },
+      });*/
+      //if (!signIn_err) {
+      //  setUser(signIn_res);
+        setSignedIn(true);
+      //} else {
+      //}
     }
   };
   return (
@@ -60,9 +70,13 @@ const signIn = ({
           <br />
           <Input.Group compact style={{ width: "30vw" }}>
             <Input
-              value={user}
+              value={user["email"]}
               prefix={<UserOutlined size="large" />}
-              onChange={(e) => setUser(e.target.value)}
+              onChange={(e) => {
+                let tmp = Object.assign({}, user);
+                tmp.email = e.target.value;
+                setUser(tmp);
+              }}
               placeholder="Enter username here"
               size="large"
               style={{ marginTop: "20px" }}
@@ -103,4 +117,4 @@ const signIn = ({
   );
 };
 
-export default signIn;
+export default SignIn;
