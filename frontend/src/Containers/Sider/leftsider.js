@@ -1,8 +1,8 @@
 import { Avatar, Badge } from "antd";
 import {
+  FileOutlined,
   InfoCircleOutlined,
-  FolderOpenOutlined,
-  MailOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import Messages from "./messages";
 import Notifications from "./notifications";
@@ -21,15 +21,15 @@ const focusedOutlined = {
   borderStyle: "solid",
 };
 
-const FolderOpenIcon = styled(FolderOpenOutlined)`
-  color: black;
-`;
-
-const MailIcon = styled(MailOutlined)`
-  color: black;
-`;
-
 const InfoCircleIcon = styled(InfoCircleOutlined)`
+  color: black;
+`;
+
+const MessageIcon = styled(MessageOutlined)`
+  color: black;
+`;
+
+const FileIcon = styled(FileOutlined)`
   color: black;
 `;
 
@@ -83,7 +83,7 @@ const LeftSider = (collapsed) => {
               <Avatar
                 shape="circle"
                 size="large"
-                icon={<FolderOpenIcon />}
+                icon={<InfoCircleIcon />}
                 style={activeBadge === 0 ? focusedOutlined : {}}
               />
             </Badge>
@@ -93,7 +93,7 @@ const LeftSider = (collapsed) => {
               <Avatar
                 shape="circle"
                 size="large"
-                icon={<MailIcon />}
+                icon={<MessageIcon />}
                 style={activeBadge === 1 ? focusedOutlined : {}}
               />
             </Badge>
@@ -103,7 +103,7 @@ const LeftSider = (collapsed) => {
               <Avatar
                 shape="circle"
                 size="large"
-                icon={<InfoCircleIcon />}
+                icon={<FileIcon />}
                 style={activeBadge === 2 ? focusedOutlined : {}}
               />
             </Badge>

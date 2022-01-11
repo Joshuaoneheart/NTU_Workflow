@@ -25,7 +25,7 @@ const CustomLayout = (props) => {
       </Header>
       <Layout>
         <Sider
-					width={500}
+					width={400}
           style={{ background: "#fff" }}
           collapsible
           collapsed={showSider}
