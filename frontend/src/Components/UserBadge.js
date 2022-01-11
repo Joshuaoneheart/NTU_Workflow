@@ -4,15 +4,17 @@ import { Avatar, Button, Dropdown, Menu } from "antd";
 
 const Badge = styled(Button)`
   float: right;
-  width: 120px;
+  width: 135px;
   height: 55px;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   margin-top: 4px;
   user-select: none;
   align-items: center;
+  justify-content: flex-start;
   display: flex;
   border: 0;
+  padding-left: 2px;
   &:hover {
     color: #555;
   }
@@ -25,7 +27,7 @@ const UserIcon = styled(Avatar)`
 const menu = (
   <Menu>
     <Menu.Item>
-        Setting
+        Profile
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item>
@@ -37,9 +39,9 @@ const menu = (
 export const UserBadge = (props) => (
   <Dropdown overlay={menu}>
   <Badge>
-    <div style={{display: "flex", width: "70px", marginRight: "7px", flexDirection: "column", alignItems: "flex-end", marginRight: "10px"}}>
-        <label style={{padding: 0, width: "30px", display: "inline-flex"}}>{props.user}</label>
-        <label style={{padding: 0, width: "30px", display: "inline-flex"}}>{props.user}</label>
+    <div style={{display: "flex", width: "100px", marginRight: "7px", flexDirection: "column", alignItems: "flex-end", marginRight: "10px", overflow: "hidden", textAlign: "end"}}>
+        <label style={{padding: 0, width: "70px", display: "inline-block", textAlign: "right"}}>Joshua</label>
+        <label style={{padding: 0, width: "70px", display: "inline-block", textAlign: "right"}}>A genius</label>
     </div>
     <div style={{display: "flex"}}>
       <UserIcon size="large" icon={<UserOutlined />} />
