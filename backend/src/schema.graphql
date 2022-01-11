@@ -7,18 +7,24 @@ enum Status {
 }
 
 type Query {
-  user(name: String, id: ID, groups: String, password: String!): [User!]
+  salt: String #check
+  signIn(email: String, password: String!): User!
+  user(name: String, id: ID, groups: String): [User!]
   document(title: String): [Document!]
   workflow(status: Status, user_id: ID): [Workflow!]
 }
 
 type Mutation {
+
+  # stuff only
   createUser(input: CreateUserInput!): User!
+  # stuff only
+  createDocument(input: CreateDocumentInput!): Document
 
-  createDocument(input: CreateDocumentInput!): Document!
-  createWorkflow(input: CreateWorkflowInput!): Workflow!
+  # student only
+  #  createWorkflow(input: CreateWorkflowInput!): Workflow
 
-  updateWorkflow(status: String, comments: String): Workflow!
+  updateWorkflow(status: String, comments: String): Workflow
 }
 
 type Subscription {
@@ -39,18 +45,36 @@ input CreateUserInput {
 
 input CreateWorkflowInput {
   id: ID!
-  document: Document! #  ref
+  document: DocumentInput! #  ref
   date: Date!
-  approvalLine: [approvalPayload]! # dictionary ?
-  student: User! #  ref
+  approvalLine: [approvalPayloadInput]! # dictionary ?
+  student: UserInput! #  ref
 }
 
 input CreateDocumentInput {
   id: ID!
   title: String!
-  body: String! 
-  fields: [FieldContent!]! #可以又需要image, file, text
-  passBy: [User!]! #ref
+  body: String!
+  fields: [FieldContentInput!]! #可以又需要image, file, text
+  passBy: [UserInput!]! #ref
+}
+
+input UserInput {
+  name: String!
+  id: ID!
+  department: String!
+  groups: [String]
+  role: String!
+  password: String!
+  email: String!
+}
+
+input DocumentInput{
+  id: ID!
+  title: String!
+  body: String! #說明申請須知
+  fields: [FieldContentInput!]! #可以又需要image, file, text
+  passBy: [UserInput!]! #ref
 }
 
 type User {
@@ -78,6 +102,11 @@ enum FieldType {
 }
 
 type FieldContent {
+  fieldType: FieldType!
+  require: Boolean!
+}
+
+input FieldContentInput {
   fieldType: FieldType!
   require: Boolean!
 }
@@ -111,3 +140,9 @@ type approvalPayload {
   stuff: User!
   status: Status!
 }
+
+input approvalPayloadInput {
+  stuff: UserInput!
+  status: Status!
+}
+

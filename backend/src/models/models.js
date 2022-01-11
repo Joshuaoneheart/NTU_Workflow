@@ -54,10 +54,16 @@ const WorkflowSchema = new Schema({
   student: { type: mongoose.Types.ObjectId, ref: "User" },
 });
 
+const SaltSchema = new Schema({
+  name: { type: String, required: true},
+  content: { type: String, required: true}
+})
+
 const UserModel = mongoose.model("User", UserSchema);
 const DocumentModel = mongoose.model("Document", DocumentSchema);
 const WorkflowModel = mongoose.model("Workflow", WorkflowSchema);
 const FileModel = mongoose.model("File", FileSchema);
 const TextModel = mongoose.model("Text", TextSchema);
+const saltModel = mongoose.model("salt",SaltSchema);
 
-export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel };
+export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel };

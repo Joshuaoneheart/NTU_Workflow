@@ -14,14 +14,14 @@ import DateResolver from "./resolvers/Date.js";
 import StatusResolver from "./resolvers/Status.js";
 
 
-import * as models from "./models/models.js"; //mongo schema
+import * as db from "./models/models.js"; //mongo schema
 
 const pubSub = new PubSub();
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
   resolvers: {
-    //Query,
-    // Mutation,
+    Query,
+    Mutation,
     // Subscription,
     Document,
     // Workflow,
@@ -30,7 +30,7 @@ const server = new GraphQLServer({
     Status: StatusResolver,
   },
   context: {
-    models,
+    db,
     pubSub,
   },
 });
