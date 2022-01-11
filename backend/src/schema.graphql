@@ -1,0 +1,148 @@
+scalar Date
+
+enum Status {
+  PENDING
+  ACCEPT
+  DECLINE
+}
+
+type Query {
+  salt: String #check
+  signIn(email: String, password: String!): User!
+  user(name: String, id: ID, groups: String): [User!]
+  document(title: String): [Document!]
+  workflow(status: Status, user_id: ID): [Workflow!]
+}
+
+type Mutation {
+
+  # stuff only
+  createUser(input: CreateUserInput!): User!
+  # stuff only
+  createDocument(input: CreateDocumentInput!): Document
+
+  # student only
+  #  createWorkflow(input: CreateWorkflowInput!): Workflow
+
+  updateWorkflow(status: String, comments: String): Workflow
+}
+
+type Subscription {
+  #如果status更新 或是有comments, 都會通知teachers跟當事的students
+  workflowUpdate: Workflow!
+}
+
+# only faculty members can create student users
+input CreateUserInput {
+  name: String!
+  id: ID!
+  department: String!
+  groups: [String]
+  role: String!
+  password: String!
+  email: String!
+}
+
+input CreateWorkflowInput {
+  id: ID!
+  document: DocumentInput! #  ref
+  date: Date!
+  approvalLine: [approvalPayloadInput]! # dictionary ?
+  student: UserInput! #  ref
+}
+
+input CreateDocumentInput {
+  id: ID!
+  title: String!
+  body: String!
+  fields: [FieldContentInput!]! #可以又需要image, file, text
+  passBy: [UserInput!]! #ref
+}
+
+input UserInput {
+  name: String!
+  id: ID!
+  department: String!
+  groups: [String]
+  role: String!
+  password: String!
+  email: String!
+}
+
+input DocumentInput{
+  id: ID!
+  title: String!
+  body: String! #說明申請須知
+  fields: [FieldContentInput!]! #可以又需要image, file, text
+  passBy: [UserInput!]! #ref
+}
+
+type User {
+  name: String!
+  id: ID!
+  department: String!
+  groups: [String]
+  role: String!
+  password: String!
+  email: String!
+}
+
+type Document {
+  id: ID!
+  title: String!
+  body: String! #說明申請須知
+  fields: [FieldContent!]! #可以又需要image, file, text
+  passBy: [User!]! #ref
+}
+
+enum FieldType {
+  IMAGE
+  FILE
+  TEXT
+}
+
+type FieldContent {
+  fieldType: FieldType!
+  require: Boolean!
+}
+
+input FieldContentInput {
+  fieldType: FieldType!
+  require: Boolean!
+}
+
+type Workflow {
+  id: ID!
+  document: Document! # ref
+  status: Status!
+  date: Date!
+  comments: String
+  contents: ContentPayload!
+  approvalLine: [approvalPayload]!
+  student: User!
+}
+
+type File {
+  _id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type ContentPayload {
+  file: [File]
+  image: [File]
+  TEXT: [String]
+}
+
+type approvalPayload {
+  stuff: User!
+  status: Status!
+}
+
+input approvalPayloadInput {
+  stuff: UserInput!
+  status: Status!
+}
+
