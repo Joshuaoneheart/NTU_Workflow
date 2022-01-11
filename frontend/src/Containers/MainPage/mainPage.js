@@ -1,11 +1,10 @@
 import DragAndDrop from "./dragAndDrop";
 import ProgressBar from "./progressBar";
+import DocumentPage from "./DocumentPage";
 const MainPage = ({ user }) => {
   return (
     <>
-      <h1>Welcome {user}</h1>
-      <DragAndDrop />
-      <ProgressBar />
+      <DocumentPage />
     </>
   );
 };

@@ -1,8 +1,5 @@
 {
-  "dependencies": {
-    "styled-components": "^5.3.3"
-  },
   "scripts": {
-	  "start": "cd frontend && yarn start"
+    "start": "cd frontend && yarn start"
   }
 }
