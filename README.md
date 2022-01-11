@@ -18,7 +18,7 @@ An auxiliary workflow system for facilitating the administrative work in Nationa
 The users are able to create and edit administrative documents such as Scholarship applications or Club Activities applications directly from their devices.
 We have 3 types of users:
 *    Students:
-		* Create and edit administrative documents
+		* Create and edit Workflows
 * Staff:
 	* Create and edit administrative documents
 	* Approve the administrative documents
