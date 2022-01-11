@@ -1,8 +1,21 @@
-import mongo from "./mongo.js";
+import {connect} from "./mongo.js";
 import server from "./server.js";
 
+require('dotenv').config()
 
-mongo();
+// const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
+// const SECRET = process.env.SECRET;
+
+// const hash = (text, saltRounds) => bcrypt.hash(text, saltRounds)
+
+// const createToken = ({ id, email, name }, secret) =>
+// +  jwt.sign({ id, email, name }, secret, {
+//     expiresIn: '1d'
+//   })
+
+
+
+connect();
 
 const port = process.env.PORT | 5000;
 

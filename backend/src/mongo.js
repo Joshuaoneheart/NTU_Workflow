@@ -1,27 +1,43 @@
-import dotenv from 'dotenv-defaults';
-import mongoose from 'mongoose';
+import dotenv from "dotenv-defaults";
+import mongoose from "mongoose";
+const Grid = require("gridfs-stream");
+const fs = require("fs");
 
-export default()=>{
-  
-dotenv.config();
 
-if(!process.env.MONGO_URL){
-  console.error("Missing MONGO_URL!")
-  process.exit(1);
-}
+async function connect() {
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-});
+  dotenv.config();
 
-const db = mongoose.connection
+  if (!process.env.MONGO_URL) {
+    console.error("Missing MONGO_URL!");
+    process.exit(1);
+  }
 
-db.once('error',()=>{
-    console.log('MongoDB error!')
+  mongoose
+    .connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => console.log("MongoDB Connected!"))
+    .catch((err) => console.log(err));
+};
+
+const storeFile = async (upload) => {
+  const { filename, createReadStream, mimetype } = await upload.then(
+    (result) => result
+  );
+
+  const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "files",
   });
 
-db.once('open', () => {
-    console.log('MongoDB connected!')
-});
-}
+  const uploadStream = bucket.openUploadStream(filename, {
+    contentType: mimetype,
+  });
+  createReadStream()
+    .pipe(uploadStream)
+    .on("error", console.log("error"))
+    .on("finish", console.log("finish"));
+};
+
+export { connect,storeFile };

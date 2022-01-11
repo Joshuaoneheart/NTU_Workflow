@@ -1,4 +1,6 @@
 import { GraphQLServer, PubSub } from "graphql-yoga";
+import Koa from "koa";
+import { ApolloServer, gql } from "apollo-server-koa";
 
 // resolvers
 import Query from "./resolvers/Query.js";
@@ -32,5 +34,9 @@ const server = new GraphQLServer({
     pubSub,
   },
 });
+
+// graphQLServer.applyMiddleware({
+//   app: server
+// });
 
 export default server;

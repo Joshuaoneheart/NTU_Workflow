@@ -47,7 +47,7 @@ const WorkflowSchema = new Schema({
   },
   approvalLine: [
     {
-      teacher: { type: mongoose.Types.ObjectId, ref: "User" },
+      stuff: { type: mongoose.Types.ObjectId, ref: "User" },
       approve: { type: Boolean },
     },
   ], //想把它寫成dictionary

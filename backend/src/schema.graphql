@@ -7,79 +7,107 @@ enum Status {
 }
 
 type Query {
-  name(name: String, id:ID ): [Student!]
+  user(name: String, id: ID, groups: String, password: String!): [User!]
   document(title: String): [Document!]
-  workflow(status: String, applicant: String): [Workflow!]
+  workflow(status: Status, user_id: ID): [Workflow!]
 }
 
 type Mutation {
-  createStudent(data: CreateStudentInput!): Student!
-  #申請時也創workflow
-  createDocument(title: String! ,body: String!): Document!
-  createWorkflow(data: CreateWorkflowInput!): Workflow!
+  createUser(input: CreateUserInput!): User!
+
+  createDocument(input: CreateDocumentInput!): Document!
+  createWorkflow(input: CreateWorkflowInput!): Workflow!
 
   updateWorkflow(status: String, comments: String): Workflow!
 }
 
 type Subscription {
-  #如果status更新 或是有comments, 都會通知teachers跟students
+  #如果status更新 或是有comments, 都會通知teachers跟當事的students
   workflowUpdate: Workflow!
 }
 
 # only faculty members can create student users
-input CreateStudentInput {
+input CreateUserInput {
   name: String!
-  id: ID! 
+  id: ID!
   department: String!
-  grade: Int!
+  groups: [String]
+  role: String!
+  password: String!
   email: String!
 }
 
-input CreateWorkflowInput{
-  id: ID! 
-  document : Document! #  ref 
-  #status: String! #APPLY
+input CreateWorkflowInput {
+  id: ID!
+  document: Document! #  ref
   date: Date!
-  #comments: [String] 
   approvalLine: [approvalPayload]! # dictionary ?
-  student: Student! #  ref
+  student: User! #  ref
 }
 
+input CreateDocumentInput {
+  id: ID!
+  title: String!
+  body: String! 
+  fields: [FieldContent!]! #可以又需要image, file, text
+  passBy: [User!]! #ref
+}
 
-type Student {
+type User {
   name: String!
   id: ID!
   department: String!
-  grade: Int!
-  email: String!
-}
-
-type Teacher {
-  name: String!
-  id: ID!
-  department: String!
+  groups: [String]
+  role: String!
+  password: String!
   email: String!
 }
 
 type Document {
-  id: ID! 
+  id: ID!
   title: String!
-  body: String!
-  passBy: [Teacher!]! #ref
+  body: String! #說明申請須知
+  fields: [FieldContent!]! #可以又需要image, file, text
+  passBy: [User!]! #ref
+}
+
+enum FieldType {
+  IMAGE
+  FILE
+  TEXT
+}
+
+type FieldContent {
+  fieldType: FieldType!
+  require: Boolean!
 }
 
 type Workflow {
-  id: ID! 
-  document : Document! # ref 
+  id: ID!
+  document: Document! # ref
   status: Status!
   date: Date!
-  comments: [String] 
-  approvalLine: [approvalPayload]! 
-  student: Student!
+  comments: String
+  contents: ContentPayload!
+  approvalLine: [approvalPayload]!
+  student: User!
 }
 
-type approvalPayload{
-  teacher: Teacher!
+type File {
+  _id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type ContentPayload {
+  file: [File]
+  image: [File]
+  TEXT: [String]
+}
+
+type approvalPayload {
+  stuff: User!
   status: Status!
 }
-
