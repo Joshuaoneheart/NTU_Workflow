@@ -11,7 +11,7 @@ let data = [
   { name: "Joshua is in love" },
 ];
 
-const listContainer = () => {
+const Notifications = () => {
   return (
     <List>
       <VirtualList data={data} itemHeight={40}>
@@ -28,4 +28,4 @@ const listContainer = () => {
   );
 };
 
-export default listContainer;
+export default Notifications;
