@@ -36,7 +36,7 @@ const DocumentPage = (props) => {
       <List size="large" header={<Title level={4}>Content List</Title>}>
         {data.map((datum, i) => {
           return (
-            <List.Item>
+            <List.Item key={i}>
               <Typography>
                 <Title level={5}>{datum["title"]}</Title>
                 <Paragraph>{datum["content"]}</Paragraph>
