@@ -1,4 +1,4 @@
-import { Badge, Card, Typography, Radio } from "antd";
+import { Badge, Card, Typography, Radio, Space } from "antd";
 import { useState } from "react";
 
 const { Text } = Typography;
@@ -29,13 +29,10 @@ const data = [
   },
 ];
 const Archives = () => {
-  const [filter, setFilter] = useState(null);
-	const onFilterChange = (e) => {
-		if (e.target.value === "All")
-			setFilter(null);
-		else 
-			setFilter(e.target.value);
-	}
+  const [filter, setFilter] = useState("All");
+  const onFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
   const convert = (a) => {
     switch (a) {
       case "APPROVED":
@@ -48,16 +45,18 @@ const Archives = () => {
   };
   return (
     <>
-      <Radio.Group onChange={onFilterChange} value={filter}>
-        <Radio value="All">All</Radio>
-        <Radio value="approved">Approved</Radio>
-        <Radio value="pending">Pending</Radio>
-        <Radio value="rejected">Rejected</Radio>
-      </Radio.Group>
+      <Space>
+        <Radio.Group onChange={onFilterChange} value={filter}>
+          <Radio value="All">All</Radio>
+          <Radio value="approved">Approved</Radio>
+          <Radio value="pending">Pending</Radio>
+          <Radio value="rejected">Rejected</Radio>
+        </Radio.Group>
+      </Space>
       {data.map((archive) => {
         const { text, color } = convert(archive.status);
         console.log(archive);
-        if (!filter) {
+        if (filter === "All") {
           return (
             <Badge.Ribbon text={text} color={color}>
               <Card>{archive.content}</Card>
