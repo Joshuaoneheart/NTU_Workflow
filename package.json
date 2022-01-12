@@ -1,12 +1,14 @@
 {
   "scripts": {
     "start": "cd backend && yarn start",
-    "build": "cd frontend && yarn && yarn build && cd ../backend && yarn"
+    "build": "cd frontend && yarn && yarn build && cd ../backend && yarn",
+    "heroku-postbuild": "echo Skip build on Heroku"
   },
   "name": "NTU_Workflow",
   "version": "1.0.0",
   "repository": "https://github.com/Joshuaoneheart/NTU_Workflow.git",
   "author": "yihsin.yu <yihsin.yu@linecorp.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "heroku-run-build-script": true
 }
