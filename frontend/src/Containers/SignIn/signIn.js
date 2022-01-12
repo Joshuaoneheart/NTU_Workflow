@@ -15,7 +15,7 @@ const Container = styled(Card)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 10vh;
+  padding: 5vh;
   height: 65vh;
   top: 17.5vh;
   left: 25vw;
@@ -55,10 +55,13 @@ const SignIn = ({
         variables: { email: user["email"], password: hashed_p },
       });
       if (!signIn_err) {
-        setUser(signIn_res);
+        setUser(signIn_res.signIn);
         setSignedIn(true);
       } else {
-        console.log(signIn_err);
+        displayStatus({
+          type: "error",
+          msg: signIn_err[0].message,
+        });
       }
     }
   };
@@ -106,7 +109,7 @@ const SignIn = ({
       ) : (
         <SignUp
           user={user}
-          salt={salt.salt}
+          salt={(salt)? salt.salt:""}
           password={password}
           confirmPass={confirmPass}
           isNew={isNew}
