@@ -34,9 +34,7 @@ const SignIn = ({
   setSignedIn,
   displayStatus,
 }) => {
-  const {
-    data: salt 
-  } = useQuery(SALT_QUERY);
+  const { data: salt, error, loading } = useQuery(SALT_QUERY);
   const [signIn] = useLazyQuery(SIGN_IN);
   const handleSignUp = async () => {
     setPassword("");
@@ -50,6 +48,14 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
+      console.log(salt);
+      if (!salt) {
+        displayStatus({
+          type: "error",
+          msg: "Some errors happen. Retry later",
+        });
+        return;
+      }
       const hashed_p = await hash(password, salt.salt);
       const { data: signIn_res, error: signIn_err } = await signIn({
         variables: { email: user["email"], password: hashed_p },
@@ -58,9 +64,10 @@ const SignIn = ({
         setUser(signIn_res.signIn);
         setSignedIn(true);
       } else {
+        console.log(signIn_err);
         displayStatus({
           type: "error",
-          msg: signIn_err[0].message,
+          msg: "Some errors happen. Retry later",
         });
       }
     }
@@ -109,7 +116,7 @@ const SignIn = ({
       ) : (
         <SignUp
           user={user}
-          salt={(salt)? salt.salt:""}
+          salt={salt ? salt.salt : ""}
           password={password}
           confirmPass={confirmPass}
           isNew={isNew}

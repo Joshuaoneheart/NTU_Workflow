@@ -24,28 +24,20 @@ const Query = {
       salt = salt.content;
       return salt;
     } catch (e) {
-      console.log(e.message);
-      return "Internal Error";
+      
+      throw new Error (e.message);
     }
   },
   signIn: async (parent, { email, password }, { db }) => {
-    // if (email) {
-    //
-    //   if (!user) throw new Error(`user not found by email ${email}`);
-    //   if (password) {
-    //     if (user.password == password) return user;
-    //   } else throw new Error(" password input is null ");
-    // } else {
-    //   throw new Error(" id input is null ");
-    // }
+
     try {
       const user = await UserModel.findOne({ email });
-      if (!user) return "User not exists";
+      if (!user) throw new Error("User not found");
       if (user.password == password) return user;
-      else return "Password incorrect";
+      else throw new Error("Password incorrect");
     } catch (e) {
-      console.log(e.message);
-      return "Internal Error";
+
+      throw new Error (e.message);
     }
   },
   findGroups: async (parent, args, db) => {
