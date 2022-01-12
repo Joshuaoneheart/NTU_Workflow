@@ -9,6 +9,7 @@ enum Status {
 type Query {
   salt: String #check
   signIn(email: String!, password: String!): User!
+  findGroups:[String!]
   user(name: String, id: ID, groups: String): [User!]
   document(title: String): [Document!]
   workflow(status: Status, user_id: ID): [Workflow!]

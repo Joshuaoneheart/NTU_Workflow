@@ -29,6 +29,9 @@ import { saltModel, UserModel,DocumentModel,WorkflowModel } from "../models/mode
 const Mutation = {
   createUser: async (parent, args, db ) =>{
 
+    const checkEmail = await UserModel.find({email: args.input.email});
+    if(checkEmail) throw new Error(`Email repeat : ${args.input.email}`);
+
     const user = await new UserModel({
       name: args.input.name,
       id: args.input.id,
@@ -41,17 +44,7 @@ const Mutation = {
     await user.save();
     return user;
   },
-    // if (password) {
-    //   const user = await db.UserModel.find({
-    //     password: password,
-    //   });
-    //   if (!user) {
-    //     throw new Error('wrong password or user is invalid');
-    //   }
-    //   else{
-    //     return (user);
-    //   }
-    // }
+
     
 };
 
