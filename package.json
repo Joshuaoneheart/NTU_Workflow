@@ -2,5 +2,6 @@
   "scripts": {
     "start": "cd backend && yarn start",
 	"build": "cd frontend && yarn && yarn build && cd ../backend && yarn"
-  }
+  },
+  "heroku-run-build-script": true
 }
