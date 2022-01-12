@@ -15,7 +15,7 @@ const Container = styled(Card)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 10vh;
+  padding: 5vh;
   height: 65vh;
   top: 17.5vh;
   left: 25vw;
@@ -106,7 +106,7 @@ const SignIn = ({
       ) : (
         <SignUp
           user={user}
-          salt={salt.salt}
+          salt={(salt)? salt.salt:""}
           password={password}
           confirmPass={confirmPass}
           isNew={isNew}
