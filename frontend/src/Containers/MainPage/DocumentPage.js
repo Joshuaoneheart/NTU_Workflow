@@ -1,11 +1,31 @@
-import { Typography, Timeline, Tag, Button, List } from "antd";
+import { Typography, Timeline, Tag, Button, List, Upload } from "antd";
+import "./Document.css"
 
 const { Title, Paragraph } = Typography;
-
 const DocumentPage = (props) => {
   const data = [
     { title: "I am happy", content: "Really" },
-    { title: "No, you are dead.", content: "Haha" },
+    {
+      title: "No, you are dead.",
+      content: (
+        <Upload
+          className="upload-list-inline"
+          disabled
+          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          listType="picture"
+          defaultFileList={[
+            {
+              uid: "-1",
+              name: "xxx.png",
+              status: "done",
+              url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+              thumbUrl:
+                "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+            },
+          ]}
+        />
+      ),
+    },
   ];
   return (
     <>
