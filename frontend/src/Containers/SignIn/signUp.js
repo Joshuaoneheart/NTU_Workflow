@@ -80,19 +80,20 @@ const SignUp = ({
       let tmp = Object.assign({}, user);
       tmp["password"] = hashed_p;
       tmp["id"] = uuidv4();
-      setUser(tmp);
-      console.log(user);
-      const { data: signUp_res, error: signUp_err } = await signUp({
-        variables: user,
-      });
-      if (!signUp_err) {
-        setUser(signUp_res.createUser);
-        setSignedIn(true);
-      } else
-        displayStatus({
-          type: "error",
-          msg: signUp_err,
+      setUser(async (old_user) => {
+        const { data: signUp_res, error: signUp_err } = await signUp({
+          variables: tmp,
         });
+        if (!signUp_err) {
+          setSignedIn(true);
+          return signUp_res.createUser;
+        } else
+          displayStatus({
+            type: "error",
+            msg: signUp_err,
+          });
+          return old_user;
+      });
     }
   };
 
