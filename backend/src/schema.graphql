@@ -8,7 +8,7 @@ enum Status {
 
 type Query {
   salt: String #check
-  signIn(email: String, password: String!): User!
+  signIn(email: String!, password: String!): User!
   user(name: String, id: ID, groups: String): [User!]
   document(title: String): [Document!]
   workflow(status: Status, user_id: ID): [Workflow!]

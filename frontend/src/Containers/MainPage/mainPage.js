@@ -4,7 +4,7 @@ import DocumentPage from "./DocumentPage";
 const MainPage = ({ user }) => {
   return (
     <>
-      <DocumentPage />
+      <DocumentPage user={user}/>
     </>
   );
 };
