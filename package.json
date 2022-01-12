@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "start": "cd backend && yarn start",
+    "start": "echo start",
+	"on": "cd backend && yarn start",
     "build": "cd frontend && yarn && yarn build && cd ../backend && yarn",
-    "heroku-postbuild": "echo Building && yarn build"
+    "heroku-postbuild": "echo Building && yarn build && yarn on"
   },
   "name": "NTU_Workflow",
   "version": "1.0.0",
