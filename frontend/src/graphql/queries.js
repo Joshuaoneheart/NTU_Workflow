@@ -7,14 +7,17 @@ const SALT_QUERY = gql`
 `;
 
 const SIGN_IN = gql`
-  query ($name: String!, $password: String!) {
-    validateUser(data: { name: $name, password: $password })
+  query ($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      name
+      id
+      department
+      groups
+      role
+      password
+      email
+    }
   }
 `;
 
-const CHECK_USER = gql`
-  query ($name: String!) {
-    checkUser(data: $name)
-  }
-`;
 export { SALT_QUERY, SIGN_IN };

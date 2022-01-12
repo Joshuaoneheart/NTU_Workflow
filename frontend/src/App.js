@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       {signedIn === true ? (
-        <Layout user={user} />
+        <Layout user={user} setUser={setUser} setSignedIn={setSignedIn}/>
       ) : (
         <SignInPage
           user={user}

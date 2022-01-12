@@ -1,5 +1,5 @@
 import { Button, Card, Input, Space } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
@@ -15,8 +15,8 @@ const Container = styled(Card)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 10vh;
-  height: 65vh;
+  padding: 3vh;
+  height: 70vh;
   top: 17.5vh;
   left: 25vw;
   box-shadow: 0px 0px 1px black;
@@ -34,7 +34,7 @@ const SignIn = ({
   setSignedIn,
   displayStatus,
 }) => {
-  const { data: salt } = useQuery(SALT_QUERY);
+  const { data: salt, error, loading } = useQuery(SALT_QUERY);
   const [signIn] = useLazyQuery(SIGN_IN);
   const handleSignUp = async () => {
     setPassword("");
@@ -48,15 +48,28 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
-      /*const hashed_p = hash(password, salt);
+      console.log(salt);
+      if (!salt) {
+        displayStatus({
+          type: "error",
+          msg: "Some errors happen. Retry later",
+        });
+        return;
+      }
+      const hashed_p = await hash(password, salt.salt);
       const { data: signIn_res, error: signIn_err } = await signIn({
         variables: { email: user["email"], password: hashed_p },
-      });*/
-      //if (!signIn_err) {
-      //  setUser(signIn_res);
+      });
+      if (!signIn_err) {
+        setUser(signIn_res.signIn);
         setSignedIn(true);
-      //} else {
-      //}
+      } else {
+        console.log(signIn_err);
+        displayStatus({
+          type: "error",
+          msg: "Some errors happen. Retry later",
+        });
+      }
     }
   };
   return (
@@ -71,13 +84,13 @@ const SignIn = ({
           <Input.Group compact style={{ width: "30vw" }}>
             <Input
               value={user["email"]}
-              prefix={<UserOutlined size="large" />}
+              prefix={<MailOutlined size="large" />}
               onChange={(e) => {
                 let tmp = Object.assign({}, user);
                 tmp.email = e.target.value;
                 setUser(tmp);
               }}
-              placeholder="Enter username here"
+              placeholder="Enter email here"
               size="large"
               style={{ marginTop: "20px" }}
             />
@@ -103,6 +116,7 @@ const SignIn = ({
       ) : (
         <SignUp
           user={user}
+          salt={salt ? salt.salt : ""}
           password={password}
           confirmPass={confirmPass}
           isNew={isNew}
@@ -110,6 +124,7 @@ const SignIn = ({
           setPassword={setPassword}
           setConfirmPass={setConfirmPass}
           setIsNew={setIsNew}
+          setSignedIn={setSignedIn}
           displayStatus={displayStatus}
         />
       )}
