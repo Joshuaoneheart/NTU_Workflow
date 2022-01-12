@@ -28,6 +28,7 @@ const Notifications = () => {
       <List>
         <VirtualList data={data} itemHeight={40}>
           {(item) => {
+            if (filter === "All") {
               return (
                 <List.Item key={item.name}>
                   <List.Item.Meta
@@ -37,6 +38,21 @@ const Notifications = () => {
                   <Badge count={item.status === "NEW" ? 1 : 0} />
                 </List.Item>
               );
+            } else {
+              console.log(filter, item.status);
+              return (
+                <List.Item
+                  key={item.name}
+                  style={item.status !== filter ? { display: "none" } : {}}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar src={UserOutlined} />}
+                    title={item.name}
+                  />
+                  <Badge count={item.status === "NEW" ? 1 : 0} />
+                </List.Item>
+              );
+            }
           }}
         </VirtualList>
       </List>
