@@ -55,10 +55,13 @@ const SignIn = ({
         variables: { email: user["email"], password: hashed_p },
       });
       if (!signIn_err) {
-        setUser(signIn_res);
+        setUser(signIn_res.signIn);
         setSignedIn(true);
       } else {
-        console.log(signIn_err);
+        displayStatus({
+          type: "error",
+          msg: signIn_err[0].message,
+        });
       }
     }
   };
