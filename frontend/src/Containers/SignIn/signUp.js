@@ -73,8 +73,8 @@ const Container = styled(Card)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 5vh;
-  height: 65vh;
+  padding: 3vh;
+  height: 75vh;
   top: 15vh;
   left: 25vw;
   box-shadow: 0px 0px 1px black;
