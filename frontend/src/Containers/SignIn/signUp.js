@@ -126,7 +126,6 @@ const SignUp = ({
         msg: "Passwords are different",
       });
     } else {
-      let salt = 0;
       const hashed_p = await hash(password, salt);
       let tmp = Object.assign({}, user);
       tmp["password"] = hashed_p;
@@ -139,7 +138,6 @@ const SignUp = ({
           });
         }
         tmp["department"] = department;
-        console.log(tmp)
         const { data: signUp_res, errors: signUp_err } = await signUp({
           variables: tmp,
         });

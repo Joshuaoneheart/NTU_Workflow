@@ -48,7 +48,6 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
-      console.log(salt);
       if (!salt) {
         displayStatus({
           type: "error",

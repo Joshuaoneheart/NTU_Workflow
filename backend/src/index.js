@@ -38,6 +38,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
+app.use('/graphql', (req, res, next) => {
+  console.log(req.body.query)
+  console.log(req.body.variables)
+  return next()
+})
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
