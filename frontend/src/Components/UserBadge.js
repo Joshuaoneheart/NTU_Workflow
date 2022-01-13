@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from "antd";
 
+const { SubMenu } = Menu;
+
 const Badge = styled(Button)`
   float: right;
   width: 135px;
@@ -26,26 +28,56 @@ const UserIcon = styled(Avatar)`
 
 const menu = (
   <Menu>
-    <Menu.Item>
-        Profile
-    </Menu.Item>
+    <Menu.Item>Profile</Menu.Item>
+    <SubMenu title="Some property">
+      <Menu.Item> Name 1 </Menu.Item>
+      <Menu.Item> Name 1 </Menu.Item>
+      <Menu.Item> Name 1 </Menu.Item>
+    </SubMenu>
     <Menu.Divider />
-    <Menu.Item>
-        Log out
-    </Menu.Item>
+    <Menu.Item>Log out</Menu.Item>
   </Menu>
 );
 
 export const UserBadge = (props) => (
   <Dropdown overlay={menu}>
-  <Badge>
-    <div style={{display: "flex", width: "100px", marginRight: "7px", flexDirection: "column", alignItems: "flex-end", marginRight: "10px", overflow: "hidden", textAlign: "end"}}>
-        <label style={{padding: 0, width: "70px", display: "inline-block", textAlign: "right"}}>Joshua</label>
-        <label style={{padding: 0, width: "70px", display: "inline-block", textAlign: "right"}}>A genius</label>
-    </div>
-    <div style={{display: "flex"}}>
-      <UserIcon size="large" icon={<UserOutlined />} />
-    </div>
-  </Badge>
+    <Badge>
+      <div
+        style={{
+          display: "flex",
+          width: "100px",
+          marginRight: "7px",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          marginRight: "10px",
+          overflow: "hidden",
+          textAlign: "end",
+        }}
+      >
+        <label
+          style={{
+            padding: 0,
+            width: "70px",
+            display: "inline-block",
+            textAlign: "right",
+          }}
+        >
+          Joshua
+        </label>
+        <label
+          style={{
+            padding: 0,
+            width: "70px",
+            display: "inline-block",
+            textAlign: "right",
+          }}
+        >
+          A genius
+        </label>
+      </div>
+      <div style={{ display: "flex" }}>
+        <UserIcon size="large" icon={<UserOutlined />} />
+      </div>
+    </Badge>
   </Dropdown>
 );
