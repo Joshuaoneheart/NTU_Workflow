@@ -1,5 +1,6 @@
 import { Typography, Timeline, Tag, Button, List, Upload } from "antd";
-import "./Document.css"
+import "./Document.css";
+import CreateWorkflow from "../CreateWorkflow/createworkflow";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
@@ -63,7 +64,6 @@ const DocumentPage = (props) => {
           <Tag>Pending</Tag>電資學院院長 張XX
         </Timeline.Item>
       </Timeline>
-      <Button danger>Cancel</Button>
     </>
   );
 };
