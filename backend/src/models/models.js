@@ -30,7 +30,7 @@ const DocumentSchema = new Schema({
   id: { type: String, required: true },
   title: { type: String, required: true },
   body: { type: String, required: true },
-  fields: { fieldType: [{ type: String, required: true }], require: {type:Boolean} }, //array of inputs
+  fields: [ { type: String, required: true }], //array of inputs
   passBy: [{ type: mongoose.Types.ObjectId, ref: "User" }], //array of ids
 });
 

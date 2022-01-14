@@ -20,7 +20,7 @@ type Mutation {
   # stuff only
   createUser(input: CreateUserInput!): User!
   # stuff only
-  createDocument(input: CreateDocumentInput!): Document
+  createDocument(input: CreateDocumentInput!): Document!
 
   # student only
   #  createWorkflow(input: CreateWorkflowInput!): Workflow
@@ -46,36 +46,18 @@ input CreateUserInput {
 
 input CreateWorkflowInput {
   id: ID!
-  document: DocumentInput! #  ref
+  document: ID!  #REVISE
   date: Date!
   approvalLine: [approvalPayloadInput]! # dictionary ?
-  student: UserInput! #  ref
+  student: ID! #  ref
 }
 
 input CreateDocumentInput {
   id: ID!
   title: String!
   body: String!
-  fields: [FieldContentInput!]! #可以又需要image, file, text
-  passBy: [UserInput!]! #ref
-}
-
-input UserInput {
-  name: String!
-  id: ID!
-  department: String!
-  groups: [String]
-  role: String!
-  password: String!
-  email: String!
-}
-
-input DocumentInput{
-  id: ID!
-  title: String!
-  body: String! #說明申請須知
-  fields: [FieldContentInput!]! #可以又需要image, file, text
-  passBy: [UserInput!]! #ref
+  fields: [FieldType!]! #可以又需要image, file, text
+  passBy: [ID!]!  #REVISE
 }
 
 type User {
@@ -92,8 +74,8 @@ type Document {
   id: ID!
   title: String!
   body: String! #說明申請須知
-  fields: [FieldContent!]! #可以又需要image, file, text
-  passBy: [User!]! #ref
+  fields: [FieldType!]! #可以又需要image, file, text
+  passBy: [User!]! #ref, pass in _id
 }
 
 enum FieldType {
@@ -102,25 +84,15 @@ enum FieldType {
   TEXT
 }
 
-type FieldContent {
-  fieldType: FieldType!
-  require: Boolean!
-}
-
-input FieldContentInput {
-  fieldType: FieldType!
-  require: Boolean!
-}
-
 type Workflow {
   id: ID!
-  document: Document! # ref
+  document: Document! # REVICE
   status: Status!
   date: Date!
   comments: String
   contents: ContentPayload!
   approvalLine: [approvalPayload]!
-  student: User!
+  student: User! # REVICE
 }
 
 type File {
@@ -138,12 +110,12 @@ type ContentPayload {
 }
 
 type approvalPayload {
-  stuff: User!
+  stuff: User! 
   status: Status!
 }
 
 input approvalPayloadInput {
-  stuff: UserInput!
+  stuff: ID! # REVICE
   status: Status!
 }
 
