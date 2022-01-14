@@ -69,14 +69,18 @@ const Query = {
     }
   },
   document: async (parent, args, db) => {
-    if (title) {
+    if (args.title) {
+      
       const doc = await DocumentModel.find({ title: args.title });
-      if (!doc) throw new Error("Document is not found"); //應該不用throw new error
+      
+      if (!doc) throw new Error("Document is not found");
+      return doc;
     } else {
       const doc = await DocumentModel.find();
       if (!doc) throw new Error("Document is null");
+      return doc;
     }
-    return doc;
+    
   },
   workflow: async (parent, { status, user_id }, db) => {
     if (status) {
