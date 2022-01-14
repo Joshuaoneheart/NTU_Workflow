@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from "antd";
+import { useState } from "react";
 
 const { SubMenu } = Menu;
 
@@ -26,58 +27,58 @@ const UserIcon = styled(Avatar)`
   align-self: center;
 `;
 
-const menu = (
-  <Menu>
-    <Menu.Item>Profile</Menu.Item>
-    <SubMenu title="Some property">
-      <Menu.Item> Name 1 </Menu.Item>
-      <Menu.Item> Name 1 </Menu.Item>
-      <Menu.Item> Name 1 </Menu.Item>
-    </SubMenu>
-    <Menu.Divider />
-    <Menu.Item>Log out</Menu.Item>
-  </Menu>
-);
-
-export const UserBadge = (props) => (
-  <Dropdown overlay={menu}>
-    <Badge>
-      <div
-        style={{
-          display: "flex",
-          width: "100px",
-          marginRight: "7px",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          marginRight: "10px",
-          overflow: "hidden",
-          textAlign: "end",
-        }}
-      >
-        <label
+const UserBadge = ({setProfileVisible, ...props}) => {
+  const showProfile = () => {
+    setProfileVisible(true);
+  };
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={showProfile}>Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item>Log out</Menu.Item>
+    </Menu>
+  );
+  return (
+    <Dropdown overlay={menu}>
+      <Badge>
+        <div
           style={{
-            padding: 0,
-            width: "70px",
-            display: "inline-block",
-            textAlign: "right",
+            display: "flex",
+            width: "100px",
+            marginRight: "7px",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            marginRight: "10px",
+            overflow: "hidden",
+            textAlign: "end",
           }}
         >
-          Joshua
-        </label>
-        <label
-          style={{
-            padding: 0,
-            width: "70px",
-            display: "inline-block",
-            textAlign: "right",
-          }}
-        >
-          A genius
-        </label>
-      </div>
-      <div style={{ display: "flex" }}>
-        <UserIcon size="large" icon={<UserOutlined />} />
-      </div>
-    </Badge>
-  </Dropdown>
-);
+          <label
+            style={{
+              padding: 0,
+              width: "70px",
+              display: "inline-block",
+              textAlign: "right",
+            }}
+          >
+            Joshua
+          </label>
+          <label
+            style={{
+              padding: 0,
+              width: "70px",
+              display: "inline-block",
+              textAlign: "right",
+            }}
+          >
+            A genius
+          </label>
+        </div>
+        <div style={{ display: "flex" }}>
+          <UserIcon size="large" icon={<UserOutlined />} />
+        </div>
+      </Badge>
+    </Dropdown>
+  );
+};
+export default UserBadge;
