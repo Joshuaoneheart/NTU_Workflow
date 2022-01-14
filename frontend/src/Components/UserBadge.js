@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from "antd";
+import { useState } from "react";
 
 const { SubMenu } = Menu;
 
@@ -26,11 +27,14 @@ const UserIcon = styled(Avatar)`
   align-self: center;
 `;
 
-export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
+export const UserBadge = ({ user, setUser, setSignedIn, setProfileVisible, ...props }) => {
   console.log(props)
+  const showProfile = () => {
+    setProfileVisible(true);
+  };
   const menu = (
     <Menu>
-      <Menu.Item key="profile">Profile</Menu.Item>
+      <Menu.Item key="profile" onClick={showProfile}>Profile</Menu.Item>
       <Menu.Divider />
       <Menu.Item
         key="log out"
@@ -53,6 +57,7 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
             marginRight: "7px",
             flexDirection: "column",
             alignItems: "flex-end",
+            marginRight: "10px",
             overflow: "hidden",
             textAlign: "end",
           }}
@@ -65,7 +70,7 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
               textAlign: "right",
             }}
           >
-            {user.department}
+            Joshua
           </label>
           <label
             style={{
@@ -75,7 +80,7 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
               textAlign: "right",
             }}
           >
-            {user.name}
+            A genius
           </label>
         </div>
         <div style={{ display: "flex" }}>
@@ -85,3 +90,4 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
     </Dropdown>
   );
 };
+export default UserBadge;
