@@ -12,19 +12,15 @@ const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
   const [page, setPage] = useState("main");
   const [profileVisible, setProfileVisible] = useState(false);
-  const onOk = () => {
+  const onCancel = () => {
     setProfileVisible(false);
   };
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Modal
         visible={profileVisible}
-        onOk={onOk}
-        footer={
-          <Button key="back" type="primary" onClick={onOk}>
-            Return
-          </Button>
-        }
+				onCancel={onCancel}
+        footer={null}
       >
         <Profile />
       </Modal>

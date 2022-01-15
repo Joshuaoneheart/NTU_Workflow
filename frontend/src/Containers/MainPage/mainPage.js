@@ -1,10 +1,7 @@
 import DocumentPage from "./DocumentPage";
 import CreateWorkflow from "../CreateWorkflow/createworkflow";
-import { Button } from "antd";
 import { useState } from "react";
-const Welcome = () => {
-  return null;
-};
+import Welcome from "../Welcome/welcome";
 const MainPage = ({ user }) => {
   const [page, setPage] = useState({ key: "welcome" });
   return (
@@ -14,7 +11,7 @@ const MainPage = ({ user }) => {
       ) : page["key"] == "createWorkflow" ? (
         <CreateWorkflow setPage={setPage} document={page["document"]} />
       ) : (
-        <Welcome />
+        <Welcome setPage={setPage}/>
       )}
     </>
   );

@@ -4,7 +4,7 @@ import DragAndDrop from "../MainPage/dragAndDrop";
 
 const { Title } = Typography;
 
-const CreateWorkflow = ({ setNewWorkflow }) => {
+const CreateWorkflow = ({ setPage, document}) => {
   const onFinish = (values) => {
     console.log("The values collected from the form are:", values);
   };
@@ -60,7 +60,7 @@ const CreateWorkflow = ({ setNewWorkflow }) => {
               </Button>
               <Button
                 type="primary"
-                onClick={() => setNewWorkflow(false)}
+                onClick={() => setPage({key: "welcome"})}
                 danger
               >
                 Cancel

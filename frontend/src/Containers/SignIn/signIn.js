@@ -56,10 +56,9 @@ const SignIn = ({
         setUser(signIn_res.signIn);
         setSignedIn(true);
       } catch (e) {
-        console.log(signIn_err);
         displayStatus({
           type: "error",
-          msg: signIn_err.message,
+          msg: e.message,
         });
       }
     }
