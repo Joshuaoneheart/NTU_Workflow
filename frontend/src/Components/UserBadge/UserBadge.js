@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from "antd";
-
 const Badge = styled(Button)`
   float: right;
   width: 135px;
@@ -24,11 +23,14 @@ const UserIcon = styled(Avatar)`
   align-self: center;
 `;
 
-export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
+export const UserBadge = ({ user, setUser, setSignedIn, setProfileVisible, ...props }) => {
   console.log(props)
+  const showProfile = () => {
+    setProfileVisible(true);
+  };
   const menu = (
     <Menu>
-      <Menu.Item key="profile">Profile</Menu.Item>
+      <Menu.Item key="profile" onClick={showProfile}>Profile</Menu.Item>
       <Menu.Divider />
       <Menu.Item
         key="log out"
@@ -51,20 +53,11 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
             marginRight: "7px",
             flexDirection: "column",
             alignItems: "flex-end",
+            marginRight: "10px",
             overflow: "hidden",
             textAlign: "end",
           }}
         >
-          <label
-            style={{
-              padding: 0,
-              width: "70px",
-              display: "inline-block",
-              textAlign: "right",
-            }}
-          >
-            {user.department}
-          </label>
           <label
             style={{
               padding: 0,
@@ -83,3 +76,4 @@ export const UserBadge = ({ user, setUser, setSignedIn, ...props }) => {
     </Dropdown>
   );
 };
+export default UserBadge;

@@ -129,28 +129,26 @@ const SignUp = ({
       const hashed_p = await hash(password, salt);
       let tmp = Object.assign({}, user);
       tmp["password"] = hashed_p;
-      setUser(async (old_user) => {
-        const department = departments[tmp["id"].substr(3, 3)];
-        if(!department){
-          displayStatus({
-            type: "error",
-            msg: "Wrong Student ID format",
-          });
-        }
-        tmp["department"] = department;
-        const { data: signUp_res, errors: signUp_err } = await signUp({
+      const department = departments[tmp["id"].substr(3, 3)];
+      if (!department) {
+        displayStatus({
+          type: "error",
+          msg: "Wrong Student ID format",
+        });
+      }
+      tmp["department"] = department;
+      try {
+        const { data: signUp_res } = await signUp({
           variables: tmp,
         });
-        if (!signUp_err) {
-          setSignedIn(true);
-          return signUp_res.createUser;
-        } else
-          displayStatus({
-            type: "error",
-            msg: signUp_err[0].message,
-          });
-        return old_user;
-      });
+        setSignedIn(true);
+        setUser(signUp_res.createUser);
+      } catch (e) {
+        displayStatus({
+          type: "error",
+          msg: e.message,
+        });
+      }
     }
   };
 
