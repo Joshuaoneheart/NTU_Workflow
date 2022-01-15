@@ -75,7 +75,7 @@ const Container = styled(Card)`
   align-items: center;
   text-align: center;
   padding: 1vh;
-  height: 85vh;
+  height: 50vh;
   top: 10vh;
   left: 25vw;
   box-shadow: 0px 0px 1px black;
@@ -157,70 +157,77 @@ const SignUp = ({
 
   return (
     <Container>
-      <div className="SignIn-title">
-        <h1> Please sign up </h1>
-      </div>
-      <br />
-      <Input.Group compact style={{ width: "30vw" }}>
-        <Input
-          value={user["name"]}
-          prefix={<UserOutlined size="large" />}
-          onChange={(e) => {
-            let tmp = Object.assign({}, user);
-            tmp["name"] = e.target.value;
-            setUser(tmp);
+      <Space direction="vertical" size="large">
+        <div
+          style={{
+            height: "31px",
+            fontFamily: "Bebas Neue, cursive",
+            fontSize: "47px",
+            textAlign: "center",
           }}
-          placeholder="Enter username here"
-          size="large"
-          style={{ marginTop: "20px" }}
-        />
-        <Input
-          value={user["id"]}
-          prefix={<ReadOutlined size="large" />}
-          onChange={(e) => {
-            let tmp = Object.assign({}, user);
-            tmp["id"] = e.target.value;
-            setUser(tmp);
-          }}
-          placeholder="Enter student id here"
-          size="large"
-          style={{ marginTop: "20px" }}
-        />
-        <Input
-          value={user["email"]}
-          prefix={<MailOutlined size="large" />}
-          onChange={(e) => {
-            let tmp = Object.assign({}, user);
-            tmp["email"] = e.target.value;
-            setUser(tmp);
-          }}
-          placeholder="Enter email here"
-          size="large"
-          style={{ marginTop: "20px" }}
-        />
-        <Input.Password
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password here"
-          size="large"
-          style={{ marginTop: "20px" }}
-        />
-        <Input.Password
-          value={confirmPass}
-          onChange={(e) => setConfirmPass(e.target.value)}
-          placeholder="Re-enter password here"
-          size="large"
-          style={{ marginTop: "20px" }}
-        />
-      </Input.Group>
-      <br />
-      <Space>
-        <Button type="primary" onClick={handleSignUp}>
-          Sign up
-        </Button>
-        <Button type="primary" onClick={handleCancel} danger>
-          Cancel
-        </Button>
+        >
+          NTU WORKFLOW
+        </div>
+        <Input.Group compact style={{ width: "30vw" }}>
+          <Input
+            value={user["name"]}
+            prefix={<UserOutlined size="large" />}
+            onChange={(e) => {
+              let tmp = Object.assign({}, user);
+              tmp["name"] = e.target.value;
+              setUser(tmp);
+            }}
+            placeholder="Enter username here"
+            size="large"
+            style={{ marginTop: "20px" }}
+          />
+          <Input
+            value={user["id"]}
+            prefix={<ReadOutlined size="large" />}
+            onChange={(e) => {
+              let tmp = Object.assign({}, user);
+              tmp["id"] = e.target.value;
+              setUser(tmp);
+            }}
+            placeholder="Enter student id here"
+            size="large"
+            style={{ marginTop: "20px" }}
+          />
+          <Input
+            value={user["email"]}
+            prefix={<MailOutlined size="large" />}
+            onChange={(e) => {
+              let tmp = Object.assign({}, user);
+              tmp["email"] = e.target.value;
+              setUser(tmp);
+            }}
+            placeholder="Enter email here"
+            size="large"
+            style={{ marginTop: "20px" }}
+          />
+          <Input.Password
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password here"
+            size="large"
+            style={{ marginTop: "20px" }}
+          />
+          <Input.Password
+            value={confirmPass}
+            onChange={(e) => setConfirmPass(e.target.value)}
+            placeholder="Re-enter password here"
+            size="large"
+            style={{ marginTop: "20px" }}
+          />
+        </Input.Group>
+        <Space>
+          <Button type="primary" onClick={handleSignUp}>
+            Sign up
+          </Button>
+          <Button type="primary" onClick={handleCancel} danger>
+            Cancel
+          </Button>
+        </Space>
       </Space>
     </Container>
   );
