@@ -10,7 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
-  const [page, setPage] = useState({ key: "welcome" });
+  const [page, setPage] = useState({ key: "createDocument" });
   const [profileVisible, setProfileVisible] = useState(false);
   const onOk = () => {
     setProfileVisible(false);

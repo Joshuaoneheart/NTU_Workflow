@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DocumentPage from "../../Components/DocumentPage/DocumentPage";
 import CreateWorkflow from "../CreateWorkflow/createworkflow";
+import CreateDocument from "../CreateDocument/createdocument";
 import Chatroom from "../Chatroom/Chatroom";
 const Welcome = () => {
   return null;
@@ -12,8 +13,14 @@ const MainPage = ({ page, setPage, user, displayStatus }) => {
         <DocumentPage setPage={setPage} document={page["document"]} />
       ) : page["key"] == "createWorkflow" ? (
         <CreateWorkflow setPage={setPage} document={page["document"]} />
+      ) : page["key"] == "createDocument" ? (
+        <CreateDocument setPage={setPage} />
       ) : page["key"] == "chatroom" ? (
-        <Chatroom user ={user} correspondence={page["chatroom"]} displayStatus={displayStatus} />
+        <Chatroom
+         user={user}
+          correspondence={page["chatroom"]}
+          displayStatus={displayStatus}
+        />
       ) : (
         <Welcome />
       )}
