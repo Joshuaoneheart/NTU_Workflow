@@ -6,7 +6,7 @@ import { ALL_GROUPS } from "../../graphql/queries";
 const { Title } = Typography;
 
 const CreateDocument = ({ setPage, displayStatus }) => {
-  const { data } = useQuery(ALL_GROUPS);
+  const { data, loading } = useQuery(ALL_GROUPS);
   const onFinish = (values) => {
     console.log("The values collected from the form are:", values);
   };
@@ -87,8 +87,8 @@ const CreateDocument = ({ setPage, displayStatus }) => {
                         { required: true, message: "Missing Professor field" },
                       ]}
                     >
-                      <Select>
-                        {data.findGroups.map((group, i) => (
+                      <Select defaultValue={0}>
+                        {(loading)?<Select.Option value={0}>loading...</Select.Option>:data.findGroups.map((group, i) => (
                           <Select.Option value={i}>{group}</Select.Option>
                         ))}
                       </Select>
