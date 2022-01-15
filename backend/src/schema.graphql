@@ -1,4 +1,5 @@
 scalar Date
+scalar Upload
 
 enum Status {
   PENDING
@@ -31,6 +32,7 @@ type Mutation {
   createWorkflow(input: CreateWorkflowInput!): Workflow!
 
   uploadTEXT(input:String!): ID!
+  uploadFile(file: Upload!): String!
   updateWorkflow(status: String, comments: String):ID!
 
   createMessage(from: String!, to: String, message: String!): Message!

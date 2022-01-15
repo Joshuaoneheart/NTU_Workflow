@@ -6,6 +6,8 @@ import "../../App.css";
 import SignUp from "./signUp";
 import { SALT_QUERY, SIGN_IN } from "../../graphql/queries";
 import { useQuery, useLazyQuery } from "@apollo/client";
+const LOCALSTORAGE_KEY_EM = "save-me";
+const LOCALSTORAGE_KEY_PA = "save-pa";
 
 const Container = styled(Card)`
   position: absolute;
@@ -48,9 +50,11 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
+      localStorage.setItem(LOCALSTORAGE_KEY_EM, user["email"]);
+      localStorage.setItem(LOCALSTORAGE_KEY_PA, password);
       const hashed_p = await hash(password, salt.salt);
       try {
-        const {data: signIn_res, error: signIn_error,} = await signIn({
+        const {data: signIn_res, error: signIn_error} = await signIn({
           variables: { email: user["email"], password: hashed_p },
         });
         if(signIn_error){

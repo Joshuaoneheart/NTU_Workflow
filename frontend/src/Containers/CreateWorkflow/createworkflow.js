@@ -40,6 +40,7 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
     variable: { id: document },
   });
   let [approvals, setApprovals] = useState([]);
+  let [contents, setContents] = useState({file: [], image: [], text: []});
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
   const onFinish = (values) => {
     console.log("The values collected from the form are:", approvals);

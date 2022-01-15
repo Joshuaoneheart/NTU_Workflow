@@ -29,15 +29,29 @@ const SIGN_UP = gql`
 `;
 
 const CREATE_WORKFLOW = gql`
-  mutation createWorkflow($document: ID!, $contents: inputContentPayload!, $student: ID!, $approvalLine: [approvalPayloadInput]!){
-    createWorkflow(input: {
-      documents: $document
-      contents: $contents
-      approvalLine: $approvalLine
-      student: $student
-    }) {
+  mutation createWorkflow(
+    $document: ID!
+    $contents: inputContentPayload!
+    $student: ID!
+    $approvalLine: [approvalPayloadInput]!
+  ) {
+    createWorkflow(
+      input: {
+        documents: $document
+        contents: $contents
+        approvalLine: $approvalLine
+        student: $student
+      }
+    ) {
       id
     }
   }
 `;
-export { SIGN_UP, CREATE_WORKFLOW };
+
+const UPLOAD_FILE = gql`
+  mutation uploadFile($file: Upload!) {
+    uploadFile(file: $file)
+  }
+`;
+
+export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE };

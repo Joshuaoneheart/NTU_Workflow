@@ -1,13 +1,23 @@
 // updateWorkflow(status: String, comments: String): Workflow!
-import {uuid} from "uuidv4";
+import { uuid } from "uuidv4";
+import fs from "fs";
+import path from "path";
+import { finished } from "stream/promises";
 import {
   saltModel,
   UserModel,
   DocumentModel,
   WorkflowModel,
 } from "../models/models";
-import {checkUser, newUser, makeName, checkChatBox, newChatBox,newMessage, checkMessage} from './utility.js'
-import { hash } from "bcrypt";
+import {
+  checkUser,
+  newUser,
+  makeName,
+  checkChatBox,
+  newChatBox,
+  newMessage,
+  checkMessage,
+} from "./utility.js";
 
 const Mutation = {
   createUser: async (parent, args, db) => {
@@ -34,20 +44,19 @@ const Mutation = {
     return user;
   },
   createDocument: async (parent, args, db) => {
-
     const id = uuid();
-    
+
     const document = await new DocumentModel({
       id: id,
       title: args.input.title,
       body: args.input.body,
       fields: args.input.fields,
       passBy: args.input.passBy,
-    })
+    });
     await document.save();
     return document;
   },
-  createWorkflow: async(parent, args, db)=>{
+  createWorkflow: async (parent, args, db) => {
     const workflow = await new WorkflowModel({
       id: uuid(),
       document: args.input.document,
@@ -59,26 +68,31 @@ const Mutation = {
         image: args.input.contents.image, //array of ids
         text: args.input.contents.text,
       },
-      approvalLine:  args.input.approvalLine,
+      approvalLine: args.input.approvalLine,
       student: args.input.student,
-    })
+    });
     await workflow.save();
     return workflow;
   },
-
-  uploadTEXT: async(parent, {input}, db)=>{
+  uploadTEXT: async (parent, { input }, db) => {
     console.log(input);
 
-    if(input){
+    if (input) {
+      const textUnit = new TextModel({ text: input });
+      await textUnit.save();
+      console.log(JSON.stringify(textUnit._id));
 
-         const textUnit =  new TextModel({text:input});
-         await textUnit.save();
-         console.log(JSON.stringify(textUnit._id));
-         
-        return JSON.stringify(textUnit._id);
+      return JSON.stringify(textUnit._id);
     }
     throw new Error(`missing uploadTEXT input`);
-    
+  },
+  uploadFile: async (parent, { file }) => {
+    const { filename, createReadStream, mimetype, encoding } = await file;
+    let stream = createReadStream();
+    const out = fs.createWriteStream(path.join(__dirname, "..","build", `${filename}.cache`));
+    stream.pipe(out);
+    await finished(out);
+    return path.join(__dirname, "build", `${filename}.cache`);
   },
   async createChatBox(parent, { name1, name2 }, { db, pubsub }, info) {
     //arg
@@ -96,37 +110,34 @@ const Mutation = {
     }
 
     const chatBoxName = makeName(name1, name2);
-    let chatBox = 
-      await checkChatBox(db, chatBoxName, "createChatBox");
+    let chatBox = await checkChatBox(db, chatBoxName, "createChatBox");
     if (!chatBox) {
       chatBox = await newChatBox(db, chatBoxName);
-      };
+    }
 
     return chatBox;
   },
-  async createMessage(parent, {from, to, message},{db,pubSub},info){
-    
-    const {chatBox, sender}= await checkMessage(db,from,to,message,"createMessage");
-    if(!chatBox) throw new Error("ChatBox not found for createMessage");
-    if(!sender) throw new Error("User not found: " + from);
-    
-    const chatBoxName = makeName(from,to);
+  async createMessage(parent, { from, to, message }, { db, pubSub }, info) {
+    const { chatBox, sender } = await checkMessage(
+      db,
+      from,
+      to,
+      message,
+      "createMessage"
+    );
+    if (!chatBox) throw new Error("ChatBox not found for createMessage");
+    if (!sender) throw new Error("User not found: " + from);
+
+    const chatBoxName = makeName(from, to);
     const newMsg = await newMessage(db, sender, message); //body = message
-    chatBox.messages.push(newMsg);// save in that specific, new chatBox
+    chatBox.messages.push(newMsg); // save in that specific, new chatBox
     await chatBox.save();
-    
-    pubSub.publish(`chatBox ${chatBoxName}`,{
-      message: {mutation: "CREATED",message:newMsg},
+
+    pubSub.publish(`chatBox ${chatBoxName}`, {
+      message: { mutation: "CREATED", message: newMsg },
     });
     return newMsg;
-  }
+  },
 };
 
 export default Mutation;
-
-// uploadFile: async (_, { file }) => {
-//       const fileId = await storeFile(file).then(result => result);
-
-//       return true;
-// // later I will return something more and create some object etc.
-//     }

@@ -1,10 +1,11 @@
 import { GraphQLServer, PubSub } from "graphql-yoga";
 import { loadTypedefsSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { join } from "path";
-import Koa from "koa";
+import { execute, subscribe } from "graphql";
+import { SubscriptionServer } from "subscriptions-transport-ws";
 import http from "http";
 import { ApolloServer, gql } from "apollo-server-express";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 // resolvers
 import Query from "./resolvers/Query.js";
@@ -23,7 +24,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv-defaults";
 import path from "path";
-//import {importSchema} from "graphql-import";
+import { graphqlUploadExpress, GraphQLUpload } from "graphql-upload";
 dotenv.config();
 
 import { connect } from "./mongo.js";
@@ -31,15 +32,21 @@ connect();
 //const __dirname = dirname(fileURLToPath(import.meta.url));
 
 console.log(__dirname);
-const schema = loadTypedefsSync(join(__dirname, "schema.graphql"), {
+const schemas = loadTypedefsSync(path.join(__dirname, "schema.graphql"), {
   loaders: [new GraphQLFileLoader()],
 });
 
-const typeDefs = schema.map((schema) => schema.document);
+const typeDefs = schemas.map((schema) => schema.document);
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 30000000,
+    maxFiles: 20,
+  })
+);
 app.use("/graphql", (req, res, next) => {
   console.log(req.body.query);
   console.log(req.body.variables);
@@ -49,7 +56,9 @@ app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 const pubSub = new PubSub();
-const server = new ApolloServer({
+
+const httpServer = http.createServer(app);
+const schema = makeExecutableSchema({
   typeDefs: gql`
     ${typeDefs[0]}
   `,
@@ -61,21 +70,49 @@ const server = new ApolloServer({
     Workflow,
     ChatBox,
     Message,
+    Upload: GraphQLUpload,
     Date: DateResolver,
     Status: StatusResolver,
   },
+});
+const subscriptionServer = SubscriptionServer.create(
+  {
+    // This is the `schema` we just created.
+    schema,
+    execute,
+    subscribe,
+  },
+  {
+    // This is the `httpServer` we created in a previous step.
+    server: httpServer,
+    // Pass a different path here if your ApolloServer serves at
+    // a different path.
+    path: "/graphql",
+  }
+);
+const server = new ApolloServer({
+  schema,
   context: {
     db,
     pubSub,
   },
+  plugins: [
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            subscriptionServer.close();
+          },
+        };
+      },
+    },
+  ],
 });
 const startApollo = async () => {
   await server.start();
   server.applyMiddleware({ app });
 };
 startApollo();
-const httpServer = http.createServer(app);
-server.installSubscriptionHandlers(httpServer);
 
 const port = process.env.PORT | 5000;
 

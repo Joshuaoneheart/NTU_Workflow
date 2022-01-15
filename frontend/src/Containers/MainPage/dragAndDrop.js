@@ -1,21 +1,20 @@
 import { Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import { useMutation } from "@apollo/client";
+import { UPLOAD_FILE } from "../../graphql/mutation";
 
 const { Dragger } = Upload;
 
-const dragAndDrop = (props) => {
+const DragAndDrop = (props) => {
+  const [uploadFile] = useMutation(UPLOAD_FILE);
   return (
     <Dragger
-      multiple={false}
-      onChange={(info) => {
-        const { status } = info.file;
-        if (status !== "uploading") {
-          console.log(info.file, info.fileList);
-        }
-        if (status === "done") {
-          message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === "error") {
-          message.error(`${info.file.name} file upload failed.`);
+      customRequest={async (e) => {
+        const { onSuccess, onError, file, action, onProgress } = e;
+        try {
+          onSuccess(await uploadFile({ variables: { file } }));
+        } catch (e) {
+          onError(e);
         }
       }}
       onDrop={(e) => {
@@ -33,4 +32,4 @@ const dragAndDrop = (props) => {
   );
 };
 
-export default dragAndDrop;
+export default DragAndDrop;
