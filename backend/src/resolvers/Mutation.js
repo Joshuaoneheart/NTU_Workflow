@@ -1,5 +1,5 @@
 // updateWorkflow(status: String, comments: String): Workflow!
-
+import {uuid} from "uuidv4";
 import {
   saltModel,
   UserModel,
@@ -34,12 +34,11 @@ const Mutation = {
     return user;
   },
   createDocument: async (parent, args, db) => {
-    // confirm that the id is unique
-    // const checkId = await DocumentModel.find({ id: args.input.id });
-    // if (checkId) throw new Error(`id repeat : ${args.input.id}`);
 
+    const id = uuid();
+    
     const document = await new DocumentModel({
-      id: args.input.id,
+      id: id,
       title: args.input.title,
       body: args.input.body,
       fields: args.input.fields,

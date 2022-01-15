@@ -63,7 +63,7 @@ input CreateDocumentInput {
   title: String!
   body: String!
   fields: [inputField!]! #可以又需要image, file, text
-  passBy: [ID!]!  #REVISE
+  passBy: [String!]!  #REVISE
 }
 
 type User {
@@ -81,7 +81,7 @@ type Document {
   title: String!
   body: String! #說明申請須知
   fields: [Field!]! #可以又需要image, file, text
-  passBy: [User!]! #ref, pass in _id
+  passBy: [String!]! #ref, pass in _id
 }
 
 enum FieldType {
