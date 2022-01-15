@@ -47,11 +47,20 @@ const Mutation = {
     await document.save();
     return document;
   },
-  // createWorkflow(input: CreateWorkflowInput!): Workflow!
+  uploadTEXT: async(parent, {input}, db)=>{
+    console.log(input);
 
-  // createWorkflow: async (parent,args,db)=>{
+    if(input){
 
-  // }
+         const textUnit =  new TextModel({text:input});
+         await textUnit.save();
+         console.log(JSON.stringify(textUnit._id));
+         
+        return JSON.stringify(textUnit._id);
+    }
+    throw new Error(`missing uploadTEXT input`);
+    
+  },
   async createChatBox(parent, { name1, name2 }, { db, pubsub }, info) {
     //arg
 
