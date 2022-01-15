@@ -10,7 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
-  const [page, setPage] = useState({ key: "welcome" });
+  const [page, setPage] = useState({ key: "createDocument" });
   const [profileVisible, setProfileVisible] = useState(false);
   const onCancel = () => {
     setProfileVisible(false);
@@ -49,18 +49,24 @@ const CustomLayout = (props) => {
         >
           <LeftSider setPage={setPage} collapsed={showSider} />
         </Sider>
-        <Content style={{ padding: "40px" }}>
-          <div
-            style={{ minHeight: "280px", padding: "24px", background: "#fff" }}
-          >
-            {<MainPage page={page} setPage={setPage} user={props.user} />}
-          </div>
-        </Content>
+        <Layout>
+          <Content style={{ padding: "40px" }}>
+            <div
+              style={{
+                minHeight: "280px",
+                padding: "24px",
+                background: "#fff",
+              }}
+            >
+              {<MainPage page={page} setPage={setPage} user={props.user} />}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>
+            NTU Workflow System @2021 Created by Yi-Hsin, Yu, Matthieu Desir and
+            Eileen Wang
+          </Footer>
+        </Layout>
       </Layout>
-      <Footer style={{ textAlign: "center" }}>
-        NTU Workflow System @2021 Created by Yi-Hsin, Yu, Matthieu Desir and
-        Eileen Wang
-      </Footer>
     </Layout>
   );
 };
