@@ -3,9 +3,7 @@ import DocumentPage from "../../Components/DocumentPage/DocumentPage";
 import CreateWorkflow from "../CreateWorkflow/createworkflow";
 import CreateDocument from "../CreateDocument/createdocument";
 import Chatroom from "../Chatroom/Chatroom";
-const Welcome = () => {
-  return null;
-};
+import Welcome from "../Welcome/welcome";
 const MainPage = ({ page, setPage, user, displayStatus }) => {
   return (
     <>
@@ -17,12 +15,12 @@ const MainPage = ({ page, setPage, user, displayStatus }) => {
         <CreateDocument setPage={setPage} />
       ) : page["key"] == "chatroom" ? (
         <Chatroom
-         user={user}
+          user={user}
           correspondence={page["chatroom"]}
           displayStatus={displayStatus}
         />
       ) : (
-        <Welcome />
+        <Welcome setPage={setPage} />
       )}
     </>
   );

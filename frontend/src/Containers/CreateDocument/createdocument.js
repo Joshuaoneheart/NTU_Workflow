@@ -1,4 +1,4 @@
-import { Card, Input, Button, Space, Form, Typography } from "antd";
+import { Input, Button, Space, Form, Typography } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import DragAndDrop from "../MainPage/dragAndDrop";
 
@@ -10,7 +10,8 @@ const CreateDocument = ({ setPage }) => {
   };
   return (
     <>
-      <Card title="Create New Workflow" style={{ width: 800 }}>
+      <Typography>
+        <Title level={2}>Create a document</Title>
         <Form name="Workflow" autoComplete="off" onFinish={onFinish}>
           <Form.Item>
             <DragAndDrop />
@@ -54,17 +55,13 @@ const CreateDocument = ({ setPage }) => {
               <Button type="primary" htmlType="submit">
                 submit
               </Button>
-              <Button
-                type="primary"
-                onClick={() => {}}
-                danger
-              >
+              <Button type="primary" onClick={() => {}} danger>
                 Cancel
               </Button>
             </Space>
           </Form.Item>
         </Form>
-      </Card>
+      </Typography>
     </>
   );
 };

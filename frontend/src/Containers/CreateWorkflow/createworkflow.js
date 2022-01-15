@@ -67,7 +67,11 @@ const CreateWorkflow = ({ setPage, document }) => {
               <Button type="primary" htmlType="submit">
                 Create
               </Button>
-              <Button type="primary" onClick={() => {}} danger>
+              <Button
+                type="primary"
+                onClick={() => setPage({key: "welcome"})}
+                danger
+              >
                 Cancel
               </Button>
             </Space>
