@@ -40,15 +40,19 @@ const Welcome = ({ setPage }) => {
           <b>4.</b> The verdict of the approval line is later sent to the
           student.
           <br />
-          <Text type="secondary" style={{fontSize: "0.9em"}}>
+          <Text type="secondary" style={{ fontSize: "0.9em" }}>
             <b>Note</b>. If any member of the approval rejects the document or
             application, the whole process is the rejected
           </Text>
         </Paragraph>
         <Title level={3} style={{ textAlign: "center" }}>
-					Video Demo
+          Video Demo
         </Title>
-				<iframe src="https://www.youtube.com/embed/1jSEVNtvhAU" title="Demo video" style={{margin: "auto", width: "420px", height: "315px"}}></iframe>
+        <iframe
+          src="https://www.youtube.com/embed/1jSEVNtvhAU"
+          title="Demo video"
+          style={{ marginLeft: "35%", width: "420px", height: "315px" }}
+        ></iframe>
       </Space>
     </>
   );
