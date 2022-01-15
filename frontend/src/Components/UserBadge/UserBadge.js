@@ -1,10 +1,6 @@
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from "antd";
-import { useState } from "react";
-
-const { SubMenu } = Menu;
-
 const Badge = styled(Button)`
   float: right;
   width: 135px;

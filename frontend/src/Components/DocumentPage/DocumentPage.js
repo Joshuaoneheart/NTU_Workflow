@@ -1,6 +1,5 @@
-import { Typography, Timeline, Tag, Button, List, Upload } from "antd";
+import { Typography, Timeline, Tag, List, Upload } from "antd";
 import "./Document.css";
-import CreateWorkflow from "../CreateWorkflow/createworkflow";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
