@@ -74,9 +74,9 @@ const Query = {
       return user;})
   },
   document: async (parent, args, db) => {
-    if (args.title) {
+    if (args.id) {
       
-      const doc = await DocumentModel.find({ title: args.title });
+      const doc = await DocumentModel.find({ id: args.id });
       
       if (!doc) throw new Error("Document is not found");
       return doc;
