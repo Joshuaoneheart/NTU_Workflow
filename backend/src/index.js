@@ -74,7 +74,7 @@ server.installSubscriptionHandlers(httpServer);
 
 const port = process.env.PORT | 5000;
 
-app.listen(port, '0.0.0.0', () => {
+httpServer.listen(port, '0.0.0.0', () => {
   console.log(`The server is up on port ${port}!`);
   console.log(`Graphql Port at ${port} ${server.SubscriptionsPath}`);
 });
