@@ -69,6 +69,9 @@ const Query = {
       if (!user) throw new Error(`user is not found by group ${groups}`);
       return user;
     }
+
+    return (await UserModel.find({})).map((user)=>{
+      return user;})
   },
   document: async (parent, args, db) => {
     if (args.title) {
@@ -116,6 +119,7 @@ const Query = {
     return workflow;
   },
   async chatBox(parent, {name1,name2}, { db }, info){
+ 
     if (!name1 || !name2)
     throw new Error("Missing chatBox name for CreateChatBox");
     const chatBoxName = makeName(name1, name2);

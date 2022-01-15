@@ -31,7 +31,7 @@ type Mutation {
   createWorkflow(input: CreateWorkflowInput!): Workflow!
 
   uploadTEXT(input:String!): ID!
-  updateWorkflow(status: String, comments: String)
+  updateWorkflow(status: String, comments: String):ID!
 
   createMessage(from: String!, to: String, message: String!): Message!
   createChatBox(name1: String!, name2: String!): ChatBox!
@@ -39,8 +39,14 @@ type Mutation {
 
 type Subscription {
   #如果status更新 或是有comments, 都會通知teachers跟當事的students
-  workflowUpdate: Workflow!
+  notification(name: ID!):notificationPayload!
   message(from: String!, to: String!): MessageSubscriptionPayload!
+}
+
+type notificationPayload{
+User_id: ID!,
+newNotice: Boolean!,
+content: String!
 }
 
 # only faculty members can create student users
