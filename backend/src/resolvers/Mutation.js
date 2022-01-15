@@ -1,5 +1,3 @@
-// logIn(id: ID!, password: String!): User!
-
 // createUser(input: CreateUserInput!): User!
 
 // createDocument(input: CreateDocumentInput!): Document!
@@ -29,6 +27,9 @@ import { saltModel, UserModel,DocumentModel,WorkflowModel } from "../models/mode
 const Mutation = {
   createUser: async (parent, args, db ) =>{
 
+    const checkEmail = await UserModel.findOne({email: args.input.email});
+    if(checkEmail) throw new Error(`Email repeat : ${args.input.email}`);
+
     const user = await new UserModel({
       name: args.input.name,
       id: args.input.id,
@@ -41,17 +42,29 @@ const Mutation = {
     await user.save();
     return user;
   },
-    // if (password) {
-    //   const user = await db.UserModel.find({
-    //     password: password,
-    //   });
-    //   if (!user) {
-    //     throw new Error('wrong password or user is invalid');
-    //   }
-    //   else{
-    //     return (user);
-    //   }
-    // }
+  //createDocument(input: CreateDocumentInput!): Document
+  // input CreateDocumentInput {
+  //   id: ID!
+  //   title: String!
+  //   body: String!
+  //   fields: [FieldContentInput!]! #可以又需要image, file, text
+  //   passBy: [UserInput!]! #ref
+  // }
+  createDocument: async (parent, args, db) =>{
+    const checkId = await DocumentModel.find({id: args.input.id});
+    if(checkId) throw new Error(`id repeat : ${args.input.id}`);
+
+    // const user = await new DocumentModel({
+    //   id: args.input.id,
+    //   title: args.input.title,
+    //   body: args.input.body,
+    //   fields: args.input.fields,
+    //   password: args.input.password,
+    //   email: args.input.email,
+    // })
+    // await user.save();
+    // return user;
+  }
     
 };
 

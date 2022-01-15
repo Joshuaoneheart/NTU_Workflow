@@ -8,18 +8,7 @@ const MainPage = ({ user }) => {
   const [newWorkflow, setNewWorkflow] = useState(false);
   return (
     <>
-      {newWorkflow === true ? (
-        <CreateWorkflow setNewWorkflow={setNewWorkflow} />
-      ) : (
-        <DocumentPage />
-      )}
-      <Button
-        type="primary"
-        onClick={() => setNewWorkflow(true)}
-        style={newWorkflow === true ? { display: "none" } : {}}
-      >
-        NEW
-      </Button>
+      <DocumentPage user={user}/>
     </>
   );
 };

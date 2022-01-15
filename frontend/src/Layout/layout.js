@@ -38,7 +38,7 @@ const CustomLayout = (props) => {
             background: "rgba(255, 255, 255, 0.3)",
           }}
         />
-        <UserBadge user={props.user} setProfileVisible={setProfileVisible} />
+        <UserBadge user={props.user} setProfileVisible={setProfileVisible} setUser={props.setUser} setSignedIn={props.setSignedIn}/>
       </Header>
       <Layout>
         <Sider
@@ -56,7 +56,7 @@ const CustomLayout = (props) => {
           <div
             style={{ minHeight: "280px", padding: "24px", background: "#fff" }}
           >
-            {<MainPage setPage={setPage} />}
+            {<MainPage setPage={setPage} user={props.user}/>}
           </div>
         </Content>
       </Layout>

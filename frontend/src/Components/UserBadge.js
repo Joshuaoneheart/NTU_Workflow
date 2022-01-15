@@ -27,15 +27,24 @@ const UserIcon = styled(Avatar)`
   align-self: center;
 `;
 
-const UserBadge = ({setProfileVisible, ...props}) => {
+export const UserBadge = ({ user, setUser, setSignedIn, setProfileVisible, ...props }) => {
+  console.log(props)
   const showProfile = () => {
     setProfileVisible(true);
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={showProfile}>Profile</Menu.Item>
+      <Menu.Item key="profile" onClick={showProfile}>Profile</Menu.Item>
       <Menu.Divider />
-      <Menu.Item>Log out</Menu.Item>
+      <Menu.Item
+        key="log out"
+        onClick={() => {
+          setUser({});
+          setSignedIn(false);
+        }}
+      >
+        Log out
+      </Menu.Item>
     </Menu>
   );
   return (
