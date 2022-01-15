@@ -3,7 +3,6 @@ import { loadTypedefsSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { join } from "path";
 import Koa from "koa";
-import http from "http";
 import { ApolloServer, gql } from "apollo-server-express";
 
 // resolvers
@@ -71,12 +70,11 @@ const startApollo = async () => {
   server.applyMiddleware({ app });
 };
 startApollo();
-const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 const port = process.env.PORT | 5000;
 
-httpServer.listen(port, () => {
+app.listen(port, () => {
   console.log(`The server is up on port ${port}!`);
   console.log(`Graphql Port at ${port} ${server.SubscriptionsPath}`);
 });
