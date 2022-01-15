@@ -8,6 +8,7 @@ import {
   UserModel,
   DocumentModel,
   WorkflowModel,
+  TextModel,
 } from "../models/models";
 import {
   checkUser,
@@ -59,7 +60,7 @@ const Mutation = {
   createWorkflow: async (parent, args, db) => {
     const workflow = await new WorkflowModel({
       id: uuid(),
-      document: args.input.document,
+      document: args.input.document, //ref _id
       status: "PENDING",
       date: new Date().getTime(),
       comments: "no comment",
@@ -94,6 +95,62 @@ const Mutation = {
     await finished(out);
     return path.join(__dirname, "build", `${filename}.cache`);
   },
+  //updateWorkflow(status: String!):ID!
+  updateWorkflow: async (
+    parent,
+    { status, workflowId, staffId, comments },
+    db
+  ) => {
+    console.log(status, workflowId, staffId, comments);
+
+    if (status && workflowId) {
+      
+      const workflow = await WorkflowModel.findOne({ id: workflowId });
+
+      if(!workflow) throw new Error(`workflow not found with mutation updateWorkflow`)
+
+      // console.log(workflow.approvalLine[0].staff);
+
+      await workflow.approvalLine.map(async (approvalPayload) => {
+        //console.log(approvalPayload.staff === staffId);
+
+          approvalPayload.staff === staffId
+          ? approvalPayload.status = status
+          : approvalPayload.status;
+          
+     });
+        
+      if (status == "DECLINE") {
+        workflow.status = "DECLINE";
+        
+        if (comments) {
+          workflow.comments = comments;
+        }
+        }
+
+        var flag = true;
+
+         flag =  await workflow.approvalLine.map((approvalPayload) => {
+           console.log(approvalPayload.status == "ACCEPT");
+          if(approvalPayload.status == "PENDING" || approvalPayload.status =="DECLINE") {
+            console.log("false");
+            return false;
+          }
+        });
+
+        console.log(flag.includes(false));
+
+        if(!flag.includes(false)){
+          workflow.status = "ACCEPT";
+        }
+        await workflow.save();
+        return workflow.id; //workflow ID
+      }
+     else {
+      throw new Error(`missing status or workflowId`);
+    }
+  },
+
   async createChatBox(parent, { name1, name2 }, { db, pubsub }, info) {
     //arg
 
