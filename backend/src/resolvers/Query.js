@@ -33,7 +33,6 @@ const Query = {
 
     try {
       const user = await UserModel.findOne({ email });
-      console.log(user)
       if (!user) throw new Error("User not found");
       if (user.password == password) return user;
       else throw new Error("Password incorrect");
@@ -69,13 +68,13 @@ const Query = {
       if (!user) throw new Error(`user is not found by group ${groups}`);
       return user;
     }
+      return (await UserModel.find({})).map((user)=>{
+        return user;})
 
-    return (await UserModel.find({})).map((user)=>{
-      return user;})
   },
   document: async (parent, args, db) => {
     if (args.id) {
-      
+      console.log(args.id);
       const doc = await DocumentModel.find({ id: args.id });
       
       if (!doc) throw new Error("Document is not found");
@@ -87,39 +86,38 @@ const Query = {
     }
     
   },
-  workflow: async (parent, { status, user_id }, db) => {
+  workflow: async (parent, { status, userId }, db) => {
     if (status) {
-      if (!user_id) {
+      if (!userId) {
         const workflow = await WorkflowModel.find({ status: status });
         if (!workflow)
           throw new Error(`workflow is not found by status ${status}`);
+          return workflow;
       } else {
-        const user = await UserModel.find({ id: user_id });
         const workflow = await WorkflowModel.find({
-          student: user,
+          student: userId,
           status: status,
         }); //pass by user id, cos ref
         if (!workflow)
           throw new Error(
-            `workflow is not found by status ${status} & user id ${user.id}`
+            `workflow is not found by status ${status} & user id ${userId}`
           );
+          return workflow;
       }
-      //return workflow;
-    } else if (user_id) {
-      const user = await UserModel.find({ id: user_id });
-      const workflow = await WorkflowModel.find({ student: user }); //pass by user id, cos ref
+    } else if (userId) {
+      const workflow = await WorkflowModel.find({ student: userId }); //pass by user id, cos ref
       if (!workflow)
-        throw new Error(`workflow is not found by user id ${user.id}`);
-      //return workflow;
+        throw new Error(`workflow is not found by user id ${userId}`);
+      return workflow;
     } else {
       const workflow = await WorkflowModel.find();
       if (!workflow) throw new Error(`workflow is null`);
-      //return workflow;
+      return workflow;
     }
-    return workflow;
+    
   },
   async chatBox(parent, {name1,name2}, { db }, info){
- 
+
     if (!name1)
     throw new Error("Missing chatBox name1 for CreateChatBox");
 

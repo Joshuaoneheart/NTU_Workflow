@@ -12,7 +12,7 @@ type Query {
   findGroups:[String!]
   user(name: String, id: ID, groups: String): [User!]
   document(id: String): [Document!]
-  workflow(status: Status, user_id: ID): [Workflow!]
+  workflow(status: Status, userId: ID): [Workflow!]
 
   notification(input:ID!):notificationPayload! #user id
 
