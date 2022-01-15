@@ -11,7 +11,7 @@ type Query {
   signIn(email: String!, password: String!): User!
   findGroups:[String!]
   user(name: String, id: ID, groups: String): [User!]
-  document(title: String): [Document!]
+  document(id: String): [Document!]
   workflow(status: Status, user_id: ID): [Workflow!]
 
   notification(input:ID!):User!
