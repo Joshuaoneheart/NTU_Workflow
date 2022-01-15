@@ -6,7 +6,7 @@ import {
   DocumentModel,
   WorkflowModel,
 } from "../models/models";
-
+import {checkUser, newUser, makeName, checkChatBox, newChatBox,newMessage, checkMessage} from './utility.js'
 import { hash } from "bcrypt";
 
 const Mutation = {
@@ -35,8 +35,8 @@ const Mutation = {
   },
   createDocument: async (parent, args, db) => {
     // confirm that the id is unique
-    const checkId = await DocumentModel.find({ id: args.input.id });
-    if (checkId) throw new Error(`id repeat : ${args.input.id}`);
+    // const checkId = await DocumentModel.find({ id: args.input.id });
+    // if (checkId) throw new Error(`id repeat : ${args.input.id}`);
 
     const document = await new DocumentModel({
       id: args.input.id,
@@ -53,6 +53,46 @@ const Mutation = {
   // createWorkflow: async (parent,args,db)=>{
 
   // }
+  async createChatBox(parent, { name1, name2 }, { db, pubsub }, info) {
+    //arg
+
+    if (!name1 || !name2)
+      throw new Error("Missing chatBox name for CreateChatBox");
+
+    if (!(await checkUser(db, name1, "createChatBox"))) {
+      throw new Error("User does not exist for CreateChatBox: " + name1);
+      //await newUser(db, name1);
+    }
+    if (!(await checkUser(db, name2, "createChatBox"))) {
+      throw new Error("User does not exist for CreateChatBox: " + name2);
+      //await newUser(db, name2);
+    }
+
+    const chatBoxName = makeName(name1, name2);
+    let chatBox = 
+      await checkChatBox(db, chatBoxName, "createChatBox");
+    if (!chatBox) {
+      chatBox = await newChatBox(db, chatBoxName);
+      };
+
+    return chatBox;
+  },
+  async createMessage(parent, {from, to, message},{db,pubSub},info){
+    
+    const {chatBox, sender}= await checkMessage(db,from,to,message,"createMessage");
+    if(!chatBox) throw new Error("ChatBox not found for createMessage");
+    if(!sender) throw new Error("User not found: " + from);
+    
+    const chatBoxName = makeName(from,to);
+    const newMsg = await newMessage(db, sender, message); //body = message
+    chatBox.messages.push(newMsg);// save in that specific, new chatBox
+    await chatBox.save();
+    
+    pubSub.publish(`chatBox ${chatBoxName}`,{
+      message: {mutation: "CREATED",message:newMsg},
+    });
+    return newMsg;
+  }
 };
 
 export default Mutation;

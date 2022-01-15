@@ -30,7 +30,8 @@ const DocumentSchema = new Schema({
   id: { type: String, required: true },
   title: { type: String, required: true },
   body: { type: String, required: true },
-  fields: [ { type: String, required: true }], //array of inputs
+  fields: [ {fieldType:{ type: String, required: true },
+    name: { type: String, required: true}}], //array of inputs
   passBy: [{ type: mongoose.Types.ObjectId, ref: "User" }], //array of ids
 });
 
@@ -59,11 +60,23 @@ const SaltSchema = new Schema({
   content: { type: String, required: true}
 })
 
+
+const ChatBoxSchema = new Schema({
+  name: { type: String, required: true },
+  messages: [{ type: mongoose.Types.ObjectId, ref: "Message" }],
+});
+
+const MessageSchema = new Schema({
+  sender: { type: mongoose.Types.ObjectId, ref: "User" },
+  body: { type: String, required: true },
+});
+
 const UserModel = mongoose.model("User", UserSchema);
 const DocumentModel = mongoose.model("Document", DocumentSchema);
 const WorkflowModel = mongoose.model("Workflow", WorkflowSchema);
 const FileModel = mongoose.model("File", FileSchema);
 const TextModel = mongoose.model("Text", TextSchema);
 const saltModel = mongoose.model("salt",SaltSchema);
-
-export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel };
+const ChatBoxModel = mongoose.model("ChatBox", ChatBoxSchema);
+const MessageModel = mongoose.model("Message", MessageSchema);
+export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel,ChatBoxModel,MessageModel };

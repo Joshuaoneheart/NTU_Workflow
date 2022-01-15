@@ -13,6 +13,8 @@ import Document from "./resolvers/Document.js";
 import Workflow from "./resolvers/Workflow.js";
 import DateResolver from "./resolvers/Date.js";
 import StatusResolver from "./resolvers/Status.js";
+import ChatBox from "./resolvers/ChatBox.js";
+import Message from "./resolvers/Message.js";
 
 import * as db from "./models/models.js"; //mongo schema
 
@@ -53,10 +55,11 @@ const server = new ApolloServer({
   resolvers: {
     Query,
     Mutation,
-    // Subscription,
+    Subscription,
     Document,
-    // Workflow,
-
+    Workflow,
+    ChatBox,
+    Message,
     Date: DateResolver,
     Status: StatusResolver,
   },
