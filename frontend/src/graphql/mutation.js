@@ -27,4 +27,17 @@ const SIGN_UP = gql`
     }
   }
 `;
-export { SIGN_UP };
+
+const CREATE_WORKFLOW = gql`
+  mutation createWorkflow($document: ID!, $contents: inputContentPayload!, $student: ID!, $approvalLine: [approvalPayloadInput]!){
+    createWorkflow(input: {
+      documents: $document
+      contents: $contents
+      approvalLine: $approvalLine
+      student: $student
+    }) {
+      id
+    }
+  }
+`;
+export { SIGN_UP, CREATE_WORKFLOW };

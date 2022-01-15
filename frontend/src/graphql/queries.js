@@ -21,7 +21,7 @@ const SIGN_IN = gql`
 `;
 
 const DOCUMENT_QUERY = gql`
-  query ($id: ID!) {
+  query ($id: String) {
     document(id: $id) {
       id
       title
@@ -54,8 +54,8 @@ const ALL_USERS = gql`
 `;
 
 const FIND_USERS_BY_GROUP = gql`
-  query ($group: String!) {
-    user(group: $group) {
+  query ($groups: String) {
+    user(groups: $groups) {
       id
       name
     }
