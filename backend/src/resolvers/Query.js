@@ -8,6 +8,7 @@ import {
   DocumentModel,
   WorkflowModel,
 } from "../models/models";
+import {checkUser, newUser, makeName, checkChatBox, newChatBox,newMessage, checkMessage} from './utility.js'
 import bcrypt from "bcrypt";
 
 const Query = {
@@ -112,6 +113,20 @@ const Query = {
       //return workflow;
     }
     return workflow;
+  },
+  async chatBox(parent, {name1,name2}, { db }, info){
+    if (!name1 || !name2)
+    throw new Error("Missing chatBox name for CreateChatBox");
+    const chatBoxName = makeName(name1, name2);
+    if (!(await checkChatBox(db,chatBoxName, "createChatBox"))) {
+      console.log("User does not exist for CreateChatBox: " + chatBoxName);
+    }
+
+
+    let chatBox = 
+      await checkChatBox(db, chatBoxName, "createChatBox");
+    if (!chatBox)  console.log("User does not exist for CreateChatBox: " + chatBoxName);
+    else  return chatBox;
   },
 };
 
