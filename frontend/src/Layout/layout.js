@@ -16,7 +16,13 @@ const CustomLayout = (props) => {
     setProfileVisible(false);
   };
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout
+      style={{
+        minHeight: "100vh",
+        userSelect: "none",
+        webkitUserSelect: "none",
+      }}
+    >
       <Modal visible={profileVisible} onCancel={onCancel} footer={null}>
         <Profile />
       </Modal>
@@ -28,8 +34,15 @@ const CustomLayout = (props) => {
             height: "31px",
             margin: "16px 24px 16px 0",
             background: "rgba(255, 255, 255, 0.3)",
+            fontFamily: "Bebas Neue, cursive",
+            fontSize: "25px",
+            textAlign: "center",
+            paddingBottom: "16px",
+            verticalAlign: "top",
           }}
-        />
+        >
+          NTU WORKFLOW
+        </div>
         <UserBadge
           user={props.user}
           setProfileVisible={setProfileVisible}
