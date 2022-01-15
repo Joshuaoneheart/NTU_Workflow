@@ -50,9 +50,18 @@ const SignIn = ({
     } else {
       const hashed_p = await hash(password, salt.salt);
       try {
-        const { data: signIn_res } = await signIn({
+        const {data: signIn_res, error: signIn_error,} = await signIn({
           variables: { email: user["email"], password: hashed_p },
         });
+        if(signIn_error){
+          for(const error of signIn_error.graphQLErrors){
+            displayStatus({
+              type: "error",
+              msg: error.message,
+            });
+          }
+          return;
+        }
         setUser(signIn_res.signIn);
         setSignedIn(true);
       } catch (e) {

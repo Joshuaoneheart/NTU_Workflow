@@ -32,6 +32,7 @@ const Query = {
 
     try {
       const user = await UserModel.findOne({ email });
+      console.log(user)
       if (!user) throw new Error("User not found");
       if (user.password == password) return user;
       else throw new Error("Password incorrect");
