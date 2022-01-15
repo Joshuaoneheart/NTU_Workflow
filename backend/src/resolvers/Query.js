@@ -120,18 +120,21 @@ const Query = {
   },
   async chatBox(parent, {name1,name2}, { db }, info){
  
-    if (!name1 || !name2)
-    throw new Error("Missing chatBox name for CreateChatBox");
-    const chatBoxName = makeName(name1, name2);
-    if (!(await checkChatBox(db,chatBoxName, "createChatBox"))) {
-      console.log("User does not exist for CreateChatBox: " + chatBoxName);
+    if (!name1)
+    throw new Error("Missing chatBox name1 for CreateChatBox");
+
+    if(name1 && name2){
+      const chatBoxName = makeName(name1, name2);
+    let chatBox = await db.ChatBoxModel.findOne({ name: chatBoxName});
+    // await checkChatBox(db, chatBoxName, "createChatBox");
+    if (!chatBox)  console.log("Users does not exist for CreateChatBox: " + chatBoxName);
+    return [chatBox]
     }
-
-
-    let chatBox = 
-      await checkChatBox(db, chatBoxName, "createChatBox");
-    if (!chatBox)  console.log("User does not exist for CreateChatBox: " + chatBoxName);
-    else  return chatBox;
+    else if(name1){
+      const chatboxes = await db.ChatBoxModel.find({name: { $regex: name1 } });
+      console.log(chatboxes);
+      return chatboxes.map((chatbox) => {return chatbox})
+    }
   },
 };
 
