@@ -1,7 +1,7 @@
 import { Layout, Button } from "antd";
 import { useState } from "react";
 import MainPage from "../Containers/MainPage/mainPage";
-import UserBadge from "../Components/UserBadge";
+import UserBadge from "../Components/UserBadge/UserBadge";
 import LeftSider from "../Containers/Sider/leftsider";
 import Profile from "../Containers/Profile/profile";
 import Modal from "antd/lib/modal/Modal";
@@ -10,7 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
-  const [page, setPage] = useState("main");
+  const [page, setPage] = useState({ key: "welcome" });
   const [profileVisible, setProfileVisible] = useState(false);
   const onOk = () => {
     setProfileVisible(false);
@@ -38,7 +38,12 @@ const CustomLayout = (props) => {
             background: "rgba(255, 255, 255, 0.3)",
           }}
         />
-        <UserBadge user={props.user} setProfileVisible={setProfileVisible} setUser={props.setUser} setSignedIn={props.setSignedIn}/>
+        <UserBadge
+          user={props.user}
+          setProfileVisible={setProfileVisible}
+          setUser={props.setUser}
+          setSignedIn={props.setSignedIn}
+        />
       </Header>
       <Layout>
         <Sider
@@ -56,7 +61,7 @@ const CustomLayout = (props) => {
           <div
             style={{ minHeight: "280px", padding: "24px", background: "#fff" }}
           >
-            {<MainPage setPage={setPage} user={props.user}/>}
+            {<MainPage page={page} setPage={setPage} user={props.user} />}
           </div>
         </Content>
       </Layout>
