@@ -16,7 +16,7 @@ type Query {
 
   notification(input:ID!):User!
 
-  chatBox(name1: String, name2: String): ChatBox!
+ chatBox(name1: String, name2: String): [ChatBox!]
 
 }
 
