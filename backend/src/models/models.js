@@ -31,7 +31,7 @@ const DocumentSchema = new Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },
   fields: [ {fieldType:{ type: String, required: true },
-    name: { type: String, required: true}}], //array of inputs
+  name: { type: String, required: true}}], //array of inputs
   passBy: [{ type: String, required: true}], //array of ids
 });
 
@@ -42,17 +42,17 @@ const WorkflowSchema = new Schema({
   date: { type: Date, required: true },
   comments: { type: String }, //等被reject或需要退回修改才會寫
   contents: {
-    file: [{ type: mongoose.Types.ObjectId, ref: "File" }],
-    image:[{ type: mongoose.Types.ObjectId, ref: "File" }], //array of ids
-    text: [{ type: mongoose.Types.ObjectId, ref: "Text" }],
+    file: [{ type: String }],
+    image:[{ type: String }], //array of ids
+    text: [{ type: String }],
   },
   approvalLine: [
     {
-      stuff: { type: mongoose.Types.ObjectId, ref: "User" },
-      approve: { type: Boolean },
+      staff: { type: String, required: true },
+      status: { type: String, required: true },
     },
   ], //想把它寫成dictionary
-  student: { type: mongoose.Types.ObjectId, ref: "User" },
+  student: { type: String, required: true },
 });
 
 const SaltSchema = new Schema({

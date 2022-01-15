@@ -47,6 +47,25 @@ const Mutation = {
     await document.save();
     return document;
   },
+  createWorkflow: async(parent, args, db)=>{
+    const workflow = await new WorkflowModel({
+      id: uuid(),
+      document: args.input.document,
+      status: "PENDING",
+      date: new Date().getTime(),
+      comments: "no comment",
+      contents: {
+        file: args.input.contents.file,
+        image: args.input.contents.image, //array of ids
+        text: args.input.contents.text,
+      },
+      approvalLine:  args.input.approvalLine,
+      student: args.input.student,
+    })
+    await workflow.save();
+    return workflow;
+  },
+
   uploadTEXT: async(parent, {input}, db)=>{
     console.log(input);
 
