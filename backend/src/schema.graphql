@@ -14,21 +14,24 @@ type Query {
   document(title: String): [Document!]
   workflow(status: Status, user_id: ID): [Workflow!]
 
+  notification(input:ID!):User!
+
   chatBox(name1: String, name2: String): ChatBox!
+
 }
 
 type Mutation {
 
-  # stuff only
+  # staff only
   createUser(input: CreateUserInput!): User!
-  # stuff only
+  # staff only
   createDocument(input: CreateDocumentInput!): Document!
 
   # student only
-  #  createWorkflow(input: CreateWorkflowInput!): Workflow
+  createWorkflow(input: CreateWorkflowInput!): Workflow!
 
   uploadTEXT(input:String!): ID!
-  updateWorkflow(status: String, comments: String): Workflow
+  updateWorkflow(status: String, comments: String):ID!
 
   createMessage(from: String!, to: String, message: String!): Message!
   createChatBox(name1: String!, name2: String!): ChatBox!
@@ -36,8 +39,14 @@ type Mutation {
 
 type Subscription {
   #如果status更新 或是有comments, 都會通知teachers跟當事的students
-  workflowUpdate: Workflow!
+  notification(name: ID!):notificationPayload!
   message(from: String!, to: String!): MessageSubscriptionPayload!
+}
+
+type notificationPayload{
+User_id: ID!,
+newNotice: Boolean!,
+content: String!
 }
 
 # only faculty members can create student users
@@ -52,15 +61,19 @@ input CreateUserInput {
 }
 
 input CreateWorkflowInput {
-  id: ID!
   document: ID!  #REVISE
-  date: Date!
-  approvalLine: [approvalPayloadInput]! # dictionary ?
+  approvalLine: [approvalPayloadInput]! 
+  contents: inputContentPayload!
   student: ID! #  ref
 }
 
+input inputContentPayload{
+  file: [ID]                    
+  image: [ID]
+  text: [ID]
+}
+
 input CreateDocumentInput {
-  id: ID!
   title: String!
   body: String!
   fields: [inputField!]! #可以又需要image, file, text
@@ -109,7 +122,7 @@ type Workflow {
   comments: String
   contents: ContentPayload!
   approvalLine: [approvalPayload]!
-  student: User! # REVICE
+  student: ID! # REVICE
 }
 
 type File {
@@ -121,18 +134,18 @@ type File {
 }
 
 type ContentPayload {
-  file: [File]
-  image: [File]
-  TEXT: [String]
+  file: [ID]
+  image: [ID]
+  text: [ID]
 }
 
 type approvalPayload {
-  stuff: User! 
+  staff: ID! 
   status: Status!
 }
 
 input approvalPayloadInput {
-  stuff: ID! # REVICE
+  staff: ID! # REVICE
   status: Status!
 }
 
