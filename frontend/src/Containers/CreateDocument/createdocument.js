@@ -114,7 +114,13 @@ const CreateDocument = ({ setPage, displayStatus }) => {
               <Button type="primary" htmlType="submit">
                 submit
               </Button>
-              <Button type="primary" onClick={() => {}} danger>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setPage({ key: "welcome" });
+                }}
+                danger
+              >
                 Cancel
               </Button>
             </Space>
