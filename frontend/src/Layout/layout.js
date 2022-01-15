@@ -30,15 +30,11 @@ const CustomLayout = (props) => {
         <div
           style={{
             float: "left",
-            width: "120px",
             height: "31px",
-            margin: "16px 24px 16px 0",
-            background: "rgba(255, 255, 255, 0.3)",
+            color: "rgb(220, 230, 220)",
             fontFamily: "Bebas Neue, cursive",
-            fontSize: "25px",
+            fontSize: "37px",
             textAlign: "center",
-            paddingBottom: "16px",
-            verticalAlign: "top",
           }}
         >
           NTU WORKFLOW
