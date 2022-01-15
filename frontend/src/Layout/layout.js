@@ -1,4 +1,4 @@
-import { Layout, Button } from "antd";
+import { Layout } from "antd";
 import { useState } from "react";
 import MainPage from "../Containers/MainPage/mainPage";
 import UserBadge from "../Components/UserBadge/UserBadge";
@@ -17,11 +17,7 @@ const CustomLayout = (props) => {
   };
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Modal
-        visible={profileVisible}
-				onCancel={onCancel}
-        footer={null}
-      >
+      <Modal visible={profileVisible} onCancel={onCancel} footer={null}>
         <Profile />
       </Modal>
       <Header>
@@ -51,7 +47,7 @@ const CustomLayout = (props) => {
             setShowSider(collapsed);
           }}
         >
-          <LeftSider collapsed={showSider} />
+          <LeftSider setPage={setPage} collapsed={showSider} />
         </Sider>
         <Content style={{ padding: "40px" }}>
           <div

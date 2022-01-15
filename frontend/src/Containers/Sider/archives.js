@@ -1,34 +1,64 @@
-import { Badge, Card, Typography, Radio, Space } from "antd";
+import {
+  Typography,
+  Badge,
+  Button,
+  Card,
+  Cascader,
+  Divider,
+  Radio,
+  Space,
+} from "antd";
 import { useState } from "react";
+import styled from "styled-components";
 
 const { Text } = Typography;
 const data = [
   {
     content: "This is a card",
     status: "APPROVED",
+    date: "2022-1-13",
   },
   {
     content: "This is not a card",
     status: "REJECTED",
+    date: "2021-3-29",
   },
   {
     content: "That is a card",
     status: "PENDING",
+    date: "2021-1-24",
   },
   {
     content: "This isn't a card",
     status: "REJECTED",
+    date: "2022-1-14",
   },
   {
     content: "This should be a card",
     status: "PENDING",
+    date: "2022-2-24",
   },
   {
     content: "This is a card or is it?",
     status: "APPROVED",
+    date: "2022-1-24",
   },
 ];
-const Archives = () => {
+const optionLists = [
+  {
+    value: "停修單",
+    label: "停修單",
+  },
+  {
+    value: "活動申請單",
+    label: "活動申請單",
+  },
+  {
+    value: "獎學金申請單",
+    label: "獎學金申請單",
+  },
+];
+const Archives = ({ setPage }) => {
   const [filter, setFilter] = useState("All");
   const onFilterChange = (e) => {
     setFilter(e.target.value);
@@ -43,9 +73,40 @@ const Archives = () => {
         return { text: a.toLowerCase(), color: "red" };
     }
   };
+  const Div = styled.div`
+    padding: 10px;
+    width: 300px;
+    height: 60vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  `;
+
+  const dropdownRender = (menus) => {
+    return (
+      <>
+        {menus}
+        <Divider style={{ margin: 0 }} />
+      </>
+    );
+  };
   return (
     <>
-      <Space>
+      <Space direction="vertical" size="large">
+        <Space>
+          <Cascader
+            options={optionLists}
+            dropdownRender={dropdownRender}
+            placeholder="Select Workflow"
+          />
+          <Button
+            type="primary"
+            onClick={() => {
+              setPage({ key: "createWorkflow" });
+            }}
+          >
+            New
+          </Button>
+        </Space>
         <Radio.Group onChange={onFilterChange} value={filter}>
           <Radio value="All">All</Radio>
           <Radio value="approved">Approved</Radio>
@@ -53,25 +114,42 @@ const Archives = () => {
           <Radio value="rejected">Rejected</Radio>
         </Radio.Group>
       </Space>
-      {data.map((archive) => {
-        const { text, color } = convert(archive.status);
-        console.log(archive);
-        if (filter === "All") {
-          return (
-            <Badge.Ribbon text={text} color={color}>
-              <Card>{archive.content}</Card>
-            </Badge.Ribbon>
-          );
-        } else {
-          if (filter === text) {
+      <Div>
+        {data.map((archive) => {
+          const { text, color } = convert(archive.status);
+          if (filter === "All") {
             return (
               <Badge.Ribbon text={text} color={color}>
-                <Card>{archive.content}</Card>
+                <br />
+                <Card>
+                  <Space direction="vertical">
+                    <Text>{archive.content}</Text>
+                    <Text type="secondary" style={{ textAlign: "right" }}>
+                      {archive.date}
+                    </Text>
+                  </Space>
+                </Card>
               </Badge.Ribbon>
             );
+          } else {
+            if (filter === text) {
+              return (
+                <Badge.Ribbon text={text} color={color}>
+                  <Card>
+                    <br />
+                    <Space direction="vertical">
+                      <Text>{archive.content}</Text>
+                      <Text type="secondary" style={{ textAlign: "right" }}>
+                        {archive.date}
+                      </Text>
+                    </Space>
+                  </Card>
+                </Badge.Ribbon>
+              );
+            }
           }
-        }
-      })}
+        })}
+      </Div>
     </>
   );
 };
