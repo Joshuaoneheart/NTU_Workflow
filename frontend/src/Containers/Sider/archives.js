@@ -76,7 +76,7 @@ const Archives = ({ setPage }) => {
   const Div = styled.div`
     padding: 10px;
     width: 300px;
-    height: 60vh;
+    height: 50vh;
     overflow-x: hidden;
     overflow-y: scroll;
   `;
@@ -104,7 +104,7 @@ const Archives = ({ setPage }) => {
               setPage({ key: "createWorkflow" });
             }}
           >
-            New
+            Create
           </Button>
         </Space>
         <Radio.Group onChange={onFilterChange} value={filter}>
@@ -113,43 +113,43 @@ const Archives = ({ setPage }) => {
           <Radio value="pending">Pending</Radio>
           <Radio value="rejected">Rejected</Radio>
         </Radio.Group>
-      </Space>
-      <Div>
-        {data.map((archive) => {
-          const { text, color } = convert(archive.status);
-          if (filter === "All") {
-            return (
-              <Badge.Ribbon text={text} color={color}>
-                <br />
-                <Card>
-                  <Space direction="vertical">
-                    <Text>{archive.content}</Text>
-                    <Text type="secondary" style={{ textAlign: "right" }}>
-                      {archive.date}
-                    </Text>
-                  </Space>
-                </Card>
-              </Badge.Ribbon>
-            );
-          } else {
-            if (filter === text) {
+        <Div>
+          {data.map((archive) => {
+            const { text, color } = convert(archive.status);
+            if (filter === "All") {
               return (
                 <Badge.Ribbon text={text} color={color}>
+                  <br />
                   <Card>
-                    <br />
-                    <Space direction="vertical">
+                    <Space direction="vertical" style={{ width: "100%" }}>
                       <Text>{archive.content}</Text>
-                      <Text type="secondary" style={{ textAlign: "right" }}>
+                      <Text type="secondary" style={{ float: "right" }}>
                         {archive.date}
                       </Text>
                     </Space>
                   </Card>
                 </Badge.Ribbon>
               );
+            } else {
+              if (filter === text) {
+                return (
+                  <Badge.Ribbon text={text} color={color}>
+                    <Card>
+                      <br />
+                      <Space direction="vertical" style={{ width: "100%" }}>
+                        <Text>{archive.content}</Text>
+                        <Text type="secondary" style={{ float: "right" }}>
+                          {archive.date}
+                        </Text>
+                      </Space>
+                    </Card>
+                  </Badge.Ribbon>
+                );
+              }
             }
-          }
-        })}
-      </Div>
+          })}
+        </Div>
+      </Space>
     </>
   );
 };

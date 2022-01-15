@@ -58,7 +58,7 @@ const IconColumn = styled.div`
 
 const ContentColumn = styled.div`
   margin-left: 80px;
-  width: 200px;
+  width: 300px;
   position: absolute;
 `;
 
