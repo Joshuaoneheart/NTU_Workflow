@@ -17,11 +17,7 @@ const CustomLayout = (props) => {
   };
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Modal
-        visible={profileVisible}
-				onCancel={onCancel}
-        footer={null}
-      >
+      <Modal visible={profileVisible} onCancel={onCancel} footer={null}>
         <Profile />
       </Modal>
       <Header>
@@ -53,18 +49,24 @@ const CustomLayout = (props) => {
         >
           <LeftSider collapsed={showSider} />
         </Sider>
-        <Content style={{ padding: "40px" }}>
-          <div
-            style={{ minHeight: "280px", padding: "24px", background: "#fff" }}
-          >
-            {<MainPage page={page} setPage={setPage} user={props.user} />}
-          </div>
-        </Content>
+        <Layout>
+          <Content style={{ padding: "40px" }}>
+            <div
+              style={{
+                minHeight: "280px",
+                padding: "24px",
+                background: "#fff",
+              }}
+            >
+              {<MainPage page={page} setPage={setPage} user={props.user} />}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>
+            NTU Workflow System @2021 Created by Yi-Hsin, Yu, Matthieu Desir and
+            Eileen Wang
+          </Footer>
+        </Layout>
       </Layout>
-      <Footer style={{ textAlign: "center" }}>
-        NTU Workflow System @2021 Created by Yi-Hsin, Yu, Matthieu Desir and
-        Eileen Wang
-      </Footer>
     </Layout>
   );
 };
