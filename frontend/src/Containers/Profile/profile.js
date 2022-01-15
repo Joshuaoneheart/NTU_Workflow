@@ -2,15 +2,8 @@ import { Avatar, Typography, Input, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
-const data = {
-  name: "Joshua",
-  email: "noone@csie.ntu.edu.tw",
-  id: "B09877221",
-  department: "CSIE",
-  groups: "student",
-};
 
-const Settings = () => {
+const Settings = ({data}) => {
   return (
     <>
       <Space

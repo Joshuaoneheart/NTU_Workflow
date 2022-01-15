@@ -26,7 +26,10 @@ const DOCUMENT_QUERY = gql`
       id
       title
       body
-      fields
+      fields {
+        fieldType
+        name
+      }
       passBy
     }
   }
