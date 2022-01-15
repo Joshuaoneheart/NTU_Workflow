@@ -48,26 +48,26 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
-      console.log(salt);
-      if (!salt) {
-        displayStatus({
-          type: "error",
-          msg: "Some errors happen. Retry later",
-        });
-        return;
-      }
       const hashed_p = await hash(password, salt.salt);
-      const { data: signIn_res, error: signIn_err } = await signIn({
-        variables: { email: user["email"], password: hashed_p },
-      });
-      if (!signIn_err) {
+      try {
+        const {data: signIn_res, error: signIn_error,} = await signIn({
+          variables: { email: user["email"], password: hashed_p },
+        });
+        if(signIn_error){
+          for(const error of signIn_error.graphQLErrors){
+            displayStatus({
+              type: "error",
+              msg: error.message,
+            });
+          }
+          return;
+        }
         setUser(signIn_res.signIn);
         setSignedIn(true);
-      } else {
-        console.log(signIn_err);
+      } catch (e) {
         displayStatus({
           type: "error",
-          msg: "Some errors happen. Retry later",
+          msg: e.message,
         });
       }
     }

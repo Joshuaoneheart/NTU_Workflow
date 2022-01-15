@@ -31,7 +31,6 @@ type Mutation {
   createWorkflow(input: CreateWorkflowInput!): Workflow!
 
   uploadTEXT(input:String!): ID!
-
   updateWorkflow(status: String, comments: String)
 
   createMessage(from: String!, to: String, message: String!): Message!

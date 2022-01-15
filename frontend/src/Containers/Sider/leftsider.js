@@ -17,20 +17,29 @@ const Icon = styled.div`
 
 const focusedOutlined = {
   border: "black",
-  borderWidth: "1px",
+  borderWidth: "0.5px",
   borderStyle: "solid",
 };
 
 const InfoCircleIcon = styled(InfoCircleOutlined)`
   color: black;
+  &:hover {
+    color: #555;
+  }
 `;
 
 const MessageIcon = styled(MessageOutlined)`
   color: black;
+  &:hover {
+    color: #555;
+  }
 `;
 
 const FileIcon = styled(FileOutlined)`
   color: black;
+  &:hover {
+    color: #555;
+  }
 `;
 
 const Container = styled.div`
@@ -49,8 +58,8 @@ const IconColumn = styled.div`
 
 const ContentColumn = styled.div`
   margin-left: 80px;
+  width: 300px;
   position: absolute;
-  ${({ collapsed }) => collapsed && `visibility: hidden;`}
 `;
 
 const Header = styled.h1`
@@ -59,20 +68,24 @@ const Header = styled.h1`
   padding: 10px;
 `;
 
-const LeftSider = (collapsed) => {
+const LeftSider = ({ collapsed, setPage }) => {
   const [FocusedIcon, setFocused] = useState(<Notifications />);
   const [activeBadge, setActiveBadge] = useState(0);
+  const [title, setTitle] = useState("Notifications");
   const FocusNotifications = () => {
     setFocused(<Notifications />);
     setActiveBadge(0);
+    setTitle("Notifications");
   };
   const FocusMessages = () => {
     setFocused(<Messages />);
     setActiveBadge(1);
+    setTitle("Messages");
   };
   const FocusArchives = () => {
-    setFocused(<Archives />);
+    setFocused(<Archives setPage={setPage} />);
     setActiveBadge(2);
+    setTitle("Archives");
   };
   return (
     <>
@@ -109,16 +122,12 @@ const LeftSider = (collapsed) => {
             </Badge>
           </Icon>
         </IconColumn>
-        {collapsed.collapsed === false ? (
-          <>
-            <ContentColumn>
-              <Header>Notifications</Header>
-              {FocusedIcon}
-            </ContentColumn>
-          </>
-        ) : (
-          <></>
-        )}
+        <ContentColumn
+          style={collapsed === true ? { visibility: "hidden" } : {}}
+        >
+          <Header>{title}</Header>
+          {FocusedIcon}
+        </ContentColumn>
       </Container>
     </>
   );

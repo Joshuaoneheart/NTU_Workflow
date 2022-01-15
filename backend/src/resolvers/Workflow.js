@@ -3,6 +3,9 @@ const Workflow = {
   document(parent, args, { db }, info) {
     return db.DocumentModel.findById(parent.document);
   },
+  contents: async (parent, args, { db }, info)=>{
+
+  },
   approvalLine(parent, args, { db }, info) {
     // console.log("workflow.js")
     // console.log(args);

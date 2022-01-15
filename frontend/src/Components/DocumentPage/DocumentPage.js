@@ -1,5 +1,5 @@
-import { Typography, Timeline, Tag, Button, List, Upload } from "antd";
-import "./Document.css"
+import { Typography, Timeline, Tag, List, Upload } from "antd";
+import "./Document.css";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
@@ -63,7 +63,6 @@ const DocumentPage = (props) => {
           <Tag>Pending</Tag>電資學院院長 張XX
         </Timeline.Item>
       </Timeline>
-      <Button danger>Cancel</Button>
     </>
   );
 };

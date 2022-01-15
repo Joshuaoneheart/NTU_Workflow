@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -40,4 +42,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.App-messages {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 45vh;
+  background: #eeeeee52;
+  border-radius: 10px;
+  margin: 2.5%;
+  padding: 20px;
+  overflow: auto;
 }
