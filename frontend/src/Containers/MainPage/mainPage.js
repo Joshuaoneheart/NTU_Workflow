@@ -1,14 +1,21 @@
-import DragAndDrop from "./dragAndDrop";
-import ProgressBar from "./progressBar";
 import DocumentPage from "./DocumentPage";
 import CreateWorkflow from "../CreateWorkflow/createworkflow";
 import { Button } from "antd";
 import { useState } from "react";
+const Welcome = () => {
+  return null;
+};
 const MainPage = ({ user }) => {
-  const [newWorkflow, setNewWorkflow] = useState(false);
+  const [page, setPage] = useState({ key: "welcome" });
   return (
     <>
-      <DocumentPage user={user}/>
+      {page["key"] == "document" ? (
+        <DocumentPage setPage={setPage} document={page["document"]} />
+      ) : page["key"] == "createWorkflow" ? (
+        <CreateWorkflow setPage={setPage} document={page["document"]} />
+      ) : (
+        <Welcome />
+      )}
     </>
   );
 };

@@ -70,17 +70,7 @@ export const UserBadge = ({ user, setUser, setSignedIn, setProfileVisible, ...pr
               textAlign: "right",
             }}
           >
-            Joshua
-          </label>
-          <label
-            style={{
-              padding: 0,
-              width: "70px",
-              display: "inline-block",
-              textAlign: "right",
-            }}
-          >
-            A genius
+            {user.name}
           </label>
         </div>
         <div style={{ display: "flex" }}>

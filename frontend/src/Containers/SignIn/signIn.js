@@ -48,25 +48,18 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
-      if (!salt) {
-        displayStatus({
-          type: "error",
-          msg: "Some errors happen. Retry later",
-        });
-        return;
-      }
       const hashed_p = await hash(password, salt.salt);
-      const { data: signIn_res, error: signIn_err } = await signIn({
-        variables: { email: user["email"], password: hashed_p },
-      });
-      if (!signIn_err) {
+      try {
+        const { data: signIn_res } = await signIn({
+          variables: { email: user["email"], password: hashed_p },
+        });
         setUser(signIn_res.signIn);
         setSignedIn(true);
-      } else {
+      } catch (e) {
         console.log(signIn_err);
         displayStatus({
           type: "error",
-          msg: "Some errors happen. Retry later",
+          msg: signIn_err.message,
         });
       }
     }
