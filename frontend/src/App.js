@@ -12,7 +12,7 @@ function App() {
   const [user, setUser] = useState({ email: savedEmail || "" });
   const [password, setPassword] = useState(savedPassword || "");
   const [confirmPass, setConfirmPass] = useState("");
-  const [signedIn, setSignedIn] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const displayStatus = (payload) => {
     if (payload.msg) {
