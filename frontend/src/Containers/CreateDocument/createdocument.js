@@ -1,10 +1,12 @@
-import { Input, Button, Space, Form, Typography } from "antd";
+import { Input, Button, Space, Form, Typography, Select } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import DragAndDrop from "../MainPage/dragAndDrop";
+import { useQuery } from "@apollo/client";
+import { ALL_GROUPS } from "../../graphql/queries";
 
 const { Title } = Typography;
 
-const CreateDocument = ({ setPage }) => {
+const CreateDocument = ({ setPage, displayStatus }) => {
+  const { data } = useQuery(ALL_GROUPS);
   const onFinish = (values) => {
     console.log("The values collected from the form are:", values);
   };
@@ -12,10 +14,63 @@ const CreateDocument = ({ setPage }) => {
     <>
       <Typography>
         <Title level={2}>Create a document</Title>
-        <Form name="Workflow" autoComplete="off" onFinish={onFinish}>
-          <Form.Item>
-            <DragAndDrop />
+        <Form name="Document" autoComplete="off" onFinish={onFinish}>
+          <Title level={3}>Document Title</Title>
+          <Form.Item name="title">
+            <Input />
           </Form.Item>
+          <Title level={3}>Document Description</Title>
+          <Form.Item name="description">
+            <Input.TextArea
+              autoSize={{ minRows: 5 }}
+              showCount
+              maxLength={500}
+              row={8}
+            />
+          </Form.Item>
+          <Title level={3}>Required Fields</Title>
+          <Form.List name="Fields">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space
+                    key={key}
+                    style={{ display: "flex", marginBottom: 8 }}
+                    align="baseline"
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "Professor"]}
+                      rules={[
+                        { required: true, message: "Missing Professor field" },
+                      ]}
+                    >
+                      <Space>
+                        <Select defaultValue="TEXT">
+                          <Select.Option value="TEXT">Text</Select.Option>
+                          <Select.Option value="IMAGE">Image</Select.Option>
+                          <Select.Option value="FILE">File</Select.Option>
+                        </Select>
+                        <Input placeholder="Field name" />
+                      </Space>
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+          <Title level={3}>Approval Line</Title>
           <Form.List name="Approval">
             {(fields, { add, remove }) => (
               <>
@@ -32,7 +87,11 @@ const CreateDocument = ({ setPage }) => {
                         { required: true, message: "Missing Professor field" },
                       ]}
                     >
-                      <Input placeholder="Group name" />
+                      <Select>
+                        {data.findGroups.map((group, i) => (
+                          <Select.Option value={i}>{group}</Select.Option>
+                        ))}
+                      </Select>
                     </Form.Item>
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>

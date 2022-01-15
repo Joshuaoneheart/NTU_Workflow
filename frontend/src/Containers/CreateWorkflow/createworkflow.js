@@ -7,7 +7,7 @@ import { DOCUMENT_QUERY } from "../../graphql/queries";
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
-const CreateWorkflow = ({ setPage, document }) => {
+const CreateWorkflow = ({ setPage, document, displayStatus }) => {
   /*const { data, loading } = useQuery(DOCUMENT_QUERY, {
     variable: { id: document.id },
   });*/
