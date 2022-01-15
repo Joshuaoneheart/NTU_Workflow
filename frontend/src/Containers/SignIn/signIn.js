@@ -1,5 +1,5 @@
-import { Button, Card, Input, Space } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Space, Avatar } from "antd";
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
@@ -18,7 +18,7 @@ const Container = styled(Card)`
   align-items: center;
   text-align: center;
   padding: 10vh;
-  height: 50vh;
+  height: 60vh;
   top: 17.5vh;
   left: 25vw;
   box-shadow: 0px 0px 1px black;
@@ -92,6 +92,8 @@ const SignIn = ({
             >
               NTU WORKFLOW
             </div>
+						<br />
+						<Avatar size={64} icon={<UserOutlined />} />
             <Input.Group compact style={{ width: "30vw" }}>
               <Input
                 value={user["email"]}
