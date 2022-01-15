@@ -32,7 +32,7 @@ const DocumentSchema = new Schema({
   body: { type: String, required: true },
   fields: [ {fieldType:{ type: String, required: true },
     name: { type: String, required: true}}], //array of inputs
-  passBy: [{ type: mongoose.Types.ObjectId, ref: "User" }], //array of ids
+  passBy: [{ type: String, required: true}], //array of ids
 });
 
 const WorkflowSchema = new Schema({
@@ -59,7 +59,6 @@ const SaltSchema = new Schema({
   name: { type: String, required: true},
   content: { type: String, required: true}
 })
-
 
 const ChatBoxSchema = new Schema({
   name: { type: String, required: true },
