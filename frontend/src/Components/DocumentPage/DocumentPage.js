@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Typography, Timeline, Tag, List, Upload, Button } from "antd";
+import { Typography, Timeline, Tag, List, Upload, Button, Space } from "antd";
 import { useEffect, useState } from "react";
-import { DECLINE_WORKFLOW } from "../../graphql/mutation";
+import { DECLINE_WORKFLOW, APPROVE_WORKFLOW } from "../../graphql/mutation";
 import {
   DOCUMENT_QUERY,
   FIND_WORKFLOW,
@@ -14,13 +14,14 @@ const DocumentPage = (props) => {
   const { data: workflow, loading } = useQuery(FIND_WORKFLOW, {
     variables: { id: props.workflow },
   });
-  const { data: document, doc_loading } = useQuery(DOCUMENT_QUERY, {
+  const { data: document, loading: doc_loading } = useQuery(DOCUMENT_QUERY, {
     variables: { id: props.document },
   });
-  const { data: users, user_loading } = useQuery(ALL_USERS);
+  const { data: users, loading: user_loading } = useQuery(ALL_USERS);
   const [status, setStatus] = useState([]);
   const [decline] = useMutation(DECLINE_WORKFLOW);
-  console.log(document, workflow);
+  const [approve] = useMutation(APPROVE_WORKFLOW);
+  console.log(props, document, workflow, users);
   useEffect(() => {
     if (!loading) {
       let first = false;
@@ -45,7 +46,7 @@ const DocumentPage = (props) => {
       <Typography>
         <Title>
           Record for {document.document[0].title}
-          <br />#{document.document[0].id}
+          <br />#{workflow.workflow[0].id}
         </Title>
         <Paragraph>{document.document[0].body}</Paragraph>
       </Typography>
@@ -75,14 +76,38 @@ const DocumentPage = (props) => {
           );
         })}
       </Timeline>
-      <Button
-        danger
-        onClick={async () => {
-          await decline({ variables: { id: props.workflow } });
-        }}
-      >
-        Cancel
-      </Button>
+      <Space>
+        {props.user.role == "staff" && (
+          <Button
+            type="primary"
+            onClick={async () => {
+              await approve({
+                variables: { id: props.workflow, userId: props.user.id },
+              });
+              props.displayStatus({
+                type: "success",
+                msg: "Workflow approved!",
+              });
+              props.setPage({ key: "welcome" });
+            }}
+          >
+            Approve
+          </Button>
+        )}
+        <Button
+          danger
+          onClick={async () => {
+            await decline({ variables: { id: props.workflow } });
+            props.displayStatus({
+              type: "success",
+              msg: "Workflow declined!",
+            });
+            props.setPage({ key: "welcome" });
+          }}
+        >
+          Cancel
+        </Button>
+      </Space>
     </>
   );
 };

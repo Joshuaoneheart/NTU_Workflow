@@ -48,6 +48,21 @@ const CREATE_WORKFLOW = gql`
   }
 `;
 
+const CREATE_DOCUMENT = gql`
+  mutation createDocument(
+    $title: String!
+    $body: String!
+    $fields: [inputField!]!
+    $passBy: [String!]!
+  ) {
+    createDocument(
+      input: { title: $title, body: $body, fields: $fields, passBy: $passBy }
+    ) {
+      id
+    }
+  }
+`;
+
 const UPLOAD_FILE = gql`
   mutation uploadFile($file: Upload!) {
     uploadFile(file: $file)
@@ -77,4 +92,20 @@ const DECLINE_WORKFLOW = gql`
     updateWorkflow(status: DECLINE, workflowId: $id)
   }
 `;
-export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, UPLOAD_TEXT, SEND_MESSAGE, DECLINE_WORKFLOW };
+
+const APPROVE_WORKFLOW = gql`
+  mutation approve($id: ID!, $userId: ID!) {
+    updateWorkflow(status: ACCEPT, workflowId: $id, staffId: $userId)
+  }
+`;
+
+export {
+  SIGN_UP,
+  CREATE_WORKFLOW,
+  APPROVE_WORKFLOW,
+  UPLOAD_FILE,
+  UPLOAD_TEXT,
+  SEND_MESSAGE,
+  DECLINE_WORKFLOW,
+  CREATE_DOCUMENT,
+};

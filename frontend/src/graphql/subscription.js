@@ -13,4 +13,15 @@ const MESSAGES_SUBSCRIPTION = gql`
     }
   }
 `;
-export { MESSAGES_SUBSCRIPTION };
+
+const NOTIFS_SUBSCRIPTION = gql`
+  subscription ($id: ID!) {
+    Notification(id: $id) {
+      userId
+      workflowId
+      content
+    }
+  }
+`;
+
+export { MESSAGES_SUBSCRIPTION, NOTIFS_SUBSCRIPTION };

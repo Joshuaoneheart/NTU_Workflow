@@ -75,6 +75,7 @@ const Query = {
     });
   },
   document: async (parent, args, db) => {
+    console.log(args)
     if (args.id) {
       console.log(args.id);
       const doc = await DocumentModel.find({ id: args.id });

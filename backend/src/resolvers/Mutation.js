@@ -77,7 +77,7 @@ const Mutation = {
 
     if (!(await NoticeModel.findOne({ workflowId: workflow.id }))) {
       const newNote = await new NoticeModel({
-        userId: workflow.student, //ex : b08508010
+        userId: args.input.approvalLine[0].staff, //ex : b08508010
         workflowId: workflow.id,
         content: `Workflow ${workflow.id} status had changed`,
       });
@@ -86,7 +86,7 @@ const Mutation = {
       console.log(args.input.approvalLine[0].staff);
       pubSub.publish(`Notification ${args.input.approvalLine[0].staff}`, {
         Notification: {
-          userId: workflow.student,
+          userId: args.input.approvalLine[0].staff,
           workflowId: workflow.id,
           content: `Workflow ${workflow.id} status had changed`,
         },

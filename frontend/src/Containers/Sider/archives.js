@@ -24,7 +24,6 @@ const Archives = ({ setPage, user }) => {
     WORKFLOW_QUERY,
     { variables: { id: user.id } }
   );
-  console.log(workflows, workflow_loading);
   const [doc_id, setDoc] = useState();
   const optionLists = loading
     ? [{ value: "loading...", label: "loading..." }]
@@ -87,9 +86,9 @@ const Archives = ({ setPage, user }) => {
             </Space>
             <Radio.Group onChange={onFilterChange} value={filter}>
               <Radio value="All">All</Radio>
-              <Radio value="approved">Approved</Radio>
+              <Radio value="accept">Accept</Radio>
               <Radio value="pending">Pending</Radio>
-              <Radio value="rejected">Rejected</Radio>
+              <Radio value="decline">Decline</Radio>
             </Radio.Group>
           </>
         ) : (

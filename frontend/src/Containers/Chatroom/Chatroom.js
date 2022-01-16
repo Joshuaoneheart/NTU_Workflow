@@ -56,11 +56,12 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
             height: "43vh",
             display: "flex",
             flexDirection: "column",
-            overflow: "auto", marginBottom: "10px"
+            overflow: "auto",
+            marginBottom: "10px",
           }}
         >
           {loading ? (
-						<Skeleton active/>
+            <Skeleton active />
           ) : !chatbox.chatBox[0].messages.length ? (
             <p>Say hey to your new friend</p>
           ) : (
@@ -99,10 +100,10 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
                 message: body,
               },
             });
-						displayStatus({
-							type: "success",
-							msg: "Message sent.",
-						});
+            displayStatus({
+              type: "success",
+              msg: "Message sent.",
+            });
             setBody("");
           }}
         ></Input.Search>

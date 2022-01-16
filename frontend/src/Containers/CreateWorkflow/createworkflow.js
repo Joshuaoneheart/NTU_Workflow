@@ -41,8 +41,9 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
     loading,
     error,
   } = useQuery(DOCUMENT_QUERY, {
-    variable: { id: document },
+    variables: { id: document },
   });
+  console.log(doc, document)
   let [approvals, setApprovals] = useState([]);
   let [contents, setContents] = useState({ file: [], image: [], text: [] });
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
@@ -66,7 +67,7 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
         approvalLine: approvals,
       },
     });
-    setPage({ key: "document", document: id.data.createWorkflow.id });
+    setPage({ key: "document", workflow: id.data.createWorkflow.id, document});
   };
   useEffect(() => {
     if (!loading) {

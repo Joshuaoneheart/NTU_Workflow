@@ -9,16 +9,12 @@ const Notifications = ({ notifs, loading, setPage }) => {
   const Div = styled.div`
     padding: 10px;
     width: 300px;
-    height: 50vh;
+    height: 70vh;
     overflow-x: hidden;
     overflow-y: scroll;
   `;
-  const [filter, setFilter] = useState("All");
   const [data, setData] = useState([]);
   const [turnD2W] = useLazyQuery(FIND_D_BY_W);
-  const onFilterChange = (e) => {
-    setFilter(e.target.value);
-  };
   useEffect(() => {
     if (!loading) {
       let tmp = [];
@@ -31,51 +27,28 @@ const Notifications = ({ notifs, loading, setPage }) => {
   return (
     <>
       <Div>
-        <Space direction="vertical" size="large">
-          <Radio.Group onChange={onFilterChange} value={filter}>
-            <Radio value="All">All</Radio>
-            <Radio value="NEW">New</Radio>
-            <Radio value="OLD">Old</Radio>
-          </Radio.Group>
-          <List>
-            <VirtualList data={data} itemHeight={40}>
-              {(item) => {
-                const onclick = async () => {
-                  setPage({
-                    key: "document",
-                    document: (await turnD2W(item.notif.workflowId)).data.workflow[0].document,
-                    workflow: item.notif.workflowId,
-                  });
-                };
-                if (filter === "All") {
-                  return (
-                    <List.Item onClick={onclick} key={item.name}>
-                      <List.Item.Meta
-                        avatar={<Avatar icon={<UserOutlined />} />}
-                        title={item.name}
-                      />
-                      <Badge count={item.status === "NEW" ? 1 : 0} />
-                    </List.Item>
-                  ); 
-                } else {
-                  return (
-                    <List.Item
-                      onClick={onclick}
-                      key={item.name}
-                      style={item.status !== filter ? { display: "none" } : {}}
-                    >
-                      <List.Item.Meta
-                        avatar={<Avatar src={UserOutlined} />}
-                        title={item.name}
-                      />
-                      <Badge count={item.status === "NEW" ? 1 : 0} />
-                    </List.Item>
-                  );
-                }
-              }}
-            </VirtualList>
-          </List>
-        </Space>
+        <List>
+          <VirtualList data={data} itemHeight={40}>
+            {(item) => {
+              const onclick = async () => {
+                setPage({
+                  key: "document",
+                  document: (await turnD2W(item.notif.workflowId)).data
+                    .workflow[0].document,
+                  workflow: item.notif.workflowId,
+                });
+              };
+              return (
+                <List.Item onClick={onclick} key={item.name}>
+                  <List.Item.Meta
+                    avatar={<Avatar icon={<UserOutlined />} />}
+                    title={item.name}
+                  />
+                </List.Item>
+              );
+            }}
+          </VirtualList>
+        </List>
       </Div>
     </>
   );

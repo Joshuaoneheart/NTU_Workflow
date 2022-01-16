@@ -1,7 +1,7 @@
 import { Empty, Button, Typography, Space } from "antd";
 
 const { Paragraph, Title, Text } = Typography;
-const Welcome = ({ setPage, user }) => {
+const Welcome = ({ setPage, user, setJump  }) => {
   const contentType = user.role === "student" ? "workflow" : "document";
   const onClick = () => {
     if (user.role === "student") setPage({ key: "createWorkflow" });
@@ -12,11 +12,11 @@ const Welcome = ({ setPage, user }) => {
       <Space direction="vertical" size="large">
         <Title style={{ textAlign: "center" }}> Welcome to NTU workflow </Title>
         {user.role === "student" && (
-          <Empty description={<span>You have no {contentType} found.</span>}>
-            <Button type="primary" onClick={onClick}>
+          <div style={{ textAlign: "center" }}>
+            <Button type="primary" onClick={()=>setJump(true)}>
               Create new {contentType}
             </Button>
-          </Empty>
+          </div>
         )}
         {user.role !== "student" && (
           <div style={{ textAlign: "center" }}>
@@ -61,7 +61,7 @@ const Welcome = ({ setPage, user }) => {
         </Title>
         <div style={{ textAlign: "center" }}>
           <iframe
-            src="https://www.youtube.com/embed/1jSEVNtvhAU"
+            src="https://www.youtube.com/embed/ohI_k-8wt_w"
             title="Demo video"
             style={{ width: "30vw", height: "25vw" }}
           ></iframe>

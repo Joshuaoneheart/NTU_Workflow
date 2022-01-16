@@ -8,7 +8,7 @@ import Messages from "./messages";
 import Notifications from "./notifications";
 import Archives from "./archives";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const { Title } = Typography;
 
@@ -49,6 +49,7 @@ const Container = styled.div`
   padding-bottom: 1vh;
   display: flex;
   position: absolute;
+  max-height: 80vh;
 `;
 
 const IconColumn = styled.div`
@@ -69,12 +70,24 @@ const Header = styled.h1`
   padding: 10px;
 `;
 
-const LeftSider = ({ collapsed, setPage, user, notifs, loading }) => {
-  const [FocusedIcon, setFocused] = useState(<Notifications notifs={notifs} loading={loading} setPage={setPage}/>);
+const LeftSider = ({
+  collapsed,
+  setPage,
+  user,
+  notifs,
+  loading,
+  jump,
+  setJump
+}) => {
+  const [FocusedIcon, setFocused] = useState(
+    <Notifications notifs={notifs} loading={loading} setPage={setPage} />
+  );
   const [activeBadge, setActiveBadge] = useState(0);
   const [title, setTitle] = useState("Notifications");
   const FocusNotifications = () => {
-    setFocused(<Notifications notifs={notifs} loading={loading} setPage={setPage}/>);
+    setFocused(
+      <Notifications notifs={notifs} loading={loading} setPage={setPage} />
+    );
     setActiveBadge(0);
     setTitle("Notifications");
   };
@@ -88,13 +101,25 @@ const LeftSider = ({ collapsed, setPage, user, notifs, loading }) => {
     setActiveBadge(2);
     setTitle("Archives");
   };
+  useEffect(() => {
+    if(jump){
+      FocusArchives();
+      setJump(false);
+    };
+  }, [jump]);
+  useEffect(()=>{
+    if(!loading) FocusNotifications();
+  }, [loading])
   return (
     <>
       <Container>
         <IconColumn>
           <Space direction="vertical" size="large">
             <Icon onClick={FocusNotifications}>
-              <Badge count={(loading)? null: notifs.notification.length} overflowCount={10}>
+              <Badge
+                count={loading ? null : notifs.notification.length}
+                overflowCount={10}
+              >
                 <Avatar
                   shape="circle"
                   size="large"

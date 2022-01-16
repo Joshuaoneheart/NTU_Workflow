@@ -9,6 +9,7 @@ const StyledMessage = styled.p`
 `;
 
 const Message = (props) => {
+  console.log(props.name, props.me)
   return (
     <StyledMessage className="App-message" isMe={props.me === props.name}>
       <Space>
