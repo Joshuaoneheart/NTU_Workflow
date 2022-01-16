@@ -105,13 +105,16 @@ git clone https://github.com/Joshuaoneheart/NTU_Workflow.git
 cd NTU_Workflow && yarn
 ```
 ### Build
+at /NTU_Workflow
 ```
-yarn build //in /NTU_Workflow
+yarn build 
 ```
 ### Start Server
 Use the command below and the web service will be available on localhost:5000.
+
+at /NTU_Workflow
 ```
-yarn start //in /NTU_Workflow
+yarn start 
 ```
 
 ### NODE version
