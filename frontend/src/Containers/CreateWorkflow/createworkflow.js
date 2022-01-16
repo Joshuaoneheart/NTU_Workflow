@@ -44,7 +44,7 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
     variable: { id: document },
   });
   let [approvals, setApprovals] = useState([]);
-  let [contents, setContents] = useState([]);
+  let [contents, setContents] = useState({ file: [], image: [], text: [] });
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
   const [uploadText] = useMutation(UPLOAD_TEXT);
   const onFinish = async (values) => {
@@ -103,32 +103,39 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
             </List.Item>
             {doc.document[0].fields.map((field, i) => {
               return (
-                <List.Item>
-                  <Typography style={{ width: "100%" }}>
-                    <Title level={4}>{field.name}</Title>
-                    {field.fieldType === "TEXT" ? (
-                      <TextArea
-                        autoSize={{ minRows: 3 }}
-                        showCount
-                        maxLength={500}
-                        row={8}
-                        onChange={(e) => {
-                          let tmp = Array.from(contents);
-                          tmp[i].content = e.target.value;
-                          setContents(tmp);
-                        }}
-                      />
-                    ) : (
-                      <DragAndDrop
-                        handleResult={(data) => {
-                          let tmp = Array.from(contents);
-                          tmp[i].content = data.data.uploadFile;
-                          setContents(tmp);
-                        }}
-                      />
-                    )}
-                  </Typography>
-                </List.Item>
+                <Form.Item
+                  name={field.name}
+                  rules={[
+                    { required: true, message: "This field is required" },
+                  ]}
+                >
+                  <List.Item>
+                    <Typography style={{ width: "100%" }}>
+                      <Title level={4}>{field.name}</Title>
+                      {field.fieldType === "TEXT" ? (
+                        <TextArea
+                          autoSize={{ minRows: 3 }}
+                          showCount
+                          maxLength={500}
+                          row={8}
+                          onChange={(e) => {
+                            let tmp = Array.from(contents);
+                            tmp[i].content = e.target.value;
+                            setContents(tmp);
+                          }}
+                        />
+                      ) : (
+                        <DragAndDrop
+                          handleResult={(data) => {
+                            let tmp = Array.from(contents);
+                            tmp[i].content = data.data.uploadFile;
+                            setContents(tmp);
+                          }}
+                        />
+                      )}
+                    </Typography>
+                  </List.Item>
+                </Form.Item>
               );
             })}
             <List.Item>
@@ -136,7 +143,17 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                 <Title level={4}>Approval Line</Title>
                 {doc.document[0].passBy.map((approval, i) => {
                   return (
-                    <Form.Item key={i} label={approval} name={`approval-${i}`}>
+                    <Form.Item
+                      key={i}
+                      label={approval}
+                      name={`approval-${i}`}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please fill in the staff memeber",
+                        },
+                      ]}
+                    >
                       <GroupSelect
                         group={approval}
                         onChange={(value) => {

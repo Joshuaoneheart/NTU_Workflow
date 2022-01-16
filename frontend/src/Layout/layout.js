@@ -71,7 +71,7 @@ const CustomLayout = (props) => {
                 background: "#fff",
               }}
             >
-              {<MainPage page={page} setPage={setPage} user={props.user} />}
+              {<MainPage page={page} setPage={setPage} user={props.user}  displayStatus={props.displayStatus}/>}
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>
