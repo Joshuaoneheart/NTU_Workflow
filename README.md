@@ -58,6 +58,8 @@ email: teacher4@ntu.edu.tw password: 123456
 [其他說明]
 staff(老師)的帳號是當時由graphql playground創建的，因為密碼salt的方式跟 由前端創建學生帳號的方式不太一樣，所以code中會給寫好的staff帳號供測試。
 
+**upload files如果檔案太大會有bug
+
 [使用與參考之框架/模組/原始碼]
 使用graphql uploads, apollo-server-express
 
