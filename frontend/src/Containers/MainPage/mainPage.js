@@ -20,7 +20,7 @@ const MainPage = ({ page, setPage, user, displayStatus }) => {
           displayStatus={displayStatus}
         />
       ) : (
-        <Welcome setPage={setPage} />
+        <Welcome setPage={setPage} user={user}/>
       )}
     </>
   );
