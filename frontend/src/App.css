@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 .App-logo {
   height: 40vmin;
@@ -33,7 +33,6 @@
   margin-right: 20px;
   font-size: 3em;
 }
-
 
 @keyframes App-logo-spin {
   from {

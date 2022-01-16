@@ -2,6 +2,7 @@ import { List, message, Avatar, Badge, Radio, Space } from "antd";
 import VirtualList from "rc-virtual-list";
 import { UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import styled from "styled-components";
 
 let data = [
   { name: "Jenny is in love", status: "NEW" },
@@ -13,6 +14,13 @@ let data = [
 ];
 
 const Notifications = () => {
+  const Div = styled.div`
+    padding: 10px;
+    width: 300px;
+    height: 50vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  `;
   const [filter, setFilter] = useState("All");
   const onFilterChange = (e) => {
     console.log(e.target.value);
@@ -20,44 +28,46 @@ const Notifications = () => {
   };
   return (
     <>
-      <Space direction="vertical" size="large">
-        <Radio.Group onChange={onFilterChange} value={filter}>
-          <Radio value="All">All</Radio>
-          <Radio value="NEW">New</Radio>
-          <Radio value="OLD">Old</Radio>
-        </Radio.Group>
-        <List>
-          <VirtualList data={data} itemHeight={40}>
-            {(item) => {
-              if (filter === "All") {
-                return (
-                  <List.Item key={item.name}>
-                    <List.Item.Meta
-                      avatar={<Avatar src={UserOutlined} />}
-                      title={item.name}
-                    />
-                    <Badge count={item.status === "NEW" ? 1 : 0} />
-                  </List.Item>
-                );
-              } else {
-                console.log(filter, item.status);
-                return (
-                  <List.Item
-                    key={item.name}
-                    style={item.status !== filter ? { display: "none" } : {}}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={UserOutlined} />}
-                      title={item.name}
-                    />
-                    <Badge count={item.status === "NEW" ? 1 : 0} />
-                  </List.Item>
-                );
-              }
-            }}
-          </VirtualList>
-        </List>
-      </Space>
+      <Div>
+        <Space direction="vertical" size="large">
+          <Radio.Group onChange={onFilterChange} value={filter}>
+            <Radio value="All">All</Radio>
+            <Radio value="NEW">New</Radio>
+            <Radio value="OLD">Old</Radio>
+          </Radio.Group>
+          <List>
+            <VirtualList data={data} itemHeight={40}>
+              {(item) => {
+                if (filter === "All") {
+                  return (
+                    <List.Item key={item.name}>
+                      <List.Item.Meta
+                        avatar={<Avatar src={UserOutlined} />}
+                        title={item.name}
+                      />
+                      <Badge count={item.status === "NEW" ? 1 : 0} />
+                    </List.Item>
+                  );
+                } else {
+                  console.log(filter, item.status);
+                  return (
+                    <List.Item
+                      key={item.name}
+                      style={item.status !== filter ? { display: "none" } : {}}
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={UserOutlined} />}
+                        title={item.name}
+                      />
+                      <Badge count={item.status === "NEW" ? 1 : 0} />
+                    </List.Item>
+                  );
+                }
+              }}
+            </VirtualList>
+          </List>
+        </Space>
+      </Div>
     </>
   );
 };
