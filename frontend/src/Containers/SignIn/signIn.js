@@ -1,5 +1,9 @@
 import { Button, Card, Input, Space, Avatar } from "antd";
+<<<<<<< HEAD
 import { KeyOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+=======
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
+>>>>>>> 7abbfb2 (Revert "Minor visual changes to sign in/up pages")
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
