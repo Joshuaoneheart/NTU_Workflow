@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import styled from "styled-components";
 import { ALL_DOCUMENTS, WORKFLOW_QUERY } from "../../graphql/queries";
+import moment from "moment";
 
 const { Text } = Typography;
 
@@ -105,7 +106,7 @@ const Archives = ({ setPage, user }) => {
         )}
         <Div>
           {workflow_loading || loading ? (
-						<Skeleton active/>
+            <Skeleton active />
           ) : (
             workflows.workflow.map((archive) => {
               const { text, color } = convert(archive.status);
@@ -118,13 +119,17 @@ const Archives = ({ setPage, user }) => {
                     <br />
                     <Card
                       onClick={() => {
-                        setPage({ key: "document", document: archive.document, workflow: archive.id });
+                        setPage({
+                          key: "document",
+                          document: archive.document,
+                          workflow: archive.id,
+                        });
                       }}
                     >
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <Text>{content}</Text>
                         <Text type="secondary" style={{ float: "right" }}>
-                          {archive.date}
+                          {moment(archive.date).fromNow()}
                         </Text>
                       </Space>
                     </Card>
@@ -143,7 +148,7 @@ const Archives = ({ setPage, user }) => {
                         <Space direction="vertical" style={{ width: "100%" }}>
                           <Text>{content}</Text>
                           <Text type="secondary" style={{ float: "right" }}>
-                            {archive.date}
+                            {moment(archive.date).fromNow()}
                           </Text>
                         </Space>
                       </Card>

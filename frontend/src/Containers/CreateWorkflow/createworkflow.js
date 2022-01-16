@@ -108,7 +108,8 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                     <Title level={4}>{field.name}</Title>
                     {field.fieldType === "TEXT" ? (
                       <Form.Item
-                        name={field.name}
+												key={i}
+                        name={`${field.name}+${i}+text-area`}
                         rules={[
                           { required: true, message: "Please enter your explanation" },
                         ]}
@@ -127,10 +128,8 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                       </Form.Item>
                     ) : (
                       <Form.Item
-                        name={field.name}
-                        rules={[
-                          { required: true, message: "Please upload the required file" },
-                        ]}
+												key={i}
+                        name={`${field.name}+${i}+drag-and-drop`}
                       >
                         <DragAndDrop
                           handleResult={(data) => {
