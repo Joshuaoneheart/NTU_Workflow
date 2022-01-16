@@ -87,7 +87,7 @@ const Query = {
       return doc;
     }
   },
-  workflow: async (parent, { status, userId }, db) => {
+  workflow: async (parent, { status, userId, workflowId }, db) => {
     if (status) {
       if (!userId) {
         const workflow = await WorkflowModel.find({ status: status });
@@ -110,7 +110,11 @@ const Query = {
       if (!workflow)
         throw new Error(`workflow is not found by user id ${userId}`);
       return workflow;
-    } else {
+    } 
+    else if(workflowId){
+      const workflow = await WorkflowModel.findOne({ id: workflowId });
+      return [workflow];
+    }else {
       const workflow = await WorkflowModel.find();
       if (!workflow) throw new Error(`workflow is null`);
       return workflow;
