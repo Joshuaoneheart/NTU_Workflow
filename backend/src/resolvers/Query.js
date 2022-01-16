@@ -1,7 +1,3 @@
-// user(name: String, id: ID, groups: String): [User!]
-//   document(title: String): [Document!]
-//   workflow(status: Status, user_id: ID): [Workflow!]
-
 import {
   saltModel,
   UserModel,
