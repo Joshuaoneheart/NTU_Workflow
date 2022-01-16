@@ -10,5 +10,8 @@
   "author": "yihsin.yu <yihsin.yu@linecorp.com>",
   "license": "MIT",
   "private": false,
-  "heroku-run-build-script": true
+  "heroku-run-build-script": true,
+  "dependencies": {
+    "backend": "^0.0.0"
+  }
 }
