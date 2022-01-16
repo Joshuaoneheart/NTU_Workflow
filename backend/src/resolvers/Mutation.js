@@ -1,6 +1,5 @@
 // updateWorkflow(status: String, comments: String): Workflow!
 import { uuid } from "uuidv4";
-import mongoose from "mongoose";
 import { FSBUCKET } from "../mongo";
 import {
   saltModel,
