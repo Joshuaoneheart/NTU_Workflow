@@ -8,20 +8,27 @@ import { useEffect, useState } from "react";
 const Messages = ({ user, setPage }) => {
   const [list_data, setListData] = useState([{ name: "loading", message: "" }]);
   const { data: users, loading } = useQuery(ALL_USERS);
+  const [opt, setOpt] = useState();
+  const [options, setOptions] = useState([
+    { value: "loading...", label: "loading..." },
+  ]);
   const {
     data: chatboxes,
     loading: chatbox_loading,
-    error
+    error,
   } = useQuery(FIND_CHATBOX_BY_USER, { variables: { name: user.id } });
-  console.log(users, chatboxes, error);
-  const options = loading
-    ? [{ value: "loading...", label: "loading..." }]
-    : users && users.user
-    ? users.user.map((user, i) => {
-        return { value: user.name, label: user.name, user: user };
-      })
-    : [{ value: "No data", label: "No data" }];
   useEffect(() => {
+    if (!loading) {
+      if (users && users.user) {
+        setOptions(
+          users.user.map((user, i) => {
+            return { value: user.name, label: user.name, user: user };
+          })
+        );
+      } else {
+        setOptions([{ value: "No data", label: "No data" }]);
+      }
+    }
     if (!chatbox_loading && !loading) {
       let new_list = [];
       for (let chatbox of chatboxes.chatBox) {
@@ -46,16 +53,27 @@ const Messages = ({ user, setPage }) => {
         <AutoComplete
           options={options}
           onSelect={(value, option) => {
-            console.log(value, option);
+            console.log(opt);
+            setOpt(option);
           }}
         >
-          <Input.Search placeholder="Search..." />
+          <Input.Search
+            onSearch={() => {
+              if (!options.find((option) => option.user.id == opt.user.id))
+                setOptions([
+                  ...options,
+                  {
+                    label: opt.user.name,
+                    value: opt.user.name,
+                    user: opt.user,
+                  },
+                ]);
+              setPage({ key: "chatroom", chatroom: opt.user });
+            }}
+            placeholder="Search..."
+          />
         </AutoComplete>
-        <List
-          onSelect={(e) => {
-            console.log(e);
-          }}
-        >
+        <List>
           <VirtualList data={list_data} itemHeight={40}>
             {(item) => (
               <List.Item

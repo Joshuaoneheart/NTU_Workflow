@@ -15,11 +15,11 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
   const {
     data: chatbox,
     loading,
+    error,
     subscribeToMore,
   } = useQuery(FIND_CHATBOX_BY_USERS, {
     variables: { name1: user.id, name2: correspondence.id },
   });
-
   const scrollToBottom = () => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   };
