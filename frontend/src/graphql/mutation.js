@@ -37,7 +37,7 @@ const CREATE_WORKFLOW = gql`
   ) {
     createWorkflow(
       input: {
-        documents: $document
+        document: $document
         contents: $contents
         approvalLine: $approvalLine
         student: $student
@@ -56,7 +56,7 @@ const UPLOAD_FILE = gql`
 
 const UPLOAD_TEXT = gql`
   mutation uploadTEXT($text: String!) {
-    uploadText(input: $text)
+    uploadTEXT(input: $text)
   }
 `;
 

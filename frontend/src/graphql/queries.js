@@ -35,6 +35,28 @@ const DOCUMENT_QUERY = gql`
   }
 `;
 
+const WORKFLOW_QUERY = gql`
+  query ($id: ID) {
+    workflow(userId: $id) {
+      id
+      document
+      status
+      date
+    }
+  }
+`;
+
+const FIND_WORKFLOW = gql`
+  query ($id: ID) {
+    workflow(workflowId: $id) {
+      id
+      document
+      status
+      date
+    }
+  }
+`;
+
 const ALL_DOCUMENTS = gql`
   query {
     document {
@@ -84,24 +106,26 @@ const FIND_CHATBOX_BY_USER = gql`
 `;
 
 const FIND_CHATBOX_BY_USERS = gql`
-query ($name1: String, $name2: String){
-  chatBox(name1: $name1, name2: $name2) {
-    name
-    messages {
-      sender {
-        id
-        name
+  query ($name1: String, $name2: String) {
+    chatBox(name1: $name1, name2: $name2) {
+      name
+      messages {
+        sender {
+          id
+          name
+        }
+        body
       }
-      body
     }
   }
-}
 `;
 
 export {
   SALT_QUERY,
   SIGN_IN,
   DOCUMENT_QUERY,
+  WORKFLOW_QUERY,
+  FIND_WORKFLOW,
   ALL_DOCUMENTS,
   ALL_USERS,
   ALL_GROUPS,

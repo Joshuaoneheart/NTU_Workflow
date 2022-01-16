@@ -1,8 +1,7 @@
 // updateWorkflow(status: String, comments: String): Workflow!
 import { uuid } from "uuidv4";
-import fs from "fs";
-import path from "path";
-import { promises } from "stream";
+import mongoose from "mongoose";
+import { FSBUCKET } from "../mongo";
 import {
   saltModel,
   UserModel,
@@ -63,7 +62,7 @@ const Mutation = {
   createWorkflow: async (parent, args, { db, pubSub }) => {
     const workflow = await new WorkflowModel({
       id: uuid(),
-      document: uuid(), //ref _id
+      document: args.input.document, //ref _id
       status: "PENDING",
       date: new Date().getTime(),
       comments: "no comment",
@@ -114,16 +113,12 @@ const Mutation = {
   uploadFile: async (parent, { file }) => {
     const { filename, createReadStream, mimetype, encoding } = await file;
     let stream = createReadStream();
-    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-      bucketName: "files",
-    });
 
-    const uploadStream = bucket.openUploadStream(filename, {
+    const uploadStream = FSBUCKET.openUploadStream(filename, {
       contentType: mimetype,
     });
-    
+
     stream.pipe(uploadStream);
-    await promises.finished(out);
 
     return uploadStream.id;
     //return path.join(__dirname, "build", `${filename}.cache`);

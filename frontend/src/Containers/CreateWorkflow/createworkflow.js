@@ -47,18 +47,26 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
   let [contents, setContents] = useState([]);
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
   const [uploadText] = useMutation(UPLOAD_TEXT);
-  const onFinish = (values) => {
-    console.log("The values collected from the form are:", approvals);
-/*
+  const onFinish = async (values) => {
+    let tmp = { file: [], image: [], text: [] };
+    for (let content of contents) {
+      if (content.type == "TEXT") {
+        tmp["text"].push(
+          (await uploadText({ variables: { text: content.content } })).data
+            .uploadTEXT
+        );
+      } else if (content.type == "IMAGE") tmp.image.push(content.content);
+      else tmp.file.push(content.content);
+    }
     const id = await createWorkflow({
       variables: {
         document,
-        contents,
+        contents: tmp,
         student: user.id,
         approvalLine: approvals,
       },
-    });*/
-    // setPage({key: "document", document: });
+    });
+    setPage({ key: "document", document: id.data.createWorkflow.id });
   };
   useEffect(() => {
     if (!loading) {
@@ -70,7 +78,6 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
     }
   }, [loading]);
   if (error) {
-    console.log(error);
     for (const err of error.graphQLErrors) {
       displayStatus({
         type: "error",
@@ -106,15 +113,19 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                         maxLength={500}
                         row={8}
                         onChange={(e) => {
-                          let tmp = Object.assign({}, contents);
+                          let tmp = Array.from(contents);
                           tmp[i].content = e.target.value;
                           setContents(tmp);
                         }}
                       />
                     ) : (
-                      <DragAndDrop handleResult={(id) => {
-                        console.log(id)
-                      }}/>
+                      <DragAndDrop
+                        handleResult={(data) => {
+                          let tmp = Array.from(contents);
+                          tmp[i].content = data.data.uploadFile;
+                          setContents(tmp);
+                        }}
+                      />
                     )}
                   </Typography>
                 </List.Item>

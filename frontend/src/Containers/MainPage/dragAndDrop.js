@@ -9,6 +9,7 @@ const DragAndDrop = (props) => {
   const [uploadFile] = useMutation(UPLOAD_FILE);
   return (
     <Dragger
+      maxCount={1}
       customRequest={async (e) => {
         const { onSuccess, onError, file, action, onProgress } = e;
         try {
