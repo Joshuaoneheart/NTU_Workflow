@@ -88,13 +88,13 @@ const DocumentPage = (props) => {
                 type: "success",
                 msg: "Workflow approved!",
               });
-              props.setPage({ key: "welcome" });
+              props.setPage({ key: "welcome", refresh: true });
             }}
           >
             Approve
           </Button>
         )}
-        <Button
+        {(workflow.workflow[0].status !== "ACCEPT" && workflow.workflow[0].status !== "DECLINE") && <Button
           danger
           onClick={async () => {
             await decline({ variables: { id: props.workflow } });
@@ -102,11 +102,11 @@ const DocumentPage = (props) => {
               type: "success",
               msg: "Workflow declined!",
             });
-            props.setPage({ key: "welcome" });
+            props.setPage({ key: "welcome", refresh: true });
           }}
         >
-          Cancel
-        </Button>
+          Decline
+        </Button>}
       </Space>
     </>
   );

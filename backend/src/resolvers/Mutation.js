@@ -136,15 +136,11 @@ const Mutation = {
       if (!workflow)
         throw new Error(`workflow not found with mutation updateWorkflow`);
 
-      // console.log(workflow.approvalLine[0].staff);
-
-      await workflow.approvalLine.map(async (approvalPayload) => {
-        //console.log(approvalPayload.staff === staffId);
-
-        approvalPayload.staff === staffId
-          ? (approvalPayload.status = status)
-          : approvalPayload.status;
-      });
+      workflow.approvalLine = workflow.approvalLine.map(
+        ({ staff, status: old_status }) => {
+          staff, staff === staffId ? status : old_status;
+        }
+      );
 
       if (status == "DECLINE") {
         workflow.status = "DECLINE";
@@ -154,57 +150,50 @@ const Mutation = {
         }
       }
 
-      var flag = true;
-
-      flag = await workflow.approvalLine.map((approvalPayload) => {
-        //console.log(approvalPayload.status == "ACCEPT");
+      let flag = workflow.approvalLine.map((approvalPayload) => {
         if (
           approvalPayload.status == "PENDING" ||
           approvalPayload.status == "DECLINE"
         ) {
-          //console.log("false");
           return false;
         }
       });
 
       //console.log(flag.includes(false));
-
-      if (!flag.includes(false)) {
-        workflow.status = "ACCEPT";
-      }
-      await workflow.save();
-
-      //也要通知老師
-      //if notice hasn't existed, created one
-      if (!(await NoticeModel.findOne({ workflowId: workflow.id }))) {
+      console.log(flag)
+      if (!flag.includes(false)) workflow.status = "ACCEPT";
+      if (workflow.status === "ACCEPT" || workflow.status === "DECLINE") {
+        await workflow.save();
         const newNote = await new NoticeModel({
           userId: workflow.student, //ex : b08508010
           workflowId: workflow.id,
           content: `Workflow ${workflow.id} status had changed`,
         });
-        await newNote.save();
+        pubSub.publish(`Notification ${workflow.student}`, {
+          Notification: {
+            userId: workflow.student,
+            workflowId: workflow.id,
+            content: `Workflow ${workflow.id} status had changed`,
+          },
+        });
       } else {
-        const updateNote = await NoticeModel.findOne({
+        let index = flag.findIndex(false);
+        console.log(workflow.approvalLine[index], index);
+        //也要通知老師
+        //if notice hasn't existed, created one
+        const newNote = await new NoticeModel({
+          userId: workflow.approvalLine[index].staff, //ex : b08508010
           workflowId: workflow.id,
+          content: `Workflow ${workflow.id} status had changed`,
         });
-        updateNote.content = `Workflow ${workflow.id} status had changed`;
-        await updateNote.save();
-      }
-      const approvalLineArray = Object.entries(workflow.approvalLine);
-      //console.log(array[0][0], array[0][1])
-
-      let nextStaff;
-      for (var i = 0; i < approvalLineArray.length; i++) {
-        if (approvalLineArray[i][1].staff === staffId) {
-          if (i + 1 < approvalLineArray.length) {
-            nextStaff = approvalLineArray[i + 1][1].staff;
-            break;
-          }
-        }
-      }
-      //console.log(!nextStaff);
-
-      if (nextStaff) {
+        await newNote.save();
+        pubSub.publish(`Notification ${workflow.approvalLine[index].staff}`, {
+          Notification: {
+            userId: workflow.approvalLine[index].staff,
+            workflowId: workflow.id,
+            content: `Workflow ${workflow.id} status had changed`,
+          },
+        });
         pubSub.publish(`Notification ${workflow.student}`, {
           Notification: {
             userId: workflow.student,
@@ -212,22 +201,9 @@ const Mutation = {
             content: `Workflow ${workflow.id} status had changed`,
           },
         });
-        pubSub.publish(`Notification ${nextStaff}`, {
-          Notification: {
-            userId: workflow.student,
-            workflowId: workflow.id,
-            content: `Workflow ${workflow.id} status had changed`,
-          },
-        });
-      } else if (!nextStaff) {
-        pubSub.publish(`Notification ${workflow.student}`, {
-          Notification: {
-            userId: workflow.student,
-            workflowId: workflow.id,
-            content: `Workflow ${workflow.id} status had changed`,
-          },
-        });
+        await workflow.save();
       }
+
       return workflow.id; //workflow ID
     } else {
       throw new Error(`missing status or workflowId`);

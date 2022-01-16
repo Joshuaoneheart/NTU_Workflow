@@ -16,30 +16,43 @@ const Notifications = ({ notifs, loading, setPage }) => {
   const [data, setData] = useState([]);
   const [turnD2W] = useLazyQuery(FIND_D_BY_W);
   useEffect(() => {
-    if (!loading) {
-      let tmp = [];
-      for (let no of notifs.notification) {
-        tmp.push({ name: no.content, status: "NEW", notif: no });
+    const handleData = async () => {
+      if (!loading) {
+        let tmp = [];
+        for (let no of notifs.notification) {
+          tmp = [
+            {
+              name: no.content,
+              status: "NEW",
+              notif: no,
+              doc: (await turnD2W(no.workflowId)).data.workflow[0].document,
+            },
+            ...tmp,
+          ];
+        }
+        setData(tmp);
       }
-      setData(tmp);
-    }
-  }, [loading]);
+    };
+    handleData();
+  }, [notifs]);
   return (
     <>
       <Div>
         <List>
           <VirtualList data={data} itemHeight={40}>
             {(item) => {
-              const onclick = async () => {
-                setPage({
-                  key: "document",
-                  document: (await turnD2W(item.notif.workflowId)).data
-                    .workflow[0].document,
-                  workflow: item.notif.workflowId,
-                });
-              };
               return (
-                <List.Item onClick={onclick} key={item.name}>
+                <List.Item
+                  onClick={() => {
+                    setPage({
+                      key: "document",
+                      document: item.doc,
+                      workflow: item.notif.workflowId,
+                      refresh: true,
+                    });
+                  }}
+                  key={item.name}
+                >
                   <List.Item.Meta
                     avatar={<Avatar icon={<UserOutlined />} />}
                     title={item.name}

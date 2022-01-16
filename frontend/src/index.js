@@ -16,14 +16,14 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import "./index.css";
 
-const port = process.env.PORT | 5000;
-const host = process.env.HEROKU | `localhost:${port}`;
+const port = process.env.PORT || 5000;
+const host = process.env.HEROKU || "localhost:" + `${port}`;
 
 const uploadLink = createUploadLink({ uri: "/graphql" });
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: "graphql",
+  uri: "/graphql",
 });
 
 // Create a WebSocket link:

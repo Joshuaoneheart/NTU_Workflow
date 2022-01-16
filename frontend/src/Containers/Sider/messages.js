@@ -68,7 +68,7 @@ const Messages = ({ user, setPage }) => {
                     user: opt.user,
                   },
                 ]);
-              setPage({ key: "chatroom", chatroom: opt.user });
+              setPage({ key: "chatroom", chatroom: opt.user, refresh: true });
             }}
             placeholder="Search..."
           />
@@ -83,7 +83,7 @@ const Messages = ({ user, setPage }) => {
                   key={item.name}
                   onClick={() => {
                     if (!item.user) return;
-                    setPage({ key: "chatroom", chatroom: item.user });
+                    setPage({ key: "chatroom", chatroom: item.user, refresh: true });
                   }}
                 >
                   <List.Item.Meta

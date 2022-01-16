@@ -8,7 +8,7 @@ import Messages from "./messages";
 import Notifications from "./notifications";
 import Archives from "./archives";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 
 const { Title } = Typography;
 
@@ -77,7 +77,7 @@ const LeftSider = ({
   notifs,
   loading,
   jump,
-  setJump
+  setJump,
 }) => {
   const [FocusedIcon, setFocused] = useState(
     <Notifications notifs={notifs} loading={loading} setPage={setPage} />
@@ -101,15 +101,16 @@ const LeftSider = ({
     setActiveBadge(2);
     setTitle("Archives");
   };
+
   useEffect(() => {
-    if(jump){
+    if (jump) {
       FocusArchives();
       setJump(false);
-    };
+    }
   }, [jump]);
-  useEffect(()=>{
-    if(!loading) FocusNotifications();
-  }, [loading])
+  useEffect(() => {
+    if (!loading) FocusNotifications();
+  }, [loading]);
   return (
     <>
       <Container>

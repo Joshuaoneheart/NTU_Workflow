@@ -78,7 +78,7 @@ const Archives = ({ setPage, user }) => {
               <Button
                 type="primary"
                 onClick={() => {
-                  setPage({ key: "createWorkflow", document: doc_id });
+                  setPage({ key: "createWorkflow", document: doc_id, refresh: true });
                 }}
               >
                 Create
@@ -96,7 +96,11 @@ const Archives = ({ setPage, user }) => {
             <Button
               type="primary"
               onClick={() => {
-                setPage({ key: "createDocument", document: doc_id });
+                setPage({
+                  key: "createDocument",
+                  document: doc_id,
+                  refresh: true,
+                });
               }}
             >
               Create
@@ -122,6 +126,7 @@ const Archives = ({ setPage, user }) => {
                           key: "document",
                           document: archive.document,
                           workflow: archive.id,
+                          refresh: true,
                         });
                       }}
                     >
@@ -140,7 +145,7 @@ const Archives = ({ setPage, user }) => {
                     <Badge.Ribbon text={text} color={color}>
                       <Card
                         onClick={() => {
-                          setPage({ key: "document", document: archive.id });
+                          setPage({ key: "document", document: archive.id, refresh: true });
                         }}
                       >
                         <br />

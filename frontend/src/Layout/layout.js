@@ -62,7 +62,7 @@ const CustomLayout = (props) => {
             textAlign: "center",
           }}
           onClick={() => {
-            setPage({ key: "welcome" });
+            setPage({ key: "welcome", refresh: true });
           }}
         >
           NTU WORKFLOW

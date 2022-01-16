@@ -1,11 +1,11 @@
 import { Empty, Button, Typography, Space } from "antd";
 
 const { Paragraph, Title, Text } = Typography;
-const Welcome = ({ setPage, user, setJump  }) => {
+const Welcome = ({ setPage, user, setJump }) => {
   const contentType = user.role === "student" ? "workflow" : "document";
   const onClick = () => {
-    if (user.role === "student") setPage({ key: "createWorkflow" });
-    else setPage({ key: "createDocument" });
+    if (user.role === "student") setJump(true);
+    else setPage({ key: "createDocument", refresh: true });
   };
   return (
     <>
@@ -13,7 +13,7 @@ const Welcome = ({ setPage, user, setJump  }) => {
         <Title style={{ textAlign: "center" }}> Welcome to NTU workflow </Title>
         {user.role === "student" && (
           <div style={{ textAlign: "center" }}>
-            <Button type="primary" onClick={()=>setJump(true)}>
+            <Button type="primary" onClick={onClick}>
               Create new {contentType}
             </Button>
           </div>
