@@ -10,7 +10,7 @@ const MainPage = ({ page, setPage, user, displayStatus }) => {
       {page["key"] == "document" ? (
         <DocumentPage setPage={setPage} document={page["document"]} />
       ) : page["key"] == "createWorkflow" ? (
-        <CreateWorkflow setPage={setPage} document={page["document"]} displayStatus={displayStatus} />
+        <CreateWorkflow setPage={setPage} user={user} document={page["document"]} displayStatus={displayStatus} />
       ) : page["key"] == "createDocument" ? (
         <CreateDocument setPage={setPage} displayStatus={displayStatus} />
       ) : page["key"] == "chatroom" ? (

@@ -12,7 +12,9 @@ const DragAndDrop = (props) => {
       customRequest={async (e) => {
         const { onSuccess, onError, file, action, onProgress } = e;
         try {
-          onSuccess(await uploadFile({ variables: { file } }));
+          const res = await uploadFile({ variables: { file } });
+          props.handleResult(res);
+          onSuccess(res);
         } catch (e) {
           onError(e);
         }
