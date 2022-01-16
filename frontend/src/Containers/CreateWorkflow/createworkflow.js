@@ -103,16 +103,16 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
             </List.Item>
             {doc.document[0].fields.map((field, i) => {
               return (
-                <Form.Item
-                  name={field.name}
-                  rules={[
-                    { required: true, message: "This field is required" },
-                  ]}
-                >
-                  <List.Item>
-                    <Typography style={{ width: "100%" }}>
-                      <Title level={4}>{field.name}</Title>
-                      {field.fieldType === "TEXT" ? (
+                <List.Item>
+                  <Typography style={{ width: "100%" }}>
+                    <Title level={4}>{field.name}</Title>
+                    {field.fieldType === "TEXT" ? (
+                      <Form.Item
+                        name={field.name}
+                        rules={[
+                          { required: true, message: "Please enter your explanation" },
+                        ]}
+                      >
                         <TextArea
                           autoSize={{ minRows: 3 }}
                           showCount
@@ -124,7 +124,14 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                             setContents(tmp);
                           }}
                         />
-                      ) : (
+                      </Form.Item>
+                    ) : (
+                      <Form.Item
+                        name={field.name}
+                        rules={[
+                          { required: true, message: "Please upload the required file" },
+                        ]}
+                      >
                         <DragAndDrop
                           handleResult={(data) => {
                             let tmp = Array.from(contents);
@@ -132,10 +139,10 @@ const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
                             setContents(tmp);
                           }}
                         />
-                      )}
-                    </Typography>
-                  </List.Item>
-                </Form.Item>
+                      </Form.Item>
+                    )}
+                  </Typography>
+                </List.Item>
               );
             })}
             <List.Item>
