@@ -113,6 +113,7 @@ Use the command below and the web service will be available on localhost:5000.
 ```
 yarn start //in /NTU_Workflow
 ```
+### go to localhost 5000
 
 ### NODE version
 NodeJS 16.2.0
