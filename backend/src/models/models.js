@@ -70,6 +70,12 @@ const MessageSchema = new Schema({
   body: { type: String, required: true },
 });
 
+const NoticeSchema = new Schema({
+  userId : {type: String, required: true},
+  workflowId: { type: String, required: true},
+  content: { type: String, required: true}
+});
+
 const UserModel = mongoose.model("User", UserSchema);
 const DocumentModel = mongoose.model("Document", DocumentSchema);
 const WorkflowModel = mongoose.model("Workflow", WorkflowSchema);
@@ -78,4 +84,5 @@ const TextModel = mongoose.model("Text", TextSchema);
 const saltModel = mongoose.model("salt",SaltSchema);
 const ChatBoxModel = mongoose.model("ChatBox", ChatBoxSchema);
 const MessageModel = mongoose.model("Message", MessageSchema);
-export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel,ChatBoxModel,MessageModel };
+const NoticeModel = mongoose.model("Notice", NoticeSchema);
+export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel,ChatBoxModel,MessageModel,NoticeModel };

@@ -7,6 +7,7 @@ import {
   UserModel,
   DocumentModel,
   WorkflowModel,
+  NoticeModel
 } from "../models/models";
 import {
   checkUser,
@@ -119,8 +120,18 @@ const Query = {
       return workflow;
     }
   },
-  async chatBox(parent, { name1, name2 }, { db }, info) {
-    if (!name1) throw new Error("Missing chatBox name1 for QueryChatBox");
+  
+  notification: async(parent, {userId}, db)=>{
+    if(userId){
+      
+      return (await NoticeModel.find({userId:userId})).map((notice)=>{
+        return notice
+      });
+    }
+    else
+    throw new Error(`Notification is not found by user id ${userId}`);
+  },
+  async chatBox(parent, {name1,name2}, { db }, info){
 
     if (name1 && name2) {
       const chatBoxName = makeName(name1, name2);

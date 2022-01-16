@@ -14,6 +14,13 @@ const Subscription = {
         return pubSub.asyncIterator(`chatBox ${name}`);
       }
     },
+
+    notificationSubscription:{
+      async subscribe(parent, {id}, { db, pubSub }, info){
+        return pubSub.asyncIterator(`Notification ${id}`);
+      }
+
+    },
     }
     
     export default Subscription;
