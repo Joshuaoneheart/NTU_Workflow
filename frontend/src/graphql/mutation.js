@@ -27,4 +27,42 @@ const SIGN_UP = gql`
     }
   }
 `;
-export { SIGN_UP };
+
+const CREATE_WORKFLOW = gql`
+  mutation createWorkflow(
+    $document: ID!
+    $contents: inputContentPayload!
+    $student: ID!
+    $approvalLine: [approvalPayloadInput]!
+  ) {
+    createWorkflow(
+      input: {
+        documents: $document
+        contents: $contents
+        approvalLine: $approvalLine
+        student: $student
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+const UPLOAD_FILE = gql`
+  mutation uploadFile($file: Upload!) {
+    uploadFile(file: $file)
+  }
+`;
+
+const SEND_MESSAGE = gql`
+  mutation sendMessage($from: String!, $to: String, $message: String!) {
+    createMessage(from: $from, to: $to, message: $message) {
+      body
+      sender {
+        id
+        name
+      }
+    }
+  }
+`;
+export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, SEND_MESSAGE };

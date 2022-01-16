@@ -30,8 +30,9 @@ const DocumentSchema = new Schema({
   id: { type: String, required: true },
   title: { type: String, required: true },
   body: { type: String, required: true },
-  fields: { fieldType: [{ type: String, required: true }], require: {type:Boolean} }, //array of inputs
-  passBy: [{ type: mongoose.Types.ObjectId, ref: "User" }], //array of ids
+  fields: [ {fieldType:{ type: String, required: true },
+  name: { type: String, required: true}}], //array of inputs
+  passBy: [{ type: String, required: true}], //array of ids
 });
 
 const WorkflowSchema = new Schema({
@@ -41,17 +42,17 @@ const WorkflowSchema = new Schema({
   date: { type: Date, required: true },
   comments: { type: String }, //等被reject或需要退回修改才會寫
   contents: {
-    file: [{ type: mongoose.Types.ObjectId, ref: "File" }],
-    image:[{ type: mongoose.Types.ObjectId, ref: "File" }], //array of ids
-    text: [{ type: mongoose.Types.ObjectId, ref: "Text" }],
+    file: [{ type: String }],
+    image:[{ type: String }], //array of ids
+    text: [{ type: String }],
   },
   approvalLine: [
     {
-      stuff: { type: mongoose.Types.ObjectId, ref: "User" },
-      approve: { type: Boolean },
+      staff: { type: String, required: true },
+      status: { type: String, required: true },
     },
   ], //想把它寫成dictionary
-  student: { type: mongoose.Types.ObjectId, ref: "User" },
+  student: { type: String, required: true },
 });
 
 const SaltSchema = new Schema({
@@ -59,11 +60,29 @@ const SaltSchema = new Schema({
   content: { type: String, required: true}
 })
 
+const ChatBoxSchema = new Schema({
+  name: { type: String, required: true },
+  messages: [{ type: mongoose.Types.ObjectId, ref: "Message" }],
+});
+
+const MessageSchema = new Schema({
+  sender: { type: mongoose.Types.ObjectId, ref: "User" },
+  body: { type: String, required: true },
+});
+
+const NoticeSchema = new Schema({
+  userId : {type: String, required: true},
+  workflowId: { type: String, required: true},
+  content: { type: String, required: true}
+});
+
 const UserModel = mongoose.model("User", UserSchema);
 const DocumentModel = mongoose.model("Document", DocumentSchema);
 const WorkflowModel = mongoose.model("Workflow", WorkflowSchema);
 const FileModel = mongoose.model("File", FileSchema);
 const TextModel = mongoose.model("Text", TextSchema);
 const saltModel = mongoose.model("salt",SaltSchema);
-
-export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel };
+const ChatBoxModel = mongoose.model("ChatBox", ChatBoxSchema);
+const MessageModel = mongoose.model("Message", MessageSchema);
+const NoticeModel = mongoose.model("Notice", NoticeSchema);
+export { UserModel, DocumentModel, WorkflowModel, FileModel, TextModel,saltModel,ChatBoxModel,MessageModel,NoticeModel };

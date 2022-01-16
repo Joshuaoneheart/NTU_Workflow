@@ -7,7 +7,17 @@ import {
   UserModel,
   DocumentModel,
   WorkflowModel,
+  NoticeModel,
 } from "../models/models";
+import {
+  checkUser,
+  newUser,
+  makeName,
+  checkChatBox,
+  newChatBox,
+  newMessage,
+  checkMessage,
+} from "./utility.js";
 import bcrypt from "bcrypt";
 
 const Query = {
@@ -24,31 +34,27 @@ const Query = {
       salt = salt.content;
       return salt;
     } catch (e) {
-      
-      throw new Error (e.message);
+      throw new Error(e.message);
     }
   },
   signIn: async (parent, { email, password }, { db }) => {
-
     try {
       const user = await UserModel.findOne({ email });
-      console.log(user)
       if (!user) throw new Error("User not found");
       if (user.password == password) return user;
       else throw new Error("Password incorrect");
     } catch (e) {
-
-      throw new Error (e.message);
+      throw new Error(e.message);
     }
   },
   findGroups: async (parent, args, db) => {
     let groupList = [];
-      (await UserModel.find({})).map((user) => {
-        user.groups.map((group) => {
-          groupList.push(group);
-        });
+    (await UserModel.find({})).map((user) => {
+      user.groups.map((group) => {
+        groupList.push(group);
       });
-    
+    });
+
     groupList = [...new Set(groupList)];
     return groupList;
   },
@@ -68,47 +74,72 @@ const Query = {
       if (!user) throw new Error(`user is not found by group ${groups}`);
       return user;
     }
+    return (await UserModel.find({})).map((user) => {
+      return user;
+    });
   },
   document: async (parent, args, db) => {
-    if (title) {
-      const doc = await DocumentModel.find({ title: args.title });
-      if (!doc) throw new Error("Document is not found"); //應該不用throw new error
+    if (args.id) {
+      console.log(args.id);
+      const doc = await DocumentModel.find({ id: args.id });
+
+      if (!doc) throw new Error("Document is not found");
+      return doc;
     } else {
       const doc = await DocumentModel.find();
       if (!doc) throw new Error("Document is null");
+      return doc;
     }
-    return doc;
   },
-  workflow: async (parent, { status, user_id }, db) => {
+  workflow: async (parent, { status, userId }, db) => {
     if (status) {
-      if (!user_id) {
+      if (!userId) {
         const workflow = await WorkflowModel.find({ status: status });
         if (!workflow)
           throw new Error(`workflow is not found by status ${status}`);
+        return workflow;
       } else {
-        const user = await UserModel.find({ id: user_id });
         const workflow = await WorkflowModel.find({
-          student: user,
+          student: userId,
           status: status,
         }); //pass by user id, cos ref
         if (!workflow)
           throw new Error(
-            `workflow is not found by status ${status} & user id ${user.id}`
+            `workflow is not found by status ${status} & user id ${userId}`
           );
+        return workflow;
       }
-      //return workflow;
-    } else if (user_id) {
-      const user = await UserModel.find({ id: user_id });
-      const workflow = await WorkflowModel.find({ student: user }); //pass by user id, cos ref
+    } else if (userId) {
+      const workflow = await WorkflowModel.find({ student: userId }); //pass by user id, cos ref
       if (!workflow)
-        throw new Error(`workflow is not found by user id ${user.id}`);
-      //return workflow;
+        throw new Error(`workflow is not found by user id ${userId}`);
+      return workflow;
     } else {
       const workflow = await WorkflowModel.find();
       if (!workflow) throw new Error(`workflow is null`);
-      //return workflow;
+      return workflow;
     }
-    return workflow;
+  },
+
+  notification: async (parent, { userId }, db) => {
+    if (userId) {
+      return (await NoticeModel.find({ userId: userId })).map((notice) => {
+        return notice;
+      });
+    } else throw new Error(`Notification is not found by user id ${userId}`);
+  },
+  async chatBox(parent, { name1, name2 }, { db }, info) {
+    if (name1 && name2) {
+      const chatBoxName = makeName(name1, name2);
+      let chatBox = await db.ChatBoxModel.findOne({ name: chatBoxName });
+      if (!chatBox) {
+        chatBox = await new db.ChatBoxModel({ name: chatBoxName }).save();
+      }
+      return [chatBox];
+    } else if (name1) {
+      const chatboxes = await db.ChatBoxModel.find({ name: { $regex: name1 } });
+      return chatboxes;
+    }
   },
 };
 

@@ -68,7 +68,7 @@ const Header = styled.h1`
   padding: 10px;
 `;
 
-const LeftSider = ({ collapsed, setPage }) => {
+const LeftSider = ({ collapsed, setPage, user }) => {
   const [FocusedIcon, setFocused] = useState(<Notifications />);
   const [activeBadge, setActiveBadge] = useState(0);
   const [title, setTitle] = useState("Notifications");
@@ -78,12 +78,12 @@ const LeftSider = ({ collapsed, setPage }) => {
     setTitle("Notifications");
   };
   const FocusMessages = () => {
-    setFocused(<Messages />);
+    setFocused(<Messages setPage={setPage} user={user}/>);
     setActiveBadge(1);
     setTitle("Messages");
   };
   const FocusArchives = () => {
-    setFocused(<Archives setPage={setPage} />);
+    setFocused(<Archives setPage={setPage} user={user} />);
     setActiveBadge(2);
     setTitle("Archives");
   };

@@ -1,21 +1,62 @@
 import { Input, Button, Space, Form, List, Typography, Select } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import DragAndDrop from "../MainPage/dragAndDrop";
-import { useQuery } from "@apollo/client";
-import { DOCUMENT_QUERY } from "../../graphql/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { DOCUMENT_QUERY, FIND_USERS_BY_GROUP } from "../../graphql/queries";
+import { CREATE_WORKFLOW } from "../../graphql/mutation";
+import { useState } from "react";
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
+
+const GroupSelect = ({ group, onChange }) => {
+  const {
+    data: candidate,
+    error,
+    loading,
+  } = useQuery(FIND_USERS_BY_GROUP, { variables: { groups: group } });
+  const options = loading
+    ? [{ value: "loading...", label: "loading..." }]
+    : candidate.user.map((u, i) => {
+        return { value: u.id, label: u.name };
+      });
+  return (
+    <Select onChange={onChange}>
+      {options.map((option, i) => (
+        <Option key={i} value={option["value"]}>
+          {option["label"]}
+        </Option>
+      ))}
+    </Select>
+  );
+};
+
 const CreateWorkflow = ({ setPage, document, displayStatus }) => {
-  /*const { data, loading } = useQuery(DOCUMENT_QUERY, {
-    variable: { id: document.id },
-  });*/
+  const {
+    data: doc,
+    loading,
+    error,
+  } = useQuery(DOCUMENT_QUERY, {
+    variable: { id: document },
+  });
+  let [approvals, setApprovals] = useState([]);
+  let [contents, setContents] = useState({file: [], image: [], text: []});
+  const [createWorkflow] = useMutation(CREATE_WORKFLOW);
   const onFinish = (values) => {
-    console.log("The values collected from the form are:", values);
+    console.log("The values collected from the form are:", approvals);
     // setPage({key: "document", document: });
   };
-  const passBy = ["學務處"];
+  if (error) {
+    console.log(error);
+    for (const err of error.graphQLErrors) {
+      displayStatus({
+        type: "error",
+        msg: err.message,
+      });
+    }
+    return <p>Error</p>;
+  }
+  if (loading) return <p>loading...</p>;
   return (
     <>
       <Typography>
@@ -24,41 +65,51 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
           <List>
             <List.Item>
               <Typography>
-                <Title level={3}>停修單#9999</Title>
-                <Paragraph>有課當停直需停</Paragraph>
+                <Title level={3}>
+                  {doc.document[0].title}#{doc.document[0].id}
+                </Title>
+                <Paragraph>{doc.document[0].body}</Paragraph>
               </Typography>
             </List.Item>
-            <List.Item>
-              <Typography style={{ width: "100%" }}>
-                <Title level={4}>停修原因</Title>
-                <Form.Item>
-                  <TextArea
-                    autoSize={{ minRows: 3 }}
-                    showCount
-                    maxLength={500}
-                    row={8}
-                  />
-                </Form.Item>
-              </Typography>
-            </List.Item>
-            <List.Item>
-              <Typography style={{ width: "100%" }}>
-                <Title level={4}>停修單掃描檔</Title>
-                <Form.Item>
-                  <DragAndDrop />
-                </Form.Item>
-              </Typography>
-            </List.Item>
+            {doc.document[0].fields.map((field, i) => {
+              return (
+                <List.Item>
+                  <Typography style={{ width: "100%" }}>
+                    <Title level={4}>{field.name}</Title>
+                    {field.fieldType === "TEXT" ? (
+                      <TextArea
+                        autoSize={{ minRows: 3 }}
+                        showCount
+                        maxLength={500}
+                        row={8}
+                        onChange={(e) => {
+                          
+                        }}
+                      />
+                    ) : (
+                      <DragAndDrop />
+                    )}
+                  </Typography>
+                </List.Item>
+              );
+            })}
             <List.Item>
               <Typography style={{ width: "100%" }}>
                 <Title level={4}>Approval Line</Title>
-                {passBy.map((approval, i) => (
-                  <Form.Item key={i} label={approval} name={`${approval}-${i}`}>
-                    <Select>
-                      <Option value={"我"}>我</Option>
-                    </Select>
-                  </Form.Item>
-                ))}
+                {doc.document[0].passBy.map((approval, i) => {
+                  return (
+                    <Form.Item key={i} label={approval} name={`approval-${i}`}>
+                      <GroupSelect
+                        group={approval}
+                        onChange={(value) => {
+                          while(approvals.length <= i) approvals.push({status: "PENDING"});
+                          approvals[i].staff = value; 
+                          setApprovals(Array.from(approvals));
+                        }}
+                      />
+                    </Form.Item>
+                  );
+                })}
               </Typography>
             </List.Item>
           </List>
@@ -69,7 +120,7 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
               </Button>
               <Button
                 type="primary"
-                onClick={() => setPage({key: "welcome"})}
+                onClick={() => setPage({ key: "welcome" })}
                 danger
               >
                 Cancel

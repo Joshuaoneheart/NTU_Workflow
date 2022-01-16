@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import {
   Typography,
   Badge,
@@ -10,6 +11,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import styled from "styled-components";
+import { ALL_DOCUMENTS } from "../../graphql/queries";
 
 const { Text } = Typography;
 const data = [
@@ -44,22 +46,18 @@ const data = [
     date: "2022-1-24",
   },
 ];
-const optionLists = [
-  {
-    value: "停修單",
-    label: "停修單",
-  },
-  {
-    value: "活動申請單",
-    label: "活動申請單",
-  },
-  {
-    value: "獎學金申請單",
-    label: "獎學金申請單",
-  },
-];
-const Archives = ({ setPage }) => {
+
+const Archives = ({ setPage, user }) => {
   const [filter, setFilter] = useState("All");
+  const { data: documents, loading } = useQuery(ALL_DOCUMENTS);
+  const [doc_id, setDoc] = useState();
+  const optionLists = loading
+    ? [{ value: "loading...", label: "loading..." }]
+    : !documents.document.length
+    ? [{ value: "No data", label: "No data" }]
+    : documents.document.map((d, i) => {
+        return { value: d["id"], label: d["title"] };
+      });
   const onFilterChange = (e) => {
     setFilter(e.target.value);
   };
@@ -92,27 +90,32 @@ const Archives = ({ setPage }) => {
   return (
     <>
       <Space direction="vertical" size="large">
-        <Space>
-          <Cascader
-            options={optionLists}
-            dropdownRender={dropdownRender}
-            placeholder="Select Workflow"
-          />
-          <Button
-            type="primary"
-            onClick={() => {
-              setPage({ key: "createWorkflow" });
-            }}
-          >
-            Create
-          </Button>
-        </Space>
-        <Radio.Group onChange={onFilterChange} value={filter}>
-          <Radio value="All">All</Radio>
-          <Radio value="approved">Approved</Radio>
-          <Radio value="pending">Pending</Radio>
-          <Radio value="rejected">Rejected</Radio>
-        </Radio.Group>
+        {user.role !== "staff" && (
+          <>
+            <Space>
+              <Cascader
+                options={optionLists}
+                dropdownRender={dropdownRender}
+                placeholder="Select Workflow"
+                onChange={(values) => {setDoc(values[0])}}
+              />
+              <Button
+                type="primary"
+                onClick={() => {
+                  setPage({ key: "createWorkflow", document: doc_id});
+                }}
+              >
+                Create
+              </Button>
+            </Space>
+            <Radio.Group onChange={onFilterChange} value={filter}>
+              <Radio value="All">All</Radio>
+              <Radio value="approved">Approved</Radio>
+              <Radio value="pending">Pending</Radio>
+              <Radio value="rejected">Rejected</Radio>
+            </Radio.Group>
+          </>
+        )}
         <Div>
           {data.map((archive) => {
             const { text, color } = convert(archive.status);

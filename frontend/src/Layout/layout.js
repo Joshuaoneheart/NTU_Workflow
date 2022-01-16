@@ -10,7 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
-  const [page, setPage] = useState({ key: "createDocument" });
+  const [page, setPage] = useState({ key: "welcome" });
   const [profileVisible, setProfileVisible] = useState(false);
   const onCancel = () => {
     setProfileVisible(false);
@@ -24,7 +24,7 @@ const CustomLayout = (props) => {
       }}
     >
       <Modal visible={profileVisible} onCancel={onCancel} footer={null}>
-        <Profile />
+        <Profile data={props.user}/>
       </Modal>
       <Header>
         <div
@@ -56,7 +56,7 @@ const CustomLayout = (props) => {
             setShowSider(collapsed);
           }}
         >
-          <LeftSider setPage={setPage} collapsed={showSider} />
+          <LeftSider setPage={setPage} collapsed={showSider} user={props.user} />
         </Sider>
         <Layout>
           <Content style={{ padding: "40px" }}>

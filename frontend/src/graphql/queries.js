@@ -21,12 +21,15 @@ const SIGN_IN = gql`
 `;
 
 const DOCUMENT_QUERY = gql`
-  query ($id: ID!) {
+  query ($id: String) {
     document(id: $id) {
       id
       title
       body
-      fields
+      fields {
+        fieldType
+        name
+      }
       passBy
     }
   }
@@ -51,8 +54,8 @@ const ALL_USERS = gql`
 `;
 
 const FIND_USERS_BY_GROUP = gql`
-  query ($group: String!) {
-    user(group: $group) {
+  query ($groups: String) {
+    user(groups: $groups) {
       id
       name
     }
@@ -63,6 +66,46 @@ const ALL_GROUPS = gql`
   query {
     findGroups
   }
-`
+`;
 
-export { SALT_QUERY, SIGN_IN, DOCUMENT_QUERY, ALL_DOCUMENTS, ALL_USERS, ALL_GROUPS, FIND_USERS_BY_GROUP };
+const FIND_CHATBOX_BY_USER = gql`
+  query ($name: String) {
+    chatBox(name1: $name) {
+      name
+      messages {
+        sender {
+          id
+          name
+        }
+        body
+      }
+    }
+  }
+`;
+
+const FIND_CHATBOX_BY_USERS = gql`
+query ($name1: String, $name2: String){
+  chatBox(name1: $name1, name2: $name2) {
+    name
+    messages {
+      sender {
+        id
+        name
+      }
+      body
+    }
+  }
+}
+`;
+
+export {
+  SALT_QUERY,
+  SIGN_IN,
+  DOCUMENT_QUERY,
+  ALL_DOCUMENTS,
+  ALL_USERS,
+  ALL_GROUPS,
+  FIND_USERS_BY_GROUP,
+  FIND_CHATBOX_BY_USER,
+  FIND_CHATBOX_BY_USERS,
+};

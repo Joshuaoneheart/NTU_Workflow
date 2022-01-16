@@ -1,66 +1,82 @@
 import { useRef, useState, useEffect } from "react";
 import { Message } from "../../Components/Message/Message";
 import { Input, Typography } from "antd";
+import { useMutation, useQuery } from "@apollo/client";
+import { FIND_CHATBOX_BY_USERS } from "../../graphql/queries";
+import { SEND_MESSAGE } from "../../graphql/mutation";
+import { MESSAGES_SUBSCRIPTION } from "../../graphql/subscription";
+
 const { Title } = Typography;
+
 const Chatroom = ({ user, correspondence, displayStatus }) => {
   const [body, setBody] = useState("");
-  /*
-  const { data, loading, subscribeToMore } = useQuery(CHATBOX_QUERY, {
+  const endRef = useRef();
+  const [sendMessage] = useMutation(SEND_MESSAGE);
+  const {
+    data: chatbox,
+    loading,
+    error,
+    subscribeToMore,
+  } = useQuery(FIND_CHATBOX_BY_USERS, {
     variables: { name1: user.id, name2: correspondence.id },
   });
-  */
-  const data = { chatbox: { messages: [{ sender: "Joshua", body: "Hey" }] } };
-  const loading = false;
-  const endRef = useRef();
-
   const scrollToBottom = () => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
     scrollToBottom();
-  }, [data]);
-  /*
+  }, [chatbox]);
   useEffect(() => {
-    subscribeToMore({
-      document: MESSAGES_SUBSCRIPTION,
-      variables: { name: props.box },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newMessage = subscriptionData.data.message;
-        props.setUnread((prev) => {
-          let new_ = Object.assign({}, prev);
-          new_[props.box]++;
-          return new_;
-        });
-        return {
-          chatbox: {
-            messages: [...prev.chatbox.messages, newMessage],
-          },
-        };
-      },
-    });
+    try {
+      subscribeToMore({
+        document: MESSAGES_SUBSCRIPTION,
+        variables: { from: user.id, to: correspondence.id },
+        updateQuery: (prev, { subscriptionData }) => {
+          console.log(prev, subscriptionData);
+          if (!subscriptionData.data) return prev;
+          const newMessage = subscriptionData.data.message;
+          return {
+            chatBox: [
+              {
+                messages: [...prev.chatBox[0].messages, newMessage],
+              },
+            ],
+          };
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }, [subscribeToMore]);
-*/
   return (
     <>
-      <Title level={2}>Joshua's Chat Room</Title>
+      <Title level={2}>{correspondence.name}'s Chat Room</Title>
       <div className="App-messages">
-          <div style={{height: "43vh"}}>
-        {loading || !data.chatbox ? (
-          <p>loading...</p>
-        ) : (
-          data.chatbox.messages.map(({ sender, body }, i) => {
-            return (
-              <Message
-                me={user.name}
-                name={sender}
-                body={body}
-                key={sender + body + i}
-              />
-            );
-          })
-        )}
-        <div ref={endRef} />
+        <div
+          style={{
+            height: "43vh",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto", marginBottom: "10px"
+          }}
+        >
+          {loading ? (
+            <p>Loading...</p>
+          ) : !chatbox.chatBox[0].messages.length ? (
+            <p>Say hey to your new friend</p>
+          ) : (
+            chatbox.chatBox[0].messages.map(({ sender, body }, i) => {
+              return (
+                <Message
+                  me={user.name}
+                  name={sender.name}
+                  body={body}
+                  key={sender + body + i}
+                />
+              );
+            })
+          )}
+          <div ref={endRef} />
         </div>
         <Input.Search
           enterButton="Send"
@@ -69,7 +85,7 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
             setBody(e.target.value);
           }}
           placeholder="Type a message here..."
-          onSearch={(msg) => {
+          onSearch={async (msg) => {
             if (!msg) {
               displayStatus({
                 type: "error",
@@ -77,7 +93,13 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
               });
               return;
             }
-            // Todo: sendMessage
+            await sendMessage({
+              variables: {
+                from: user.id,
+                to: correspondence.id,
+                message: body,
+              },
+            });
             setBody("");
           }}
         ></Input.Search>

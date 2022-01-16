@@ -1,42 +1,35 @@
 import { Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import { useMutation } from "@apollo/client";
+import { UPLOAD_FILE } from "../../graphql/mutation";
 
 const { Dragger } = Upload;
 
-const props = {
-  name: "file",
-  multiple: true,
-  action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
-
-const dragAndDrop = (props) => {
+const DragAndDrop = (props) => {
+  const [uploadFile] = useMutation(UPLOAD_FILE);
   return (
-    <Dragger {...props}>
+    <Dragger
+      customRequest={async (e) => {
+        const { onSuccess, onError, file, action, onProgress } = e;
+        try {
+          onSuccess(await uploadFile({ variables: { file } }));
+        } catch (e) {
+          onError(e);
+        }
+      }}
+      onDrop={(e) => {
+        console.log("Dropped files", e.dataTransfer.files);
+      }}
+    >
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>
       <p className="ant-upload-text">
         Click or drag file to this area to upload
       </p>
-      <p className="ant-upload-hint">
-        Support for a single or bulk upload.
-      </p>
+      <p className="ant-upload-hint">Support for a single or bulk upload.</p>
     </Dragger>
   );
 };
 
-export default dragAndDrop;
+export default DragAndDrop;

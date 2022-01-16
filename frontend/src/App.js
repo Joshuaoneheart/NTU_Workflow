@@ -2,14 +2,17 @@
 import "./App.css";
 import { message } from "antd";
 import SignInPage from "./Containers/SignIn/signIn";
-import Layout from "./Layout/layout"
+import Layout from "./Layout/layout";
 import { useEffect, useState } from "react";
-
+const LOCALSTORAGE_KEY_EM = "save-me";
+const LOCALSTORAGE_KEY_PA = "save-pa";
 function App() {
-  const [user, setUser] = useState("");
-  const [password, setPassword] = useState("");
+  const savedEmail = localStorage.getItem(LOCALSTORAGE_KEY_EM);
+  const savedPassword = localStorage.getItem(LOCALSTORAGE_KEY_PA);
+  const [user, setUser] = useState({ email: savedEmail || "" });
+  const [password, setPassword] = useState(savedPassword || "");
   const [confirmPass, setConfirmPass] = useState("");
-  const [signedIn, setSignedIn] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const displayStatus = (payload) => {
     if (payload.msg) {
@@ -33,15 +36,20 @@ function App() {
   return (
     <>
       {signedIn === true ? (
-        <Layout user={user} setUser={setUser} setSignedIn={setSignedIn} displayStatus={displayStatus}/>
+        <Layout
+          user={user}
+          setUser={setUser}
+          setSignedIn={setSignedIn}
+          displayStatus={displayStatus}
+        />
       ) : (
         <SignInPage
           user={user}
-					isNew={isNew}
+          isNew={isNew}
           password={password}
-					confirmPass={confirmPass}
-					setConfirmPass={setConfirmPass}
-					setIsNew={setIsNew}
+          confirmPass={confirmPass}
+          setConfirmPass={setConfirmPass}
+          setIsNew={setIsNew}
           setUser={setUser}
           setPassword={setPassword}
           setSignedIn={setSignedIn}

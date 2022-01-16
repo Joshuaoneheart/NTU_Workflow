@@ -1,10 +1,12 @@
-import { Space, Button, Card, Input, Select } from "antd";
+import { Space, Button, Card, Input } from "antd";
 import { MailOutlined, ReadOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
 import { SIGN_UP } from "../../graphql/mutation";
 import { useMutation } from "@apollo/client";
+const LOCALSTORAGE_KEY_EM = "save-me";
+const LOCALSTORAGE_KEY_PA = "save-pa";
 
 const departments = {
   101: "中國文學系",
@@ -63,7 +65,6 @@ const departments = {
   B01: "生命科學系",
   B02: "生化科技學系",
 };
-const { Option } = Select;
 
 const Container = styled(Card)`
   position: absolute;
@@ -126,6 +127,8 @@ const SignUp = ({
         msg: "Passwords are different",
       });
     } else {
+      localStorage.setItem(LOCALSTORAGE_KEY_EM, user["email"]);
+      localStorage.setItem(LOCALSTORAGE_KEY_PA, password);
       const hashed_p = await hash(password, salt);
       let tmp = Object.assign({}, user);
       tmp["password"] = hashed_p;

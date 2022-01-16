@@ -38,9 +38,7 @@ export const UserBadge = ({ user, setUser, setSignedIn, setProfileVisible, ...pr
           setUser({});
           setSignedIn(false);
         }}
-      >
-        Log out
-      </Menu.Item>
+      >Log out</Menu.Item>
     </Menu>
   );
   return (
