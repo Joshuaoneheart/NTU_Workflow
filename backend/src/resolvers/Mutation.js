@@ -1,5 +1,8 @@
 // updateWorkflow(status: String, comments: String): Workflow!
 import { uuid } from "uuidv4";
+import fs from "fs";
+import path from "path";
+import { promises } from "stream";
 import {
   saltModel,
   UserModel,
@@ -76,7 +79,6 @@ const Mutation = {
 
     if (!(await NoticeModel.findOne({ workflowId: workflow.id }))) {
       const newNote = await new NoticeModel({
-
         userId: workflow.student, //ex : b08508010
         workflowId: workflow.id,
         content: `Workflow ${workflow.id} status had changed`,
@@ -85,12 +87,13 @@ const Mutation = {
 
       console.log(args.input.approvalLine[0].staff);
       pubSub.publish(`Notification ${args.input.approvalLine[0].staff}`, {
-        Notification:
-        {userId: workflow.student,
-        workflowId: workflow.id,
-        content: `Workflow ${workflow.id} status had changed`}
+        Notification: {
+          userId: workflow.student,
+          workflowId: workflow.id,
+          content: `Workflow ${workflow.id} status had changed`,
+        },
       });
-     }
+    }
 
     return workflow;
   },
@@ -107,7 +110,25 @@ const Mutation = {
     }
     throw new Error(`missing uploadTEXT input`);
   },
-  //updateWorkflow(status: String!):ID!
+
+  uploadFile: async (parent, { file }) => {
+    const { filename, createReadStream, mimetype, encoding } = await file;
+    let stream = createReadStream();
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "files",
+    });
+
+    const uploadStream = bucket.openUploadStream(filename, {
+      contentType: mimetype,
+    });
+    
+    stream.pipe(uploadStream);
+    await promises.finished(out);
+
+    return uploadStream.id;
+    //return path.join(__dirname, "build", `${filename}.cache`);
+  },
+
   updateWorkflow: async (
     parent,
     { status, workflowId, staffId, comments },
@@ -168,7 +189,6 @@ const Mutation = {
           content: `Workflow ${workflow.id} status had changed`,
         });
         await newNote.save();
-
       } else {
         const updateNote = await NoticeModel.findOne({
           workflowId: workflow.id,
@@ -178,43 +198,42 @@ const Mutation = {
       }
       const approvalLineArray = Object.entries(workflow.approvalLine);
       //console.log(array[0][0], array[0][1])
-      
+
       let nextStaff;
-       for(var i = 0; i < approvalLineArray.length; i++) {
-        if(approvalLineArray[i][1].staff === staffId){
-          if((i+1) < approvalLineArray.length){
-            nextStaff = approvalLineArray[i+1][1].staff;
+      for (var i = 0; i < approvalLineArray.length; i++) {
+        if (approvalLineArray[i][1].staff === staffId) {
+          if (i + 1 < approvalLineArray.length) {
+            nextStaff = approvalLineArray[i + 1][1].staff;
             break;
           }
         }
       }
       //console.log(!nextStaff);
-    
-if(nextStaff){
-  pubSub.publish(`Notification ${workflow.student}`, {
-    Notification:{ 
-      userId: workflow.student,
-      workflowId: workflow.id,
-      content: `Workflow ${workflow.id} status had changed`,
-    }
-  });
-  pubSub.publish(`Notification ${nextStaff}`, {
-    Notification:{ 
-      userId: workflow.student,
-      workflowId: workflow.id,
-      content: `Workflow ${workflow.id} status had changed`,
-    }
-  });
-}
-else if (!nextStaff){
-  pubSub.publish(`Notification ${workflow.student}`, {
-    Notification:{ 
-      userId: workflow.student,
-      workflowId: workflow.id,
-      content: `Workflow ${workflow.id} status had changed`,
-    }
-  });
-}
+
+      if (nextStaff) {
+        pubSub.publish(`Notification ${workflow.student}`, {
+          Notification: {
+            userId: workflow.student,
+            workflowId: workflow.id,
+            content: `Workflow ${workflow.id} status had changed`,
+          },
+        });
+        pubSub.publish(`Notification ${nextStaff}`, {
+          Notification: {
+            userId: workflow.student,
+            workflowId: workflow.id,
+            content: `Workflow ${workflow.id} status had changed`,
+          },
+        });
+      } else if (!nextStaff) {
+        pubSub.publish(`Notification ${workflow.student}`, {
+          Notification: {
+            userId: workflow.student,
+            workflowId: workflow.id,
+            content: `Workflow ${workflow.id} status had changed`,
+          },
+        });
+      }
       return workflow.id; //workflow ID
     } else {
       throw new Error(`missing status or workflowId`);
