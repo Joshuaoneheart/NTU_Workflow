@@ -1,5 +1,5 @@
 import { Button, Card, Input, Space, Avatar } from "antd";
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import { MailOutlined, UserOutlined, KeyOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
@@ -109,6 +109,7 @@ const SignIn = ({
               />
               <Input.Password
                 value={password}
+								prefix={<KeyOutlined size="large" />}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password here"
                 size="large"
