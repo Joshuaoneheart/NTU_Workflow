@@ -95,7 +95,7 @@ const Archives = ({ setPage, user }) => {
   return (
     <>
       <Space direction="vertical" size="large">
-        {user.role !== "staff" && (
+        {user.role === "student" ? (
           <>
             <Space>
               <Cascader
@@ -122,6 +122,17 @@ const Archives = ({ setPage, user }) => {
               <Radio value="rejected">Rejected</Radio>
             </Radio.Group>
           </>
+        ) : (
+          <div style={{ textAlign: "center" }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setPage({ key: "createDocument", document: doc_id });
+              }}
+            >
+              Create
+            </Button>
+          </div>
         )}
         <Div>
           {workflow_loading || loading ? (
