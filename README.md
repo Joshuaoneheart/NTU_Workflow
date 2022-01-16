@@ -2,37 +2,51 @@
 
 [110-1] Web Programming Final
 (Group 3) NTU Workflow
+
 [組員]
 資工三 B08902017 游一心
 資工三 B08902093 石諾盟
 醫工三 B08508010 王愛琳
+
 [Demo 影片連結] ([網站功能] 參考Demo影片)
 https://youtu.be/ohI_k-8wt_w
+
 [服務介紹]
 大家有跑公文流程的經驗嗎?
 譬如停修單流程需要**任課教師、系主任、教務處註冊組**三方依序核准才能認可，
 所以NTU Workflow線上公文系統就可以幫你解決實體跑公文流程的麻煩。
+
 [Github link]
 https://github.com/Joshuaoneheart/NTU_Workflow
+
 [Deployed link]
 (https://ntu-workflow.herokuapp.com/
 )
+
 [Deployed 使用/操作方式]
 伺服器端: heroku 都幫你用好了喔
+
 使用者端:
 只可以”新增學生帳號”，提供 staff 帳號供測試
+
 staff(老師)帳號，可以”新增公文的格式"，譬如停修單可能需要上傳一份文件、一段文字、需要哪些行政人員核可(譬如教務處的Teacher1)。
+
 staff sign in account:
 email: teacher1@ntu.edu.tw pasword:123456
 email: teacher2@ntu.edu.tw password: 123456
 email: teacher3@ntu.edu.tw password: 123456
 email: teacher4@ntu.edu.tw password: 123456
+
 學生帳號可以”提交公文申請”，停修單需要依序經過任課老師、系主任最後才被教務處註冊組核准，所以當學生提交公文後，就會通知第一位核准老師(譬如任課老師)，當第一位老師核准後就會通知學生和下一位老師(譬如系主任)。
+
 還有聊天室可以即時聯絡文件相關問題。
+
 [其他說明]
 staff(老師)的帳號是當時由graphql playground創建的，因為密碼salt的方式跟 由前端創建學生帳號的方式不太一樣，所以code中會給寫好的staff帳號供測試。
+
 [使用與參考之框架/模組/原始碼]
 使用graphql uploads, apollo-server-express
+
 [第三方套件、框架、程式碼]
 antd
 
