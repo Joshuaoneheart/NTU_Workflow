@@ -1,4 +1,4 @@
-import { Space, Button, Card, Input, Select } from "antd";
+import { Space, Button, Card, Input } from "antd";
 import { MailOutlined, ReadOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
@@ -65,7 +65,6 @@ const departments = {
   B01: "生命科學系",
   B02: "生化科技學系",
 };
-const { Option } = Select;
 
 const Container = styled(Card)`
   position: absolute;

@@ -50,6 +50,7 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
+      while(loading);
       localStorage.setItem(LOCALSTORAGE_KEY_EM, user["email"]);
       localStorage.setItem(LOCALSTORAGE_KEY_PA, password);
       const hashed_p = await hash(password, salt.salt);

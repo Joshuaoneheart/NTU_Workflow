@@ -1,14 +1,13 @@
 import {checkUser, newUser, makeName, checkChatBox, newChatBox,newMessage, checkMessage} from './utility.js'
+import { ChatBoxModel } from '../models/models.js';
 
 const Subscription = {
     message:{
-  
       async subscribe(parent, { from, to }, { db, pubSub }, info){
-  
         const name = makeName(from,to);
-        const chatBox = await db.ChatBoxModel.findOne({name});
+        const chatBox = await ChatBoxModel.findOne({name});
         if(!chatBox) {
-          await newChatBox(db, chatBoxName);
+          await new ChatBoxModel({name: chatBoxName}).save();
         }
   
         return pubSub.asyncIterator(`chatBox ${name}`);

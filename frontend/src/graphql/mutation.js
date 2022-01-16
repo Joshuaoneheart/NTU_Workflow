@@ -54,4 +54,15 @@ const UPLOAD_FILE = gql`
   }
 `;
 
-export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE };
+const SEND_MESSAGE = gql`
+  mutation sendMessage($from: String!, $to: String, $message: String!) {
+    createMessage(from: $from, to: $to, message: $message) {
+      body
+      sender {
+        id
+        name
+      }
+    }
+  }
+`;
+export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, SEND_MESSAGE };

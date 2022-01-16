@@ -81,6 +81,9 @@ const subscriptionServer = SubscriptionServer.create(
     schema,
     execute,
     subscribe,
+    onOperation: (message, params, webSocket) => {
+      return { ...params, context: { db, pubSub } };
+    },
   },
   {
     // This is the `httpServer` we created in a previous step.
@@ -117,6 +120,6 @@ startApollo();
 const port = process.env.PORT | 5000;
 
 httpServer.listen(port, "0.0.0.0", () => {
-  console.log(`The server is up on port ${port}!`);
-  console.log(`Graphql Port at ${port} ${server.SubscriptionsPath}`);
+  console.log(`The server is up on port ${port} ${server.graphqlPath}!`);
+  console.log(`Graphql Port at ${port} ${server}`);
 });

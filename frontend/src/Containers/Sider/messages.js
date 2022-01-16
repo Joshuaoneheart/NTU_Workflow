@@ -32,7 +32,7 @@ const Messages = ({ user, setPage }) => {
         new_list.push({
           name: u.name,
           message: chatbox.messages.length
-            ? chatbox.messages[chatbox.messages.length - 1]
+            ? chatbox.messages[chatbox.messages.length - 1].body
             : "",
           user: u,
         });
