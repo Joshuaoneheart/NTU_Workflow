@@ -63,7 +63,6 @@ input CreateUserInput {
 }
 
 input CreateWorkflowInput {
-  document: ID!  #REVISE
   approvalLine: [approvalPayloadInput]! 
   contents: inputContentPayload!
   student: ID! #  ref
@@ -118,7 +117,7 @@ name: String!
 
 type Workflow {
   id: ID!
-  document: Document! # REVICE
+  document: ID! # REVICE
   status: Status!
   date: Date!
   comments: String

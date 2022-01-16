@@ -37,7 +37,7 @@ const DocumentSchema = new Schema({
 
 const WorkflowSchema = new Schema({
   id: { type: String, required: true },
-  document: { type: mongoose.Types.ObjectId, ref: "Document" },
+  document: { type: String, required: true },
   status: { type: String, required: true },
   date: { type: Date, required: true },
   comments: { type: String }, //等被reject或需要退回修改才會寫

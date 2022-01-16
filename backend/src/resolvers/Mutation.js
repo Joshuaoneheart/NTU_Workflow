@@ -63,7 +63,7 @@ const Mutation = {
   createWorkflow: async (parent, args, { db, pubSub }) => {
     const workflow = await new WorkflowModel({
       id: uuid(),
-      document: args.input.document, //ref _id
+      document: uuid(), //ref _id
       status: "PENDING",
       date: new Date().getTime(),
       comments: "no comment",

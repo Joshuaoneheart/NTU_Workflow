@@ -1,8 +1,8 @@
 const Workflow = {
   //parent is Workflow
-  document(parent, args, { db }, info) {
-    return db.DocumentModel.findById(parent.document);
-  },
+  // document(parent, args, { db }, info) {
+  //   return db.DocumentModel.findById(parent.document);
+  // },
   contents: async (parent, args, { db }, info)=>{
 
   },
