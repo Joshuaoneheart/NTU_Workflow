@@ -1,24 +1,29 @@
 import { useRef, useState, useEffect } from "react";
 import { Message } from "../../Components/Message/Message";
 import { Input, Typography } from "antd";
+import { useQuery } from "@apollo/client";
+import { FIND_CHATBOX_BY_USERS } from "../../graphql/queries";
+
 const { Title } = Typography;
+
 const Chatroom = ({ user, correspondence, displayStatus }) => {
+  console.log(user, correspondence);
   const [body, setBody] = useState("");
-  /*
-  const { data, loading, subscribeToMore } = useQuery(CHATBOX_QUERY, {
+  const endRef = useRef();
+  const {
+    data: chatbox,
+    loading,
+    subscribeToMore,
+  } = useQuery(FIND_CHATBOX_BY_USERS, {
     variables: { name1: user.id, name2: correspondence.id },
   });
-  */
-  const data = { chatbox: { messages: [{ sender: "Joshua", body: "Hey" }] } };
-  const loading = false;
-  const endRef = useRef();
 
   const scrollToBottom = () => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
     scrollToBottom();
-  }, [data]);
+  }, [chatbox]);
   /*
   useEffect(() => {
     subscribeToMore({
@@ -43,24 +48,26 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
 */
   return (
     <>
-      <Title level={2}>Joshua's Chat Room</Title>
+      <Title level={2}>{correspondence.name}'s Chat Room</Title>
       <div className="App-messages">
-          <div style={{height: "43vh"}}>
-        {loading || !data.chatbox ? (
-          <p>loading...</p>
-        ) : (
-          data.chatbox.messages.map(({ sender, body }, i) => {
-            return (
-              <Message
-                me={user.name}
-                name={sender}
-                body={body}
-                key={sender + body + i}
-              />
-            );
-          })
-        )}
-        <div ref={endRef} />
+        <div style={{ height: "43vh" }}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : !chatbox.chatBox[0].messages.length ? (
+            <p>Say hey to your new friend</p>
+          ) : (
+            chatbox.chatBox[0].messages.map(({ sender, body }, i) => {
+              return (
+                <Message
+                  me={user.name}
+                  name={sender}
+                  body={body}
+                  key={sender + body + i}
+                />
+              );
+            })
+          )}
+          <div ref={endRef} />
         </div>
         <Input.Search
           enterButton="Send"

@@ -1,8 +1,8 @@
 const Message ={
-    sender(parent,args,{db},info){
+    sender: async (parent,args,{db},info) => {
         //console.log(parent.sender);
         
-        return db.UserModel.findById(parent.sender); //Message - sender type : ObjectID
+        return await db.UserModel.findById(parent.sender); //Message - sender type : ObjectID
     },
 };
 

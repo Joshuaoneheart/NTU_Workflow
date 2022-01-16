@@ -78,7 +78,7 @@ const LeftSider = ({ collapsed, setPage, user }) => {
     setTitle("Notifications");
   };
   const FocusMessages = () => {
-    setFocused(<Messages />);
+    setFocused(<Messages setPage={setPage} user={user}/>);
     setActiveBadge(1);
     setTitle("Messages");
   };

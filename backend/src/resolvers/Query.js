@@ -8,7 +8,15 @@ import {
   DocumentModel,
   WorkflowModel,
 } from "../models/models";
-import {checkUser, newUser, makeName, checkChatBox, newChatBox,newMessage, checkMessage} from './utility.js'
+import {
+  checkUser,
+  newUser,
+  makeName,
+  checkChatBox,
+  newChatBox,
+  newMessage,
+  checkMessage,
+} from "./utility.js";
 import bcrypt from "bcrypt";
 
 const Query = {
@@ -25,30 +33,27 @@ const Query = {
       salt = salt.content;
       return salt;
     } catch (e) {
-      
-      throw new Error (e.message);
+      throw new Error(e.message);
     }
   },
   signIn: async (parent, { email, password }, { db }) => {
-
     try {
       const user = await UserModel.findOne({ email });
       if (!user) throw new Error("User not found");
       if (user.password == password) return user;
       else throw new Error("Password incorrect");
     } catch (e) {
-
-      throw new Error (e.message);
+      throw new Error(e.message);
     }
   },
   findGroups: async (parent, args, db) => {
     let groupList = [];
-      (await UserModel.find({})).map((user) => {
-        user.groups.map((group) => {
-          groupList.push(group);
-        });
+    (await UserModel.find({})).map((user) => {
+      user.groups.map((group) => {
+        groupList.push(group);
       });
-    
+    });
+
     groupList = [...new Set(groupList)];
     return groupList;
   },
@@ -68,15 +73,15 @@ const Query = {
       if (!user) throw new Error(`user is not found by group ${groups}`);
       return user;
     }
-      return (await UserModel.find({})).map((user)=>{
-        return user;})
-
+    return (await UserModel.find({})).map((user) => {
+      return user;
+    });
   },
   document: async (parent, args, db) => {
     if (args.id) {
       console.log(args.id);
       const doc = await DocumentModel.find({ id: args.id });
-      
+
       if (!doc) throw new Error("Document is not found");
       return doc;
     } else {
@@ -84,7 +89,6 @@ const Query = {
       if (!doc) throw new Error("Document is null");
       return doc;
     }
-    
   },
   workflow: async (parent, { status, userId }, db) => {
     if (status) {
@@ -92,7 +96,7 @@ const Query = {
         const workflow = await WorkflowModel.find({ status: status });
         if (!workflow)
           throw new Error(`workflow is not found by status ${status}`);
-          return workflow;
+        return workflow;
       } else {
         const workflow = await WorkflowModel.find({
           student: userId,
@@ -102,7 +106,7 @@ const Query = {
           throw new Error(
             `workflow is not found by status ${status} & user id ${userId}`
           );
-          return workflow;
+        return workflow;
       }
     } else if (userId) {
       const workflow = await WorkflowModel.find({ student: userId }); //pass by user id, cos ref
@@ -114,24 +118,20 @@ const Query = {
       if (!workflow) throw new Error(`workflow is null`);
       return workflow;
     }
-    
   },
-  async chatBox(parent, {name1,name2}, { db }, info){
+  async chatBox(parent, { name1, name2 }, { db }, info) {
+    if (!name1) throw new Error("Missing chatBox name1 for QueryChatBox");
 
-    if (!name1)
-    throw new Error("Missing chatBox name1 for CreateChatBox");
-
-    if(name1 && name2){
+    if (name1 && name2) {
       const chatBoxName = makeName(name1, name2);
-    let chatBox = await db.ChatBoxModel.findOne({ name: chatBoxName});
-    // await checkChatBox(db, chatBoxName, "createChatBox");
-    if (!chatBox)  console.log("Users does not exist for CreateChatBox: " + chatBoxName);
-    return [chatBox]
-    }
-    else if(name1){
-      const chatboxes = await db.ChatBoxModel.find({name: { $regex: name1 } });
+      let chatBox = await db.ChatBoxModel.findOne({ name: chatBoxName });
+      if (!chatBox)
+        console.log("Users does not exist for QueryChatBox: " + chatBoxName);
+      return [chatBox];
+    } else if (name1) {
+      const chatboxes = await db.ChatBoxModel.find({ name: { $regex: name1 } });
       console.log(chatboxes);
-      return chatboxes.map((chatbox) => {return chatbox})
+      return chatboxes;
     }
   },
 };
