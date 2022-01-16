@@ -8,44 +8,13 @@ import {
   Divider,
   Radio,
   Space,
+  Skeleton,
 } from "antd";
 import { useState } from "react";
 import styled from "styled-components";
 import { ALL_DOCUMENTS, WORKFLOW_QUERY } from "../../graphql/queries";
 
 const { Text } = Typography;
-const data = [
-  {
-    content: "This is a card",
-    status: "APPROVED",
-    date: "2022-1-13",
-  },
-  {
-    content: "This is not a card",
-    status: "REJECTED",
-    date: "2021-3-29",
-  },
-  {
-    content: "That is a card",
-    status: "PENDING",
-    date: "2021-1-24",
-  },
-  {
-    content: "This isn't a card",
-    status: "REJECTED",
-    date: "2022-1-14",
-  },
-  {
-    content: "This should be a card",
-    status: "PENDING",
-    date: "2022-2-24",
-  },
-  {
-    content: "This is a card or is it?",
-    status: "APPROVED",
-    date: "2022-1-24",
-  },
-];
 
 const Archives = ({ setPage, user }) => {
   const [filter, setFilter] = useState("All");
@@ -136,7 +105,7 @@ const Archives = ({ setPage, user }) => {
         )}
         <Div>
           {workflow_loading || loading ? (
-            <p>Loading...</p>
+						<Skeleton active/>
           ) : (
             workflows.workflow.map((archive) => {
               const { text, color } = convert(archive.status);
