@@ -1,4 +1,4 @@
-import { Avatar, Badge, Space } from "antd";
+import { Avatar, Badge, Space, Typography } from "antd";
 import {
   FileOutlined,
   InfoCircleOutlined,
@@ -9,6 +9,8 @@ import Notifications from "./notifications";
 import Archives from "./archives";
 import styled from "styled-components";
 import { useState } from "react";
+
+const { Title } = Typography;
 
 const Icon = styled.div`
 	border-radius: 20px;
@@ -126,7 +128,7 @@ const LeftSider = ({ collapsed, setPage, user }) => {
         <ContentColumn
           style={collapsed === true ? { visibility: "hidden" } : {}}
         >
-          <Header>{title}</Header>
+          <Header><Title>{title}</Title></Header>
           {FocusedIcon}
         </ContentColumn>
       </Container>
