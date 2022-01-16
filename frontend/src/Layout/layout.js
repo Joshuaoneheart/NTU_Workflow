@@ -5,13 +5,17 @@ import UserBadge from "../Components/UserBadge/UserBadge";
 import LeftSider from "../Containers/Sider/leftsider";
 import Profile from "../Containers/Profile/profile";
 import Modal from "antd/lib/modal/Modal";
+import { ALL_NOTIFY } from "../graphql/queries";
+import { useQuery } from "@apollo/client";
 
 const { Header, Footer, Sider, Content } = Layout;
 
 const CustomLayout = (props) => {
   const [showSider, setShowSider] = useState(false);
   const [page, setPage] = useState({ key: "welcome" });
+  const {data: notifs, loading, subscribeToMore} = useQuery(ALL_NOTIFY, {variables: {id: props.user.id}});
   const [profileVisible, setProfileVisible] = useState(false);
+  console.log(notifs)
   const onCancel = () => {
     setProfileVisible(false);
   };
@@ -56,7 +60,7 @@ const CustomLayout = (props) => {
             setShowSider(collapsed);
           }}
         >
-          <LeftSider setPage={setPage} collapsed={showSider} user={props.user} />
+          <LeftSider setPage={setPage} collapsed={showSider} notifs={notifs} loading={loading} user={props.user} />
         </Sider>
         <Layout>
           <Content style={{ padding: "40px" }}>

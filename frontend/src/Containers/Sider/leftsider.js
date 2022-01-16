@@ -69,12 +69,12 @@ const Header = styled.h1`
   padding: 10px;
 `;
 
-const LeftSider = ({ collapsed, setPage, user }) => {
-  const [FocusedIcon, setFocused] = useState(<Notifications />);
+const LeftSider = ({ collapsed, setPage, user, notifs, loading }) => {
+  const [FocusedIcon, setFocused] = useState(<Notifications notifs={notifs} loading={loading} setPage={setPage}/>);
   const [activeBadge, setActiveBadge] = useState(0);
   const [title, setTitle] = useState("Notifications");
   const FocusNotifications = () => {
-    setFocused(<Notifications />);
+    setFocused(<Notifications notifs={notifs} loading={loading} setPage={setPage}/>);
     setActiveBadge(0);
     setTitle("Notifications");
   };
@@ -94,7 +94,7 @@ const LeftSider = ({ collapsed, setPage, user }) => {
         <IconColumn>
           <Space direction="vertical" size="large">
             <Icon onClick={FocusNotifications}>
-              <Badge count={3} overflowCount={10}>
+              <Badge count={(loading)? null: notifs.notification.length} overflowCount={10}>
                 <Avatar
                   shape="circle"
                   size="large"
@@ -104,7 +104,7 @@ const LeftSider = ({ collapsed, setPage, user }) => {
               </Badge>
             </Icon>
             <Icon onClick={FocusMessages}>
-              <Badge count={2} overflowCount={10}>
+              <Badge overflowCount={10}>
                 <Avatar
                   shape="circle"
                   size="large"
@@ -114,7 +114,7 @@ const LeftSider = ({ collapsed, setPage, user }) => {
               </Badge>
             </Icon>
             <Icon onClick={FocusArchives}>
-              <Badge count={1} overflowCount={10}>
+              <Badge overflowCount={10}>
                 <Avatar
                   shape="circle"
                   size="large"

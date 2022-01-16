@@ -35,6 +35,16 @@ const DOCUMENT_QUERY = gql`
   }
 `;
 
+const ALL_NOTIFY = gql`
+  query ($id: ID!) {
+    notification(userId: $id) {
+      userId
+      workflowId
+      content
+    }
+  }
+`;
+
 const WORKFLOW_QUERY = gql`
   query ($id: ID) {
     workflow(userId: $id) {
@@ -63,6 +73,14 @@ const FIND_WORKFLOW = gql`
         status
       }
       comments
+    }
+  }
+`;
+
+const FIND_D_BY_W = gql`
+  query ($id: ID) {
+    workflow(workflowId: $id) {
+      document
     }
   }
 `;
@@ -136,8 +154,10 @@ export {
   DOCUMENT_QUERY,
   WORKFLOW_QUERY,
   FIND_WORKFLOW,
+  FIND_D_BY_W,
   ALL_DOCUMENTS,
   ALL_USERS,
+  ALL_NOTIFY,
   ALL_GROUPS,
   FIND_USERS_BY_GROUP,
   FIND_CHATBOX_BY_USER,

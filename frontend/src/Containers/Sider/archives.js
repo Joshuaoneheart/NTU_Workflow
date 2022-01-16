@@ -68,11 +68,11 @@ const Archives = ({ setPage, user }) => {
   };
   const convert = (a) => {
     switch (a) {
-      case "APPROVED":
+      case "ACCEPT":
         return { text: a.toLowerCase(), color: "green" };
       case "PENDING":
         return { text: a.toLowerCase(), color: "yellow" };
-      case "REJECTED":
+      case "DECLINE":
         return { text: a.toLowerCase(), color: "red" };
     }
   };

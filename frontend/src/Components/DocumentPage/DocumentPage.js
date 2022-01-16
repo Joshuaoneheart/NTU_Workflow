@@ -1,21 +1,57 @@
-import { useQuery } from "@apollo/client";
-import { Typography, Timeline, Tag, List, Upload } from "antd";
-import { DOCUMENT_QUERY, FIND_WORKFLOW } from "../../graphql/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { Typography, Timeline, Tag, List, Upload, Button } from "antd";
+import { useEffect, useState } from "react";
+import { DECLINE_WORKFLOW } from "../../graphql/mutation";
+import {
+  DOCUMENT_QUERY,
+  FIND_WORKFLOW,
+  ALL_USERS,
+} from "../../graphql/queries";
 import "./Document.css";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
-  const {data: workflow, loading} = useQuery(FIND_WORKFLOW, {variables: {id: props.workflow}});
-  const {data: document, doc_loading} = useQuery(DOCUMENT_QUERY, {variables: {id: props.document}});
-  console.log(props, workflow, document, doc_loading, loading)
-  return (loading || doc_loading)? <p>Loading...</p>:(
+  const { data: workflow, loading } = useQuery(FIND_WORKFLOW, {
+    variables: { id: props.workflow },
+  });
+  const { data: document, doc_loading } = useQuery(DOCUMENT_QUERY, {
+    variables: { id: props.document },
+  });
+  const { data: users, user_loading } = useQuery(ALL_USERS);
+  const [status, setStatus] = useState([]);
+  const [decline] = useMutation(DECLINE_WORKFLOW);
+  console.log(document, workflow);
+  useEffect(() => {
+    if (!loading) {
+      let first = false;
+      let tmp = [];
+      for (let a of workflow.workflow[0].approvalLine) {
+        if (!first && a.status == "PENDING")
+          tmp.push({ color: "blue", body: "In Progress" });
+        else if (a.status == "PENDING")
+          tmp.push({ color: "blue", body: "Pending" });
+        else if (a.status == "ACCEPT")
+          tmp.push({ color: "green", body: "Pass" });
+        else tmp.push({ color: "red", body: "Rejected" });
+      }
+      console.log(tmp);
+      setStatus(tmp);
+    }
+  }, [loading]);
+  return loading || doc_loading || user_loading || !status.length ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Typography>
-        <Title>Record for {document.document[0].title}<br />#{document.document[0].id}</Title>
+        <Title>
+          Record for {document.document[0].title}
+          <br />#{document.document[0].id}
+        </Title>
         <Paragraph>{document.document[0].body}</Paragraph>
       </Typography>
       <List size="large" header={<Title level={4}>Content List</Title>}>
         {document.document[0].fields.map((datum, i) => {
+          let content = workflow.workflow[0].contents[i];
           return (
             <List.Item key={i}>
               <Typography>
@@ -28,22 +64,25 @@ const DocumentPage = (props) => {
       </List>
       <br />
       <Timeline>
-        <Timeline.Item color="green">
-          <Tag color="green">Pass</Tag>教授 呂XX
-        </Timeline.Item>
-        <Timeline.Item color="green">
-          <Tag color="green">Pass</Tag>資工系辦 黃XX
-        </Timeline.Item>
-        <Timeline.Item color="blue">
-          <Tag color="blue">In Process</Tag>資工系辦 周XX
-        </Timeline.Item>
-        <Timeline.Item color="gray">
-          <Tag>Pending</Tag>資工系主任 洪XX
-        </Timeline.Item>
-        <Timeline.Item color="gray">
-          <Tag>Pending</Tag>電資學院院長 張XX
-        </Timeline.Item>
+        {document.document[0].passBy.map((approval, i) => {
+          const meta = workflow.workflow[0].approvalLine[i];
+          let name = users.user.find((user) => user.id === meta.staff).name;
+          return (
+            <Timeline.Item color={status[i].color}>
+              <Tag color={status[i].color}>{status[i].body}</Tag>
+              {approval} {name}
+            </Timeline.Item>
+          );
+        })}
       </Timeline>
+      <Button
+        danger
+        onClick={async () => {
+          await decline({ variables: { id: props.workflow } });
+        }}
+      >
+        Cancel
+      </Button>
     </>
   );
 };

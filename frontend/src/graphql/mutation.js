@@ -71,4 +71,10 @@ const SEND_MESSAGE = gql`
     }
   }
 `;
-export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, UPLOAD_TEXT, SEND_MESSAGE };
+
+const DECLINE_WORKFLOW = gql`
+  mutation decline($id: ID!) {
+    updateWorkflow(status: DECLINE, workflowId: $id)
+  }
+`;
+export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, UPLOAD_TEXT, SEND_MESSAGE, DECLINE_WORKFLOW };

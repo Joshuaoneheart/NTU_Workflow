@@ -32,7 +32,6 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
         document: MESSAGES_SUBSCRIPTION,
         variables: { from: user.id, to: correspondence.id },
         updateQuery: (prev, { subscriptionData }) => {
-          console.log(prev, subscriptionData);
           if (!subscriptionData.data) return prev;
           const newMessage = subscriptionData.data.message;
           return {
