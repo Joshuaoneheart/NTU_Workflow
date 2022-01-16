@@ -2,7 +2,7 @@
 import { uuid } from "uuidv4";
 import fs from "fs";
 import path from "path";
-import { finished } from "stream/promises";
+import { promises } from "stream";
 import {
   saltModel,
   UserModel,
@@ -117,7 +117,7 @@ const Mutation = {
     let stream = createReadStream();
     const out = fs.createWriteStream(path.join(__dirname, "..","build", `${filename}.cache`));
     stream.pipe(out);
-    await finished(out);
+    await promises.finished(out);
     return path.join(__dirname, "build", `${filename}.cache`);
   },
   //updateWorkflow(status: String!):ID!
