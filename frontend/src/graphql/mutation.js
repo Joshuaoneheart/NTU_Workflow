@@ -37,7 +37,7 @@ const CREATE_WORKFLOW = gql`
   ) {
     createWorkflow(
       input: {
-        documents: $document
+        document: $document
         contents: $contents
         approvalLine: $approvalLine
         student: $student
@@ -54,6 +54,12 @@ const UPLOAD_FILE = gql`
   }
 `;
 
+const UPLOAD_TEXT = gql`
+  mutation uploadTEXT($text: String!) {
+    uploadTEXT(input: $text)
+  }
+`;
+
 const SEND_MESSAGE = gql`
   mutation sendMessage($from: String!, $to: String, $message: String!) {
     createMessage(from: $from, to: $to, message: $message) {
@@ -65,4 +71,4 @@ const SEND_MESSAGE = gql`
     }
   }
 `;
-export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, SEND_MESSAGE };
+export { SIGN_UP, CREATE_WORKFLOW, UPLOAD_FILE, UPLOAD_TEXT, SEND_MESSAGE };

@@ -1,5 +1,5 @@
-import { Button, Card, Input, Space } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Space, Avatar } from "antd";
+import { MailOutlined, UserOutlined, KeyOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
@@ -17,8 +17,8 @@ const Container = styled(Card)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 3vh;
-  height: 70vh;
+  padding: 10vh;
+  height: 60vh;
   top: 17.5vh;
   left: 25vw;
   box-shadow: 0px 0px 1px black;
@@ -55,11 +55,11 @@ const SignIn = ({
       localStorage.setItem(LOCALSTORAGE_KEY_PA, password);
       const hashed_p = await hash(password, salt.salt);
       try {
-        const {data: signIn_res, error: signIn_error} = await signIn({
+        const { data: signIn_res, error: signIn_error } = await signIn({
           variables: { email: user["email"], password: hashed_p },
         });
-        if(signIn_error){
-          for(const error of signIn_error.graphQLErrors){
+        if (signIn_error) {
+          for (const error of signIn_error.graphQLErrors) {
             displayStatus({
               type: "error",
               msg: error.message,
@@ -81,41 +81,49 @@ const SignIn = ({
     <>
       {isNew === false ? (
         <Container>
-          <div className="SignIn-title">
-            <h1> Please sign in </h1>
-          </div>
-          <br />
-          <br />
-          <Input.Group compact style={{ width: "30vw" }}>
-            <Input
-              value={user["email"]}
-              prefix={<MailOutlined size="large" />}
-              onChange={(e) => {
-                let tmp = Object.assign({}, user);
-                tmp.email = e.target.value;
-                setUser(tmp);
+          <Space direction="vertical" size="large">
+            <div
+              style={{
+                height: "31px",
+                fontFamily: "Bebas Neue, cursive",
+                fontSize: "47px",
+                textAlign: "center",
               }}
-              placeholder="Enter email here"
-              size="large"
-              style={{ marginTop: "20px" }}
-            />
-            <Input.Password
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password here"
-              size="large"
-              style={{ marginTop: "20px" }}
-            />
-          </Input.Group>
-          <br />
-          <br />
-          <Space>
-            <Button type="primary" onClick={handleSignIn}>
-              Sign in
-            </Button>
-            <Button type="primary" onClick={handleSignUp}>
-              Sign up
-            </Button>
+            >
+              NTU WORKFLOW
+            </div>
+						<br />
+						<Avatar size={64} icon={<UserOutlined />} />
+            <Input.Group compact style={{ width: "30vw" }}>
+              <Input
+                value={user["email"]}
+                prefix={<MailOutlined size="large" />}
+                onChange={(e) => {
+                  let tmp = Object.assign({}, user);
+                  tmp.email = e.target.value;
+                  setUser(tmp);
+                }}
+                placeholder="Enter email here"
+                size="large"
+                style={{ marginTop: "20px" }}
+              />
+              <Input.Password
+                value={password}
+								prefix={<KeyOutlined size="large" />}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password here"
+                size="large"
+                style={{ marginTop: "20px" }}
+              />
+            </Input.Group>
+            <Space>
+              <Button type="primary" onClick={handleSignIn}>
+                Sign in
+              </Button>
+              <Button type="primary" onClick={handleSignUp}>
+                Sign up
+              </Button>
+            </Space>
           </Space>
         </Container>
       ) : (

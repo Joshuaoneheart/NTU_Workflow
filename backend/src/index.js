@@ -11,8 +11,6 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import Query from "./resolvers/Query.js";
 import Mutation from "./resolvers/Mutation.js";
 import Subscription from "./resolvers/Subscription.js";
-import Document from "./resolvers/Document.js";
-import Workflow from "./resolvers/Workflow.js";
 import DateResolver from "./resolvers/Date.js";
 import StatusResolver from "./resolvers/Status.js";
 import ChatBox from "./resolvers/ChatBox.js";
@@ -66,8 +64,6 @@ const schema = makeExecutableSchema({
     Query,
     Mutation,
     Subscription,
-    Document,
-    Workflow,
     ChatBox,
     Message,
     Upload: GraphQLUpload,
@@ -117,7 +113,7 @@ const startApollo = async () => {
 };
 startApollo();
 
-const port = process.env.PORT | 5000;
+const port = process.env.PORT || 5000;
 
 httpServer.listen(port, "0.0.0.0", () => {
   console.log(`The server is up on port ${port} ${server.graphqlPath}!`);

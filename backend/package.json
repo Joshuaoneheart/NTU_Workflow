@@ -34,7 +34,7 @@
     "uuidv4": "^6.2.12"
   },
   "scripts": {
-    "start": "nodemon src/index.js --ext js,ts,tsx,graphql --exec babel-node"
+    "start": "npx babel-node src/index.js --ext js,ts,tsx,graphql"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.7",

@@ -1,40 +1,20 @@
+import { useQuery } from "@apollo/client";
 import { Typography, Timeline, Tag, List, Upload } from "antd";
+import { FIND_WORKFLOW } from "../../graphql/queries";
 import "./Document.css";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
-  const data = [
-    { title: "I am happy", content: "Really" },
-    {
-      title: "No, you are dead.",
-      content: (
-        <Upload
-          className="upload-list-inline"
-          disabled
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture"
-          defaultFileList={[
-            {
-              uid: "-1",
-              name: "xxx.png",
-              status: "done",
-              url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-              thumbUrl:
-                "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-            },
-          ]}
-        />
-      ),
-    },
-  ];
-  return (
+  const {data: workflow, loading} = useQuery(FIND_WORKFLOW, {variables: {id: props.document}});
+  console.log(workflow)
+  return (loading)? <p>Loading...</p>:(
     <>
       <Typography>
         <Title>Record for #99999 停修單</Title>
         <Paragraph>This is an example of document description.</Paragraph>
       </Typography>
       <List size="large" header={<Title level={4}>Content List</Title>}>
-        {data.map((datum, i) => {
+        {workflow.map((datum, i) => {
           return (
             <List.Item key={i}>
               <Typography>

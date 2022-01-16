@@ -1,4 +1,4 @@
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, Space, Typography } from "antd";
 import {
   FileOutlined,
   InfoCircleOutlined,
@@ -10,35 +10,36 @@ import Archives from "./archives";
 import styled from "styled-components";
 import { useState } from "react";
 
+const { Title } = Typography;
+
 const Icon = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
+	border-radius: 20px;
 `;
 
 const focusedOutlined = {
-  border: "black",
-  borderWidth: "0.5px",
+  border: "#001528",
+  borderWidth: "1px",
   borderStyle: "solid",
 };
 
 const InfoCircleIcon = styled(InfoCircleOutlined)`
-  color: black;
+  color: #001528;
   &:hover {
-    color: #555;
+    color: #ffffff;
   }
 `;
 
 const MessageIcon = styled(MessageOutlined)`
-  color: black;
+  color: #001528;
   &:hover {
-    color: #555;
+    color: #ffffff;
   }
 `;
 
 const FileIcon = styled(FileOutlined)`
-  color: black;
+  color: #001528;
   &:hover {
-    color: #555;
+    color: #ffffff;
   }
 `;
 
@@ -91,41 +92,43 @@ const LeftSider = ({ collapsed, setPage, user }) => {
     <>
       <Container>
         <IconColumn>
-          <Icon onClick={FocusNotifications}>
-            <Badge count={3} overflowCount={10}>
-              <Avatar
-                shape="circle"
-                size="large"
-                icon={<InfoCircleIcon />}
-                style={activeBadge === 0 ? focusedOutlined : {}}
-              />
-            </Badge>
-          </Icon>
-          <Icon onClick={FocusMessages}>
-            <Badge count={2} overflowCount={10}>
-              <Avatar
-                shape="circle"
-                size="large"
-                icon={<MessageIcon />}
-                style={activeBadge === 1 ? focusedOutlined : {}}
-              />
-            </Badge>
-          </Icon>
-          <Icon onClick={FocusArchives}>
-            <Badge count={1} overflowCount={10}>
-              <Avatar
-                shape="circle"
-                size="large"
-                icon={<FileIcon />}
-                style={activeBadge === 2 ? focusedOutlined : {}}
-              />
-            </Badge>
-          </Icon>
+          <Space direction="vertical" size="large">
+            <Icon onClick={FocusNotifications}>
+              <Badge count={3} overflowCount={10}>
+                <Avatar
+                  shape="circle"
+                  size="large"
+                  icon={<InfoCircleIcon />}
+                  style={activeBadge === 0 ? focusedOutlined : {}}
+                />
+              </Badge>
+            </Icon>
+            <Icon onClick={FocusMessages}>
+              <Badge count={2} overflowCount={10}>
+                <Avatar
+                  shape="circle"
+                  size="large"
+                  icon={<MessageIcon />}
+                  style={activeBadge === 1 ? focusedOutlined : {}}
+                />
+              </Badge>
+            </Icon>
+            <Icon onClick={FocusArchives}>
+              <Badge count={1} overflowCount={10}>
+                <Avatar
+                  shape="circle"
+                  size="large"
+                  icon={<FileIcon />}
+                  style={activeBadge === 2 ? focusedOutlined : {}}
+                />
+              </Badge>
+            </Icon>
+          </Space>
         </IconColumn>
         <ContentColumn
           style={collapsed === true ? { visibility: "hidden" } : {}}
         >
-          <Header>{title}</Header>
+          <Header><Title>{title}</Title></Header>
           {FocusedIcon}
         </ContentColumn>
       </Container>

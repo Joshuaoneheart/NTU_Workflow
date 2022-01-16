@@ -42,7 +42,7 @@ const Welcome = ({ setPage }) => {
           <br />
           <Text type="secondary" style={{ fontSize: "0.9em" }}>
             <b>Note</b>. If any member of the approval rejects the document or
-            application, the whole process is the rejected
+            application, the whole process is then rejected
           </Text>
         </Paragraph>
         <Title level={3} style={{ textAlign: "center" }}>

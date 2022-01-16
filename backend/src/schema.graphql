@@ -1,4 +1,5 @@
 scalar Date
+scalar Upload
 
 enum Status {
   PENDING
@@ -17,7 +18,6 @@ type Query {
   notification(userId:ID!):[notificationPayload!] # pass in userId, cos 1 student may have multiple apply => []
 
   chatBox(name1: String, name2: String): [ChatBox!]
-
 }
 
 type Mutation {
@@ -31,7 +31,7 @@ type Mutation {
   createWorkflow(input: CreateWorkflowInput!): Workflow
 
   uploadTEXT(input:String!): ID!
-
+  uploadFile(file: Upload!): ID!
   updateWorkflow(status: Status!, workflowId: ID!, staffId: ID ,comments: String):ID!
 
   createMessage(from: String!, to: String, message: String!): Message!
@@ -65,6 +65,7 @@ input CreateUserInput {
 input CreateWorkflowInput {
   approvalLine: [approvalPayloadInput]! 
   contents: inputContentPayload!
+  document: ID!
   student: ID! #  ref
 }
 

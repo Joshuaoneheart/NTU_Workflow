@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import styled from "styled-components";
-import { ALL_DOCUMENTS } from "../../graphql/queries";
+import { ALL_DOCUMENTS, WORKFLOW_QUERY } from "../../graphql/queries";
 
 const { Text } = Typography;
 const data = [
@@ -50,6 +50,11 @@ const data = [
 const Archives = ({ setPage, user }) => {
   const [filter, setFilter] = useState("All");
   const { data: documents, loading } = useQuery(ALL_DOCUMENTS);
+  const { data: workflows, loading: workflow_loading } = useQuery(
+    WORKFLOW_QUERY,
+    { variables: { id: user.id } }
+  );
+  console.log(workflows, workflow_loading);
   const [doc_id, setDoc] = useState();
   const optionLists = loading
     ? [{ value: "loading...", label: "loading..." }]
@@ -97,12 +102,14 @@ const Archives = ({ setPage, user }) => {
                 options={optionLists}
                 dropdownRender={dropdownRender}
                 placeholder="Select Workflow"
-                onChange={(values) => {setDoc(values[0])}}
+                onChange={(values) => {
+                  setDoc(values[0]);
+                }}
               />
               <Button
                 type="primary"
                 onClick={() => {
-                  setPage({ key: "createWorkflow", document: doc_id});
+                  setPage({ key: "createWorkflow", document: doc_id });
                 }}
               >
                 Create
@@ -117,30 +124,25 @@ const Archives = ({ setPage, user }) => {
           </>
         )}
         <Div>
-          {data.map((archive) => {
-            const { text, color } = convert(archive.status);
-            if (filter === "All") {
-              return (
-                <Badge.Ribbon text={text} color={color}>
-                  <br />
-                  <Card>
-                    <Space direction="vertical" style={{ width: "100%" }}>
-                      <Text>{archive.content}</Text>
-                      <Text type="secondary" style={{ float: "right" }}>
-                        {archive.date}
-                      </Text>
-                    </Space>
-                  </Card>
-                </Badge.Ribbon>
-              );
-            } else {
-              if (filter === text) {
+          {workflow_loading && loading ? (
+            <p>Loading...</p>
+          ) : (
+            workflows.workflow.map((archive) => {
+              const { text, color } = convert(archive.status);
+              let content = documents.document.find(
+                (d) => d.id === archive.document
+              ).title;
+              if (filter === "All") {
                 return (
                   <Badge.Ribbon text={text} color={color}>
-                    <Card>
-                      <br />
+                    <br />
+                    <Card
+                      onClick={() => {
+                        setPage({ key: "document", document: archive.id });
+                      }}
+                    >
                       <Space direction="vertical" style={{ width: "100%" }}>
-                        <Text>{archive.content}</Text>
+                        <Text>{content}</Text>
                         <Text type="secondary" style={{ float: "right" }}>
                           {archive.date}
                         </Text>
@@ -148,9 +150,29 @@ const Archives = ({ setPage, user }) => {
                     </Card>
                   </Badge.Ribbon>
                 );
+              } else {
+                if (filter === text) {
+                  return (
+                    <Badge.Ribbon text={text} color={color}>
+                      <Card
+                        onClick={() => {
+                          setPage({ key: "document", document: archive.id });
+                        }}
+                      >
+                        <br />
+                        <Space direction="vertical" style={{ width: "100%" }}>
+                          <Text>{content}</Text>
+                          <Text type="secondary" style={{ float: "right" }}>
+                            {archive.date}
+                          </Text>
+                        </Space>
+                      </Card>
+                    </Badge.Ribbon>
+                  );
+                }
               }
-            }
-          })}
+            })
+          )}
         </Div>
       </Space>
     </>

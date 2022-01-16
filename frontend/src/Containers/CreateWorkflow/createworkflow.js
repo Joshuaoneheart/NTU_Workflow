@@ -2,8 +2,12 @@ import { Input, Button, Space, Form, List, Typography, Select } from "antd";
 import DragAndDrop from "../MainPage/dragAndDrop";
 import { useMutation, useQuery } from "@apollo/client";
 import { DOCUMENT_QUERY, FIND_USERS_BY_GROUP } from "../../graphql/queries";
-import { CREATE_WORKFLOW } from "../../graphql/mutation";
-import { useState } from "react";
+import {
+  CREATE_WORKFLOW,
+  UPLOAD_FILE,
+  UPLOAD_TEXT,
+} from "../../graphql/mutation";
+import { useEffect, useState } from "react";
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -31,7 +35,7 @@ const GroupSelect = ({ group, onChange }) => {
   );
 };
 
-const CreateWorkflow = ({ setPage, document, displayStatus }) => {
+const CreateWorkflow = ({ setPage, user, document, displayStatus }) => {
   const {
     data: doc,
     loading,
@@ -40,14 +44,40 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
     variable: { id: document },
   });
   let [approvals, setApprovals] = useState([]);
-  let [contents, setContents] = useState({file: [], image: [], text: []});
+  let [contents, setContents] = useState([]);
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
-  const onFinish = (values) => {
-    console.log("The values collected from the form are:", approvals);
-    // setPage({key: "document", document: });
+  const [uploadText] = useMutation(UPLOAD_TEXT);
+  const onFinish = async (values) => {
+    let tmp = { file: [], image: [], text: [] };
+    for (let content of contents) {
+      if (content.type == "TEXT") {
+        tmp["text"].push(
+          (await uploadText({ variables: { text: content.content } })).data
+            .uploadTEXT
+        );
+      } else if (content.type == "IMAGE") tmp.image.push(content.content);
+      else tmp.file.push(content.content);
+    }
+    const id = await createWorkflow({
+      variables: {
+        document,
+        contents: tmp,
+        student: user.id,
+        approvalLine: approvals,
+      },
+    });
+    setPage({ key: "document", document: id.data.createWorkflow.id });
   };
+  useEffect(() => {
+    if (!loading) {
+      let tmp = [];
+      for (let field of doc.document[0].fields) {
+        tmp.push({ type: field.fieldType, content: "" });
+      }
+      setContents(tmp);
+    }
+  }, [loading]);
   if (error) {
-    console.log(error);
     for (const err of error.graphQLErrors) {
       displayStatus({
         type: "error",
@@ -83,11 +113,19 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
                         maxLength={500}
                         row={8}
                         onChange={(e) => {
-                          
+                          let tmp = Array.from(contents);
+                          tmp[i].content = e.target.value;
+                          setContents(tmp);
                         }}
                       />
                     ) : (
-                      <DragAndDrop />
+                      <DragAndDrop
+                        handleResult={(data) => {
+                          let tmp = Array.from(contents);
+                          tmp[i].content = data.data.uploadFile;
+                          setContents(tmp);
+                        }}
+                      />
                     )}
                   </Typography>
                 </List.Item>
@@ -102,8 +140,9 @@ const CreateWorkflow = ({ setPage, document, displayStatus }) => {
                       <GroupSelect
                         group={approval}
                         onChange={(value) => {
-                          while(approvals.length <= i) approvals.push({status: "PENDING"});
-                          approvals[i].staff = value; 
+                          while (approvals.length <= i)
+                            approvals.push({ status: "PENDING" });
+                          approvals[i].staff = value;
                           setApprovals(Array.from(approvals));
                         }}
                       />
