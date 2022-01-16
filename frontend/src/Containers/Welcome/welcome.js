@@ -1,19 +1,30 @@
 import { Empty, Button, Typography, Space } from "antd";
 
 const { Paragraph, Title, Text } = Typography;
-const Welcome = ({ setPage }) => {
+const Welcome = ({ setPage, user }) => {
+  const contentType = user.role === "student" ? "workflow" : "document";
   const onClick = () => {
-    setPage({ key: "createWorkflow" });
+    if (user.role === "student") setPage({ key: "createWorkflow" });
+    else setPage({ key: "createDocument" });
   };
   return (
     <>
       <Space direction="vertical" size="large">
         <Title style={{ textAlign: "center" }}> Welcome to NTU workflow </Title>
-        <Empty description={<span>You have no workflow found.</span>}>
-          <Button type="primary" onClick={onClick}>
-            Create new workflow
-          </Button>
-        </Empty>
+        {user.role === "student" && (
+          <Empty description={<span>You have no {contentType} found.</span>}>
+            <Button type="primary" onClick={onClick}>
+              Create new {contentType}
+            </Button>
+          </Empty>
+        )}
+        {user.role !== "student" && (
+          <div style={{ textAlign: "center" }}>
+            <Button type="primary" onClick={onClick} size="large">
+              Create new {contentType}
+            </Button>
+          </div>
+        )}
         <Title level={2} style={{ textAlign: "center" }}>
           What is NTU workflow about?
         </Title>
@@ -48,11 +59,13 @@ const Welcome = ({ setPage }) => {
         <Title level={3} style={{ textAlign: "center" }}>
           Video Demo
         </Title>
-        <iframe
-          src="https://www.youtube.com/embed/1jSEVNtvhAU"
-          title="Demo video"
-          style={{ marginLeft: "35%", width: "420px", height: "315px" }}
-        ></iframe>
+        <div style={{ textAlign: "center" }}>
+          <iframe
+            src="https://www.youtube.com/embed/1jSEVNtvhAU"
+            title="Demo video"
+            style={{ width: "30vw", height: "25vw" }}
+          ></iframe>
+        </div>
       </Space>
     </>
   );

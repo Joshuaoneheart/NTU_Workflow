@@ -1,4 +1,4 @@
-import { List, Avatar, Input, Space, AutoComplete } from "antd";
+import { List, Avatar, Input, Space, AutoComplete, Skeleton } from "antd";
 import VirtualList from "rc-virtual-list";
 import { UserOutlined } from "@ant-design/icons";
 import { ALL_USERS, FIND_CHATBOX_BY_USER } from "../../graphql/queries";
@@ -73,25 +73,29 @@ const Messages = ({ user, setPage }) => {
             placeholder="Search..."
           />
         </AutoComplete>
-        <List>
-          <VirtualList data={list_data} itemHeight={40}>
-            {(item) => (
-              <List.Item
-                key={item.name}
-                onClick={() => {
-                  if (!item.user) return;
-                  setPage({ key: "chatroom", chatroom: item.user });
-                }}
-              >
-                <List.Item.Meta
-                  avatar={<Avatar icon={<UserOutlined />} />}
-                  title={item.name}
-                  description={item.message}
-                />
-              </List.Item>
-            )}
-          </VirtualList>
-        </List>
+        {loading ? (
+          <Skeleton avatar active />
+        ) : (
+          <List>
+            <VirtualList data={list_data} itemHeight={40}>
+              {(item) => (
+                <List.Item
+                  key={item.name}
+                  onClick={() => {
+                    if (!item.user) return;
+                    setPage({ key: "chatroom", chatroom: item.user });
+                  }}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar icon={<UserOutlined />} />}
+                    title={item.name}
+                    description={item.message}
+                  />
+                </List.Item>
+              )}
+            </VirtualList>
+          </List>
+        )}
       </Space>
     </>
   );

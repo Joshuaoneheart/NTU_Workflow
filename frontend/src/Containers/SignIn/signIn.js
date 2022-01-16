@@ -1,5 +1,5 @@
 import { Button, Card, Input, Space, Avatar } from "antd";
-import { MailOutlined, UserOutlined, KeyOutlined } from "@ant-design/icons";
+import { KeyOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { hash } from "bcryptjs";
 import "../../App.css";
@@ -50,7 +50,7 @@ const SignIn = ({
         msg: "Username or Password empty",
       });
     } else {
-      while(loading);
+      while (loading);
       localStorage.setItem(LOCALSTORAGE_KEY_EM, user["email"]);
       localStorage.setItem(LOCALSTORAGE_KEY_PA, password);
       const hashed_p = await hash(password, salt.salt);
@@ -92,8 +92,8 @@ const SignIn = ({
             >
               NTU WORKFLOW
             </div>
-						<br />
-						<Avatar size={64} icon={<UserOutlined />} />
+            <br />
+            <Avatar size={64} icon={<UserOutlined />} />
             <Input.Group compact style={{ width: "30vw" }}>
               <Input
                 value={user["email"]}
@@ -109,7 +109,7 @@ const SignIn = ({
               />
               <Input.Password
                 value={password}
-								prefix={<KeyOutlined size="large" />}
+                prefix={<KeyOutlined size="large" />}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password here"
                 size="large"

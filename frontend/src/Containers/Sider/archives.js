@@ -8,44 +8,14 @@ import {
   Divider,
   Radio,
   Space,
+  Skeleton,
 } from "antd";
 import { useState } from "react";
 import styled from "styled-components";
 import { ALL_DOCUMENTS, WORKFLOW_QUERY } from "../../graphql/queries";
+import moment from "moment";
 
 const { Text } = Typography;
-const data = [
-  {
-    content: "This is a card",
-    status: "APPROVED",
-    date: "2022-1-13",
-  },
-  {
-    content: "This is not a card",
-    status: "REJECTED",
-    date: "2021-3-29",
-  },
-  {
-    content: "That is a card",
-    status: "PENDING",
-    date: "2021-1-24",
-  },
-  {
-    content: "This isn't a card",
-    status: "REJECTED",
-    date: "2022-1-14",
-  },
-  {
-    content: "This should be a card",
-    status: "PENDING",
-    date: "2022-2-24",
-  },
-  {
-    content: "This is a card or is it?",
-    status: "APPROVED",
-    date: "2022-1-24",
-  },
-];
 
 const Archives = ({ setPage, user }) => {
   const [filter, setFilter] = useState("All");
@@ -95,7 +65,7 @@ const Archives = ({ setPage, user }) => {
   return (
     <>
       <Space direction="vertical" size="large">
-        {user.role !== "staff" && (
+        {user.role === "student" ? (
           <>
             <Space>
               <Cascader
@@ -122,10 +92,21 @@ const Archives = ({ setPage, user }) => {
               <Radio value="rejected">Rejected</Radio>
             </Radio.Group>
           </>
+        ) : (
+          <div style={{ textAlign: "center" }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setPage({ key: "createDocument", document: doc_id });
+              }}
+            >
+              Create
+            </Button>
+          </div>
         )}
         <Div>
           {workflow_loading || loading ? (
-            <p>Loading...</p>
+            <Skeleton active />
           ) : (
             workflows.workflow.map((archive) => {
               const { text, color } = convert(archive.status);
@@ -138,13 +119,17 @@ const Archives = ({ setPage, user }) => {
                     <br />
                     <Card
                       onClick={() => {
-                        setPage({ key: "document", document: archive.document, workflow: archive.id });
+                        setPage({
+                          key: "document",
+                          document: archive.document,
+                          workflow: archive.id,
+                        });
                       }}
                     >
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <Text>{content}</Text>
                         <Text type="secondary" style={{ float: "right" }}>
-                          {archive.date}
+                          {moment(archive.date).fromNow()}
                         </Text>
                       </Space>
                     </Card>
@@ -163,7 +148,7 @@ const Archives = ({ setPage, user }) => {
                         <Space direction="vertical" style={{ width: "100%" }}>
                           <Text>{content}</Text>
                           <Text type="secondary" style={{ float: "right" }}>
-                            {archive.date}
+                            {moment(archive.date).fromNow()}
                           </Text>
                         </Space>
                       </Card>

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Message } from "../../Components/Message/Message";
-import { Input, Typography } from "antd";
+import { Input, Typography, Skeleton } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { FIND_CHATBOX_BY_USERS } from "../../graphql/queries";
 import { SEND_MESSAGE } from "../../graphql/mutation";
@@ -60,7 +60,7 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
           }}
         >
           {loading ? (
-            <p>Loading...</p>
+						<Skeleton active/>
           ) : !chatbox.chatBox[0].messages.length ? (
             <p>Say hey to your new friend</p>
           ) : (
@@ -99,6 +99,10 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
                 message: body,
               },
             });
+						displayStatus({
+							type: "success",
+							msg: "Message sent.",
+						});
             setBody("");
           }}
         ></Input.Search>

@@ -13,7 +13,7 @@ import { useState } from "react";
 const { Title } = Typography;
 
 const Icon = styled.div`
-	border-radius: 20px;
+  border-radius: 20px;
 `;
 
 const focusedOutlined = {
@@ -79,7 +79,7 @@ const LeftSider = ({ collapsed, setPage, user, notifs, loading }) => {
     setTitle("Notifications");
   };
   const FocusMessages = () => {
-    setFocused(<Messages setPage={setPage} user={user}/>);
+    setFocused(<Messages setPage={setPage} user={user} />);
     setActiveBadge(1);
     setTitle("Messages");
   };
@@ -113,22 +113,26 @@ const LeftSider = ({ collapsed, setPage, user, notifs, loading }) => {
                 />
               </Badge>
             </Icon>
-            <Icon onClick={FocusArchives}>
-              <Badge overflowCount={10}>
-                <Avatar
-                  shape="circle"
-                  size="large"
-                  icon={<FileIcon />}
-                  style={activeBadge === 2 ? focusedOutlined : {}}
-                />
-              </Badge>
-            </Icon>
+            {user.role === "student" && (
+              <Icon onClick={FocusArchives}>
+                <Badge overflowCount={10}>
+                  <Avatar
+                    shape="circle"
+                    size="large"
+                    icon={<FileIcon />}
+                    style={activeBadge === 2 ? focusedOutlined : {}}
+                  />
+                </Badge>
+              </Icon>
+            )}
           </Space>
         </IconColumn>
         <ContentColumn
           style={collapsed === true ? { visibility: "hidden" } : {}}
         >
-          <Header><Title>{title}</Title></Header>
+          <Header>
+            <Title>{title}</Title>
+          </Header>
           {FocusedIcon}
         </ContentColumn>
       </Container>
