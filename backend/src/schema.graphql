@@ -13,7 +13,7 @@ type Query {
   findGroups:[String!]
   user(name: String, id: ID, groups: String): [User!]
   document(id: String): [Document!]
-  workflow(status: Status, userId: ID): [Workflow!]
+  workflow(status: Status, userId: ID, workflowId: ID): [Workflow!]
 
   notification(userId:ID!):[notificationPayload!] # pass in userId, cos 1 student may have multiple apply => []
 

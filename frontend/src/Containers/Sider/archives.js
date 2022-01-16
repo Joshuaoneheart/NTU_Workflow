@@ -124,7 +124,7 @@ const Archives = ({ setPage, user }) => {
           </>
         )}
         <Div>
-          {workflow_loading && loading ? (
+          {workflow_loading || loading ? (
             <p>Loading...</p>
           ) : (
             workflows.workflow.map((archive) => {
@@ -138,7 +138,7 @@ const Archives = ({ setPage, user }) => {
                     <br />
                     <Card
                       onClick={() => {
-                        setPage({ key: "document", document: archive.id });
+                        setPage({ key: "document", document: archive.document, workflow: archive.id });
                       }}
                     >
                       <Space direction="vertical" style={{ width: "100%" }}>

@@ -1,24 +1,25 @@
 import { useQuery } from "@apollo/client";
 import { Typography, Timeline, Tag, List, Upload } from "antd";
-import { FIND_WORKFLOW } from "../../graphql/queries";
+import { DOCUMENT_QUERY, FIND_WORKFLOW } from "../../graphql/queries";
 import "./Document.css";
 
 const { Title, Paragraph } = Typography;
 const DocumentPage = (props) => {
-  const {data: workflow, loading} = useQuery(FIND_WORKFLOW, {variables: {id: props.document}});
-  console.log(workflow)
-  return (loading)? <p>Loading...</p>:(
+  const {data: workflow, loading} = useQuery(FIND_WORKFLOW, {variables: {id: props.workflow}});
+  const {data: document, doc_loading} = useQuery(DOCUMENT_QUERY, {variables: {id: props.document}});
+  console.log(props, workflow, document, doc_loading, loading)
+  return (loading || doc_loading)? <p>Loading...</p>:(
     <>
       <Typography>
-        <Title>Record for #99999 停修單</Title>
-        <Paragraph>This is an example of document description.</Paragraph>
+        <Title>Record for {document.document[0].title}<br />#{document.document[0].id}</Title>
+        <Paragraph>{document.document[0].body}</Paragraph>
       </Typography>
       <List size="large" header={<Title level={4}>Content List</Title>}>
-        {workflow.map((datum, i) => {
+        {document.document[0].fields.map((datum, i) => {
           return (
             <List.Item key={i}>
               <Typography>
-                <Title level={5}>{datum["title"]}</Title>
+                <Title level={5}>{datum["name"]}</Title>
                 <Paragraph>{datum["content"]}</Paragraph>
               </Typography>
             </List.Item>

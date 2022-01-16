@@ -53,6 +53,16 @@ const FIND_WORKFLOW = gql`
       document
       status
       date
+      contents {
+        file
+        image
+        text
+      }
+      approvalLine {
+        staff
+        status
+      }
+      comments
     }
   }
 `;
