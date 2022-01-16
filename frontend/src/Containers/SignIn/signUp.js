@@ -209,10 +209,7 @@ const SignUp = ({
           />
           <Input.Password
             value={password}
-<<<<<<< HEAD
 						prefix={<KeyOutlined size="large" />}
-=======
->>>>>>> 7abbfb2 (Revert "Minor visual changes to sign in/up pages")
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password here"
             size="large"
@@ -220,10 +217,7 @@ const SignUp = ({
           />
           <Input.Password
             value={confirmPass}
-<<<<<<< HEAD
 						prefix={<KeyOutlined size="large" />}
-=======
->>>>>>> 7abbfb2 (Revert "Minor visual changes to sign in/up pages")
             onChange={(e) => setConfirmPass(e.target.value)}
             placeholder="Re-enter password here"
             size="large"
