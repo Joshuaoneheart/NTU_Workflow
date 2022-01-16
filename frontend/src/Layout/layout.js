@@ -40,6 +40,7 @@ const CustomLayout = (props) => {
             fontSize: "37px",
             textAlign: "center",
           }}
+					onClick={()=>{setPage({key: "welcome"})}}
         >
           NTU WORKFLOW
         </div>

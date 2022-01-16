@@ -99,6 +99,10 @@ const Chatroom = ({ user, correspondence, displayStatus }) => {
                 message: body,
               },
             });
+						displayStatus({
+							type: "success",
+							msg: "Message sent.",
+						});
             setBody("");
           }}
         ></Input.Search>

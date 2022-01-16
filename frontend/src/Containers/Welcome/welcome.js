@@ -11,11 +11,20 @@ const Welcome = ({ setPage, user }) => {
     <>
       <Space direction="vertical" size="large">
         <Title style={{ textAlign: "center" }}> Welcome to NTU workflow </Title>
-        <Empty description={<span>You have no {contentType} found.</span>}>
-          <Button type="primary" onClick={onClick}>
-            Create new {contentType}
-          </Button>
-        </Empty>
+        {user.role === "student" && (
+          <Empty description={<span>You have no {contentType} found.</span>}>
+            <Button type="primary" onClick={onClick}>
+              Create new {contentType}
+            </Button>
+          </Empty>
+        )}
+        {user.role !== "student" && (
+          <div style={{ textAlign: "center" }}>
+            <Button type="primary" onClick={onClick} size="large">
+              Create new {contentType}
+            </Button>
+          </div>
+        )}
         <Title level={2} style={{ textAlign: "center" }}>
           What is NTU workflow about?
         </Title>
