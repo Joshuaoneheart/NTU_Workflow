@@ -18,16 +18,16 @@ import "./index.css";
 
 const port = process.env.PORT | 5000;
 
-const uploadLink = createUploadLink({ uri: `http://localhost:${port}/graphql` });
+const uploadLink = createUploadLink({ uri: "/graphql" });
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: `http://localhost:${port}/graphql`,
+  uri: "/graphql",
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:${port}/graphql`,
+  uri: "/graphql",
   options: { reconnect: true },
 });
 
