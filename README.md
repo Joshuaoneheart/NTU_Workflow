@@ -15,11 +15,11 @@
 
 ## Description
 An auxiliary workflow system for facilitating the administrative work in National Taiwan University.
-The users are able to create and edit administrative documents such as Scholarship applications or Club Activities applications directly from their devices.
+The users are able to create, edit and fill in administrative documents such as Scholarship applications or Club Activities applications directly from their devices.
 We have 3 types of users:
 *    Students:
 		* Create and edit Workflows
-* Staff:
+* Staff(including teachers and other members of the curricular and extracurricular bodies):
 	* Create and edit administrative documents
 	* Approve the administrative documents
 * Admin:
