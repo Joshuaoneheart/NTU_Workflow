@@ -209,6 +209,7 @@ const SignUp = ({
           />
           <Input.Password
             value={password}
+						prefix={<KeyOutlined size="large" />}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password here"
             size="large"
@@ -216,6 +217,7 @@ const SignUp = ({
           />
           <Input.Password
             value={confirmPass}
+						prefix={<KeyOutlined size="large" />}
             onChange={(e) => setConfirmPass(e.target.value)}
             placeholder="Re-enter password here"
             size="large"
