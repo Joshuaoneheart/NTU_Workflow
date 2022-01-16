@@ -117,7 +117,7 @@ const startApollo = async () => {
 };
 startApollo();
 
-const port = process.env.PORT | 5000;
+const port = process.env.PORT || 5000;
 
 httpServer.listen(port, "0.0.0.0", () => {
   console.log(`The server is up on port ${port} ${server.graphqlPath}!`);
