@@ -116,20 +116,10 @@ const startApollo = async () => {
   server.applyMiddleware({ app });
 };
 startApollo();
-<<<<<<< HEAD
 
 const port = process.env.PORT | 5000;
 
 httpServer.listen(port, "0.0.0.0", () => {
   console.log(`The server is up on port ${port} ${server.graphqlPath}!`);
   console.log(`Graphql Port at ${port} ${server}`);
-=======
-server.installSubscriptionHandlers(httpServer);
-
-const port = process.env.PORT | 5000;
-
-app.listen(port, '0.0.0.0', () => {
-  console.log(`The server is up on port ${port}!`);
-  console.log(`Graphql Port at ${port} ${server.SubscriptionsPath}`);
->>>>>>> a167c7a (Frontend (#7))
 });
