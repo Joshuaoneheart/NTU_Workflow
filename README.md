@@ -102,12 +102,12 @@ cd NTU_Workflow && yarn
 ```
 ### Build
 ```
-yarn build
+yarn build //in /NTU_Workflow
 ```
 ### Start Server
 Use the command below and the web service will be available on localhost:5000.
 ```
-yarn start
+yarn start //in /NTU_Workflow
 ```
 
 ### NODE version
@@ -120,6 +120,7 @@ NodeJS 16.2.0
 這次的專題我主要負責將前端和後端接起來並督促組員，有點像 PM 的角色，但也因此需要前端後端都很熟，有時候出現第一次遇到的功能，需要大量的查資料跟嘗試才能成功，也因此學到了很多。剛開始構思這個專案的時候很擔心會不會搞得太複雜，很感謝各位組員的團隊合作，各司其職，才讓我們最後能做出像樣的成品。
 
 資工三 B08902093 石諾盟: 
+
 From this final project, I was able to better understand the process behind designing a website especially on the frontend side. The whole process was very time consuming since any minor tweak may end up with unexpected twists, however with patience I was able to get through the whole process and do my best to fix all of the frontend related bugs. I also got very familiar with the frameworks AntD, styled-components and I also were able to deepen my knowledge and understanding of CSS design.
 
 醫工三 B08508010 王愛琳:
