@@ -1,6 +1,6 @@
 import dotenv from "dotenv-defaults";
 import mongoose from "mongoose";
-
+import { dataInit } from "./resolvers/upload";
 async function connect() {
   dotenv.config();
 
@@ -16,6 +16,7 @@ async function connect() {
     })
     .then(() => {
       console.log("MongoDB Connected!");
+      dataInit();
       FSBUCKET = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
         chunkSizeBytes: 1024,
         bucketName: "files",
