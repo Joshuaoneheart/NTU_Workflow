@@ -3,9 +3,7 @@ import mongoose from "mongoose";
 const Grid = require("gridfs-stream");
 const fs = require("fs");
 
-
 async function connect() {
-
   dotenv.config();
 
   if (!process.env.MONGO_URL) {
@@ -20,7 +18,7 @@ async function connect() {
     })
     .then(() => console.log("MongoDB Connected!"))
     .catch((err) => console.log(err));
-};
+}
 
 const storeFile = async (upload) => {
   const { filename, createReadStream, mimetype } = await upload.then(
@@ -40,4 +38,4 @@ const storeFile = async (upload) => {
     .on("finish", console.log("finish"));
 };
 
-export { connect,storeFile };
+export { connect, storeFile };

@@ -12,9 +12,6 @@ const Subscription = {
   
         return pubSub.asyncIterator(`chatBox ${name}`);
       }
-
-      return pubSub.asyncIterator(`chatBox ${name}`);
-    },
   },
 
   Notification: {
