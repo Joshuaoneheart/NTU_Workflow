@@ -27,8 +27,10 @@ const DocumentPage = (props) => {
       let first = false;
       let tmp = [];
       for (let a of workflow.workflow[0].approvalLine) {
-        if (!first && a.status == "PENDING")
+        if (!first && a.status == "PENDING"){
           tmp.push({ color: "blue", body: "In Progress" });
+          first = true;
+        }
         else if (a.status == "PENDING")
           tmp.push({ color: "blue", body: "Pending" });
         else if (a.status == "ACCEPT")
