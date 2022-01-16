@@ -32,7 +32,7 @@ const DocumentPage = (props) => {
           first = true;
         }
         else if (a.status == "PENDING")
-          tmp.push({ color: "blue", body: "Pending" });
+          tmp.push({ color: "gray", body: "Pending" });
         else if (a.status == "ACCEPT")
           tmp.push({ color: "green", body: "Pass" });
         else tmp.push({ color: "red", body: "Rejected" });
