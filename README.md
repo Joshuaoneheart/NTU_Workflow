@@ -97,7 +97,7 @@ We have 3 types of users:
 
 ### Clone the repo
 ```
-git clone git@github.com:Joshuaoneheart/NTU_Workflow.git
+git clone https://github.com/Joshuaoneheart/NTU_Workflow.git
 ```
 
 ### Install all of the extensions
