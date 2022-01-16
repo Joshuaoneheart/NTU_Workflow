@@ -7,7 +7,7 @@ const Subscription = {
         const name = makeName(from,to);
         const chatBox = await ChatBoxModel.findOne({name});
         if(!chatBox) {
-          await new ChatBoxModel({name: chatBoxName}).save();
+          console.log(`Chatbox ${name} not exist`)
         }
   
         return pubSub.asyncIterator(`chatBox ${name}`);

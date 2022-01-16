@@ -7,7 +7,7 @@ import {
   UserModel,
   DocumentModel,
   WorkflowModel,
-  NoticeModel
+  NoticeModel,
 } from "../models/models";
 import {
   checkUser,
@@ -120,28 +120,24 @@ const Query = {
       return workflow;
     }
   },
-  
-  notification: async(parent, {userId}, db)=>{
-    if(userId){
-      
-      return (await NoticeModel.find({userId:userId})).map((notice)=>{
-        return notice
-      });
-    }
-    else
-    throw new Error(`Notification is not found by user id ${userId}`);
-  },
-  async chatBox(parent, {name1,name2}, { db }, info){
 
+  notification: async (parent, { userId }, db) => {
+    if (userId) {
+      return (await NoticeModel.find({ userId: userId })).map((notice) => {
+        return notice;
+      });
+    } else throw new Error(`Notification is not found by user id ${userId}`);
+  },
+  async chatBox(parent, { name1, name2 }, { db }, info) {
     if (name1 && name2) {
       const chatBoxName = makeName(name1, name2);
       let chatBox = await db.ChatBoxModel.findOne({ name: chatBoxName });
-      if (!chatBox)
-        console.log("Users does not exist for QueryChatBox: " + chatBoxName);
+      if (!chatBox) {
+        chatBox = await new db.ChatBoxModel({ name: chatBoxName }).save();
+      }
       return [chatBox];
     } else if (name1) {
       const chatboxes = await db.ChatBoxModel.find({ name: { $regex: name1 } });
-      console.log(chatboxes);
       return chatboxes;
     }
   },
