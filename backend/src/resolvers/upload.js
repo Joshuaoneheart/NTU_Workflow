@@ -49,7 +49,7 @@ const dataInit = async () => {
     await UserModel.insertMany(example);
     console.log("Database initialized!");
   }
-  if (!(await saltModel.find())) {
+  if (!(await saltModel.findOne())) {
     await new saltModel(salt).save();
   }
 };

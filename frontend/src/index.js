@@ -10,24 +10,25 @@ import {
   ApolloProvider,
   HttpLink,
 } from "@apollo/client";
-import { createUploadLink } from 'apollo-upload-client';
+import { createUploadLink } from "apollo-upload-client";
 import { split, ApolloLink } from "apollo-link";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import "./index.css";
 
 const port = process.env.PORT | 5000;
+const host = process.env.HEROKU | `localhost:${port}`;
 
 const uploadLink = createUploadLink({ uri: "/graphql" });
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: "/graphql",
+  uri: "graphql",
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: "/graphql",
+  uri: `ws://${host}/graphql`,
   options: { reconnect: true },
 });
 
