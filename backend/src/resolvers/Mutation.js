@@ -1,8 +1,5 @@
 // updateWorkflow(status: String, comments: String): Workflow!
 import { uuid } from "uuidv4";
-import fs from "fs";
-import path from "path";
-import { finished } from "stream/promises";
 import {
   saltModel,
   UserModel,
@@ -20,6 +17,7 @@ import {
   newMessage,
   checkMessage,
 } from "./utility.js";
+import { hash } from "bcrypt";
 
 const Mutation = {
   createUser: async (parent, args, db) => {
@@ -81,25 +79,22 @@ const Mutation = {
 
         userId: workflow.student, //ex : b08508010
         workflowId: workflow.id,
-        content: `Workflow ${workflow.id} status had changed to ${workflow.status}`,
+        content: `Workflow ${workflow.id} status had changed`,
       });
       await newNote.save();
 
-      
-      await (args.input.approvalLine).map((approvalPayload)=>{
-        //console.log(approvalPayload.staff);
-
-        pubSub.publish(`Notification ${approvalPayload.staff}`, {
-          newNotice:
-          {userId: workflow.student,
-          workflowId: workflow.id,
-          content: `Workflow ${workflow.id} status had changed to ${workflow.status}`,}
-        });
-      })
+      console.log(args.input.approvalLine[0].staff);
+      pubSub.publish(`Notification ${args.input.approvalLine[0].staff}`, {
+        Notification:
+        {userId: workflow.student,
+        workflowId: workflow.id,
+        content: `Workflow ${workflow.id} status had changed`}
+      });
      }
 
     return workflow;
   },
+
   uploadTEXT: async (parent, { input }, db) => {
     console.log(input);
 
@@ -111,14 +106,6 @@ const Mutation = {
       return JSON.stringify(textUnit._id);
     }
     throw new Error(`missing uploadTEXT input`);
-  },
-  uploadFile: async (parent, { file }) => {
-    const { filename, createReadStream, mimetype, encoding } = await file;
-    let stream = createReadStream();
-    const out = fs.createWriteStream(path.join(__dirname, "..","build", `${filename}.cache`));
-    stream.pipe(out);
-    await finished(out);
-    return path.join(__dirname, "build", `${filename}.cache`);
   },
   //updateWorkflow(status: String!):ID!
   updateWorkflow: async (
@@ -155,17 +142,17 @@ const Mutation = {
       var flag = true;
 
       flag = await workflow.approvalLine.map((approvalPayload) => {
-        console.log(approvalPayload.status == "ACCEPT");
+        //console.log(approvalPayload.status == "ACCEPT");
         if (
           approvalPayload.status == "PENDING" ||
           approvalPayload.status == "DECLINE"
         ) {
-          console.log("false");
+          //console.log("false");
           return false;
         }
       });
 
-      console.log(flag.includes(false));
+      //console.log(flag.includes(false));
 
       if (!flag.includes(false)) {
         workflow.status = "ACCEPT";
@@ -178,7 +165,7 @@ const Mutation = {
         const newNote = await new NoticeModel({
           userId: workflow.student, //ex : b08508010
           workflowId: workflow.id,
-          content: `Workflow ${workflow.id} status had changed to ${status}`,
+          content: `Workflow ${workflow.id} status had changed`,
         });
         await newNote.save();
 
@@ -186,18 +173,48 @@ const Mutation = {
         const updateNote = await NoticeModel.findOne({
           workflowId: workflow.id,
         });
-        updateNote.content = `Workflow ${workflow.id} status had changed to ${status}`;
+        updateNote.content = `Workflow ${workflow.id} status had changed`;
         await updateNote.save();
       }
-      pubSub.publish(`Notification ${workflow.student}`, {
-        newNotice:{ 
-          userId: workflow.student,
-          workflowId: workflow.id,
-          content: `Workflow ${workflow.id} status had changed to ${workflow.status}`,
+      const approvalLineArray = Object.entries(workflow.approvalLine);
+      //console.log(array[0][0], array[0][1])
+      
+      let nextStaff;
+       for(var i = 0; i < approvalLineArray.length; i++) {
+        if(approvalLineArray[i][1].staff === staffId){
+          if((i+1) < approvalLineArray.length){
+            nextStaff = approvalLineArray[i+1][1].staff;
+            break;
+          }
         }
-        
-      });
-
+      }
+      //console.log(!nextStaff);
+    
+if(nextStaff){
+  pubSub.publish(`Notification ${workflow.student}`, {
+    Notification:{ 
+      userId: workflow.student,
+      workflowId: workflow.id,
+      content: `Workflow ${workflow.id} status had changed`,
+    }
+  });
+  pubSub.publish(`Notification ${nextStaff}`, {
+    Notification:{ 
+      userId: workflow.student,
+      workflowId: workflow.id,
+      content: `Workflow ${workflow.id} status had changed`,
+    }
+  });
+}
+else if (!nextStaff){
+  pubSub.publish(`Notification ${workflow.student}`, {
+    Notification:{ 
+      userId: workflow.student,
+      workflowId: workflow.id,
+      content: `Workflow ${workflow.id} status had changed`,
+    }
+  });
+}
       return workflow.id; //workflow ID
     } else {
       throw new Error(`missing status or workflowId`);
