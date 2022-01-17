@@ -19,9 +19,7 @@ import dotenv from "dotenv-defaults"
 
 dotenv.config()
 const port = process.env.PORT || 5000;
-const host = "localhost:" + `${port}`;
-console.log(host, process.env);
-if (process.env.HEROKU) host = process.env.HEROKU;
+const host = "ntu-workflow.herokuapp.com";
 
 const uploadLink = createUploadLink({ uri: "/graphql" });
 
