@@ -17,8 +17,9 @@ import { getMainDefinition } from "apollo-utilities";
 import "./index.css";
 
 const port = process.env.PORT || 5000;
-const host = process.env.HEROKU || "localhost:" + `${port}`;
-console.log(host)
+const host = "localhost:" + `${port}`;
+console.log(host);
+if (process.env.HEROKU) host = process.env.HEROKU;
 
 const uploadLink = createUploadLink({ uri: "/graphql" });
 
