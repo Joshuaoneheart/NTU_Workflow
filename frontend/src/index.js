@@ -15,7 +15,9 @@ import { split, ApolloLink } from "apollo-link";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import "./index.css";
+import dotenv from "dotenv-defaults"
 
+dotenv.config()
 const port = process.env.PORT || 5000;
 const host = "localhost:" + `${port}`;
 console.log(host, process.env);
