@@ -18,7 +18,7 @@ import "./index.css";
 
 const port = process.env.PORT || 5000;
 const host = "localhost:" + `${port}`;
-console.log(host);
+console.log(host, process.env);
 if (process.env.HEROKU) host = process.env.HEROKU;
 
 const uploadLink = createUploadLink({ uri: "/graphql" });
