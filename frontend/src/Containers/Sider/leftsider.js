@@ -109,6 +109,7 @@ const LeftSider = ({
     }
   }, [jump]);
   useEffect(() => {
+    console.log("loading", notifs, loading)
     if (!loading) FocusNotifications();
   }, [loading]);
   return (

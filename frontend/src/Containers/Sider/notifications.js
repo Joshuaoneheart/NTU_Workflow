@@ -4,7 +4,32 @@ import { UserOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FIND_D_BY_W } from "../../graphql/queries";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+
+const NotifyItem = ({ item, setPage }) => {
+  const { data: doc, loading } = useQuery(FIND_D_BY_W, {
+    variables: { id: item.notif.workflowId },
+  });
+  if(loading) return <p>Loading...</p>;
+  return (
+    <List.Item
+      onClick={() => {
+        setPage({
+          key: "document",
+          document: doc.workflow[0].document,
+          workflow: item.notif.workflowId,
+        });
+      }}
+      key={item.name}
+    >
+      <List.Item.Meta
+        avatar={<Avatar icon={<UserOutlined />} />}
+        title={item.name}
+      />
+    </List.Item>
+  );
+};
+
 const Notifications = ({ notifs, loading, setPage }) => {
   const Div = styled.div`
     padding: 10px;
@@ -14,26 +39,22 @@ const Notifications = ({ notifs, loading, setPage }) => {
     overflow-y: scroll;
   `;
   const [data, setData] = useState([]);
-  const [turnD2W] = useLazyQuery(FIND_D_BY_W);
+
   useEffect(() => {
-    const handleData = async () => {
-      if (!loading) {
-        let tmp = [];
-        for (let no of notifs.notification) {
-          tmp = [
-            {
-              name: no.content,
-              status: "NEW",
-              notif: no,
-              doc: (await turnD2W(no.workflowId)).data.workflow[0].document,
-            },
-            ...tmp,
-          ];
-        }
-        setData(tmp);
+    if (!loading) {
+      let tmp = [];
+      for (let no of notifs.notification) {
+        tmp = [
+          {
+            name: no.content,
+            status: "NEW",
+            notif: no,
+          },
+          ...tmp,
+        ];
       }
-    };
-    handleData();
+      setData(tmp);
+    }
   }, [notifs]);
   return (
     <>
@@ -41,24 +62,7 @@ const Notifications = ({ notifs, loading, setPage }) => {
         <List>
           <VirtualList data={data} itemHeight={40}>
             {(item) => {
-              return (
-                <List.Item
-                  onClick={() => {
-                    setPage({
-                      key: "document",
-                      document: item.doc,
-                      workflow: item.notif.workflowId,
-                      refresh: true,
-                    });
-                  }}
-                  key={item.name}
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar icon={<UserOutlined />} />}
-                    title={item.name}
-                  />
-                </List.Item>
-              );
+              return <NotifyItem setPage={setPage} item={item} />;
             }}
           </VirtualList>
         </List>

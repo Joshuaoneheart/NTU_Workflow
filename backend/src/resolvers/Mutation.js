@@ -129,7 +129,6 @@ const Mutation = {
     { db, pubSub }
   ) => {
     console.log(status, workflowId, staffId, comments);
-
     if (status && workflowId) {
       const workflow = await WorkflowModel.findOne({ id: workflowId });
 
@@ -137,9 +136,9 @@ const Mutation = {
         throw new Error(`workflow not found with mutation updateWorkflow`);
 
       workflow.approvalLine = workflow.approvalLine.map(
-        ({ staff, status: old_status }) => {
-          staff, staff === staffId ? status : old_status;
-        }
+        ({ staff, status: old_status }) => {return {
+          staff, status: (staff === staffId) ? status : old_status
+        }}
       );
 
       if (status == "DECLINE") {
@@ -151,6 +150,7 @@ const Mutation = {
       }
 
       let flag = workflow.approvalLine.map((approvalPayload) => {
+        console.log(approvalPayload)
         if (
           approvalPayload.status == "PENDING" ||
           approvalPayload.status == "DECLINE"
@@ -160,7 +160,6 @@ const Mutation = {
       });
 
       //console.log(flag.includes(false));
-      console.log(flag)
       if (!flag.includes(false)) workflow.status = "ACCEPT";
       if (workflow.status === "ACCEPT" || workflow.status === "DECLINE") {
         await workflow.save();
@@ -177,8 +176,7 @@ const Mutation = {
           },
         });
       } else {
-        let index = flag.findIndex(false);
-        console.log(workflow.approvalLine[index], index);
+        let index = flag.findIndex((item) => !item);
         //也要通知老師
         //if notice hasn't existed, created one
         const newNote = await new NoticeModel({

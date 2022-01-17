@@ -5,7 +5,7 @@ const Welcome = ({ setPage, user, setJump }) => {
   const contentType = user.role === "student" ? "workflow" : "document";
   const onClick = () => {
     if (user.role === "student") setJump(true);
-    else setPage({ key: "createDocument", refresh: true });
+    else setPage({ key: "createDocument" });
   };
   return (
     <>
