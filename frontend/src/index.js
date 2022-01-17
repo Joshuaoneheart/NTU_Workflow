@@ -30,7 +30,7 @@ const httpLink = new HttpLink({
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${host}/graphql`,
+  uri: `wss://${host}/graphql`,
   options: { reconnect: true },
 });
 
